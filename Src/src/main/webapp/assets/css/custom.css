@@ -1,0 +1,96 @@
+.reservation-card{
+  max-width: 500px;
+  margin: 0 auto; }
+.reservation-logo{
+  margin: 0 auto; 
+  max-width: 180px; }
+.reservation-card .footer {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+.reservation-container{
+    padding-top: 20vh;
+    position: relative;}
+
+.section-disponibilite{
+    background: #EEEEEE;
+    min-height: 100vh;
+}
+.section-disponibilite .card .options{
+    /*background-color: #dedede;*/
+}
+.section-disponibilite .card .options img{
+    margin: 1% 1vw;
+    width: 35px;
+    -webkit-filter: opacity(75%); /* Safari 6.0 - 9.0 */
+    filter: opacity(75%);
+}
+.section-disponibilite .carousel .carousel-inner{
+    box-shadow: none;
+}
+/* back to top button style */
+.back-to-top {
+    cursor: pointer;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display:none;
+}
+/* to use hr as a gradient separator */
+hr.gradient { 
+    border: 0; 
+    height: 1px; 
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0)); 
+}
+/* to add the gradient separator at the bottom of a div */
+.gradient-hr-bot { position: relative;} 
+.gradient-hr-bot:before, .gradient-hr-bot:after { 
+    content: ""; 
+    position: absolute; bottom: 0px; left: 0px; 
+} 
+.gradient-hr-bot:not(:last-child):after {
+    right: 0px; 
+    height: 1px; 
+    background-image: -webkit-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0)); 
+    background-image: -webkit-linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0)); 
+    background-image: -moz-linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0)); 
+    background-image: -o-linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0)); 
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0))
+}
+.modal-body > .modal-section:not(:first-child){
+    padding: 5px 0;
+}
+.modal-body > .modal-section:first-child{
+    margin-top: -20px;
+    padding-bottom: 5px;
+}
+/* last line of modal (grey one in availability popup) */
+.modal-content > .modal-pre-footer{
+   padding: 5px 30px;
+   background:#DDDDDD;
+}
+/* make modal centered */
+.modal.show .modal-dialog {
+    transform: none;
+}
+/* ----- Ecran registration ----- */
+/* card logo image width */
+.card-logo img{
+    width: 70px;
+}
+/* Card width */
+.registration-card{
+    max-width: 500px;
+    margin: 0 auto;
+}
+.registration-card form .content .input-group{
+    max-width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+}
+textarea.form-control{
+    border-radius: 10px;
+}
+.registration-card .card-section{
+    padding: 10px 0;
+}
