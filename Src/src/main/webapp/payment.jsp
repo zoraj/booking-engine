@@ -143,7 +143,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="form-check-label" for="">
-                                                <img src="../img/masterCard.jpg" alt="" class="image-liste">
+                                                <img src="<%=request.getContextPath()%>/assets/img/masterCard.jpg" alt="" class="image-liste">
                                             </label>
                                         </div>
                                         <div class="col-md-1">
@@ -151,7 +151,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="form-check-label" for="">
-                                                <img src="../img/visa.jpg" alt="" class="image-liste">
+                                                <img src="<%=request.getContextPath()%>/assets/img/visa.jpg" alt="" class="image-liste">
                                             </label>
                                         </div>
                                     </div>
