@@ -17,6 +17,6 @@
 
         <!-- Custom stlylesheet -->
         <link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/style.css" />
-        <link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/paiement.css" />
+
     </head>
     <body>
