@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 package cloud.multimicro.booking.servlet;
-
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
-import org.json.simple.JSONObject;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,8 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
-import org.json.simple.JSONArray;
-
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.codehaus.jettison.json.JSONArray;
 
 /**
  *
@@ -68,8 +69,31 @@ public class Reservation extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Reservation.postReservation();
+        String roomData = request.getParameter("room-list-id");
+        String resaData = request.getParameter("reservation-id");
+       // Reservation.postReservation(resaData, roomData);
+        Reservation.postRoomVentillation(1, roomData);
         processRequest(request, response);
+    }
+
+    private static JSONArray stringToJsonArray(String value) {
+        JSONArray jsonArray = null;
+        try {
+            jsonArray = new JSONArray(value);
+        } catch (JSONException ex) {
+            Logger.getLogger(Reservation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return jsonArray;
+    }
+
+    private static JSONObject stringToJsonObject(String value){
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(value);
+        } catch (JSONException ex) {
+            Logger.getLogger(Reservation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return jsonObject;
     }
 
     /**
@@ -82,64 +106,46 @@ public class Reservation extends HttpServlet {
         return "Short description";
     }// </editor-fold>    
 
-    private static void postReservation() {
+    private static void postReservation(String resa, String roomListArray) {
+        System.out.println(" string " + resa);
+        JSONObject resaJSONObject = Reservation.stringToJsonObject(resa);
         ResteasyClient reservation = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = reservation.target("http://localhost:8080/api/notes/pms/header");
-
-        JSONObject resa = new JSONObject();
-        resa.put("dateArrivee", "2020-05-11");
-        resa.put("dateDepart", "2020-05-15");
-        resa.put("description", "descript");
-        resa.put("nbPax", "4");
-        resa.put("nbChambre", "2");
-        resa.put("nbEnfant", "3");
-        resa.put("mmcClientId", "1");
-        resa.put("nomNote", "resa");
-        resa.put("numeroReservation", "00132");
-        resa.put("pmsServiceId", "1");
-        resa.put("pmsReservationTypeId", "1");
-        resa.put("posActivitePosteId", "1");
-        resa.put("origine", "BOOKING");
-
-        System.out.println(Entity.json(resa));
-        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "CD19FD5E87DB2FB0056168D58D24753B42CC4B9B75894632242A2E2BA257402E").header("Authorization", "Bearer 5edc790b914878af26afd0f7cc56715028420006401f2a9f4d8d238b5c2beae7").post(Entity.json(resa));
+        System.out.println(" json " + Entity.json(resaJSONObject));
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "CD19FD5E87DB2FB0056168D58D24753B42CC4B9B75894632242A2E2BA257402E").header("Authorization", "Bearer 5edc790b914878af26afd0f7cc56715028420006401f2a9f4d8d238b5c2beae7").post(Entity.json(resaJSONObject));
         //Read output in string format
         String value = response.readEntity(String.class);
-        
-        int entitieId = 1;
-        JSONArray roomListArray = new JSONArray();
-        JSONObject roomOne = new JSONObject();
-        roomOne.put("qteChb", 3);
-        roomOne.put("nbAdulte", 3);
-        roomOne.put("nbEnfant", 3);
-        roomListArray.add(roomOne);
-
-        JSONObject roomTwo = new JSONObject();
-        roomTwo.put("qteChb", 3);
-        roomTwo.put("nbAdulte", 3);
-        roomTwo.put("nbEnfant", 3);
-        roomListArray.add(roomOne);
-
-        JSONObject roomThree = new JSONObject();
-        roomThree.put("qteChb", 3);
-        roomThree.put("nbAdulte", 3);
-        roomThree.put("nbEnfant", 3);
-        roomListArray.add(roomThree);
-
-        Reservation.postRoomVentillation(entitieId,roomListArray);
+        JSONObject noteEntete = null;
+        try {
+            noteEntete = new JSONObject(value);
+        } catch (JSONException ex) {
+            Logger.getLogger(Reservation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       Reservation.postRoomVentillation(entitieId, roomListArray);
         response.close();
+
     }
 
-    private static void postRoomVentillation(int entitieId,JSONArray roomListArray) {
+    private static void postRoomVentillation(Integer entitieId, String roomList) {
+        JSONArray roomListArray = stringToJsonArray(roomList);
         ResteasyClient ventillation = new ResteasyClientBuilder().build();
         JSONObject ventillationObject = new JSONObject();
-        ventillationObject.put("pmsNoteEnteteId",entitieId);
-        ventillationObject.put("roomList", roomListArray);
+        try {
+            ventillationObject.put("pmsNoteEnteteId", entitieId);
+        } catch (JSONException ex) {
+            Logger.getLogger(Reservation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            ventillationObject.put("roomList", roomListArray);
+        } catch (JSONException ex) {
+            Logger.getLogger(Reservation.class.getName()).log(Level.SEVERE, null, ex);
+        }
         ResteasyWebTarget target = ventillation.target("http://localhost:8080/api/notes/pms/room-ventillation");
-        System.out.println(Entity.json(ventillationObject));
+        System.out.println(" ventillationObject " + Entity.json(ventillationObject));
         Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "CD19FD5E87DB2FB0056168D58D24753B42CC4B9B75894632242A2E2BA257402E").header("Authorization", "Bearer 5edc790b914878af26afd0f7cc56715028420006401f2a9f4d8d238b5c2beae7").post(Entity.json(ventillationObject));
         //Read output in string format
         String value = response.readEntity(String.class);
         response.close();
+
     }
 }
