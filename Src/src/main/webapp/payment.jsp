@@ -54,7 +54,7 @@
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="code" id="code" class="form-control" type="text">
+                                                <input name="complement" id="complement" class="form-control" type="text">
                                                 <span class="form-label">Complément</span>
                                             </div>
                                         </div>
@@ -137,7 +137,7 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-1">
-                                            <input class="form-check-input" type="radio" name="" value="">
+                                            <input class="form-check-input" type="radio" id="masterCardId" name="" value="">
                                         </div>
                                         <div class="col-md-3">
                                             <label class="form-check-label" for="">
@@ -145,7 +145,7 @@
                                             </label>
                                         </div>
                                         <div class="col-md-1">
-                                            <input class="form-check-input" type="radio" name="" value="">
+                                            <input class="form-check-input" type="radio" id="visaId" name="" value="">
                                         </div>
                                         <div class="col-md-3">
                                             <label class="form-check-label" for="">
@@ -158,7 +158,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input class="form-control" type="text">
+                                        <input class="form-control" id="carte-paiement-numero" name="carte-paiement-numero" type="text">
                                         <span class="form-label">Numéro de carte<i class="obligatoir">*</i></span>
                                     </div>
                                 </div>
@@ -172,19 +172,19 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <!--span class="form-label"></span-->
-                                        <select class="form-control">
-                                            <option>Janvier</option>
-                                            <option>Février</option>
-                                            <option>Mars</option>
-                                            <option>Avril</option>
-                                            <option>Mai</option>
-                                            <option>Juin</option>
-                                            <option>Juillet</option>
-                                            <option>Aout</option>
-                                            <option>Septembre</option>
-                                            <option>Octobre</option>
-                                            <option>Novembre</option>
-                                            <option>Décembre</option>
+                                        <select id="mounthId" class="form-control">
+                                            <option value="01">Janvier</option>
+                                            <option value="02">Février</option>
+                                            <option value="03">Mars</option>
+                                            <option value="04">Avril</option>
+                                            <option value="05">Mai</option>
+                                            <option value="06">Juin</option>
+                                            <option value="07">Juillet</option>
+                                            <option value="08">Aout</option>
+                                            <option value="09">Septembre</option>
+                                            <option value="10">Octobre</option>
+                                            <option value="11">Novembre</option>
+                                            <option value="12">Décembre</option>
                                         </select>
                                         <span class="select-arrow"></span>
                                         <!--input class="form-control" type="month">
@@ -194,10 +194,10 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <!--span class="form-label"></span-->
-                                        <select class="form-control">
-                                            <option>2019</option>
-                                            <option>2020</option>
-                                            <option>2021</option>
+                                        <select id="yearId" class="form-control">
+                                            <option value="2019">2019</option>
+                                            <option value="2020">2020</option>
+                                            <option value="2020">2021</option>
                                         </select>
                                         <span class="select-arrow"></span>
                                     </div>
@@ -206,13 +206,13 @@
                             <div class="row">
                                 <div class="col-md-7">
                                     <div class="form-group">
-                                        <input class="form-control" type="text">
+                                        <input class="form-control" id="carte-paiement-titulaire" name="carte-paiement-titulaire" type="text">
                                         <span class="form-label">Nom du titulaire<i class="obligatoir">*</i></span>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
-                                        <input class="form-control" type="text" maxlength="3">
+                                        <input class="form-control" id="carte-paiement-cvv" name="carte-paiement-cvv" type="text" maxlength="3">
                                         <span class="form-label">Cryptogramme<i class="obligatoir">*</i></span>
                                     </div>
                                 </div>
@@ -224,7 +224,7 @@
                                     <strong>Montant (Acompte)</strong>
                                 </div>
                                 <div class="col-md-2">
-                                    <strong>219,50£</strong>
+                                    <strong id="amountId">219.50</strong>£
                                 </div>
                             </div><hr>
                             <div class="row">
@@ -264,9 +264,16 @@
                                         </div>
                                     </div></br></br>
                                     <div class="row">
+                                        <input type="hidden" id="reservation" name="reservation">
+                                        <input type="hidden" id="room-list" name="room-list">
+                                        <input type="hidden" id="carte-paiement-expiration" name="carte-paiement-expiration">
+                                        <input type="hidden" id="carte-paiement-type" name="carte-paiement-type">
+                                        <input type="hidden" id="montant" name="montant">
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-offset-4 col-md-8">
                                             <div class="form-btn">
-                                                <button class="submit-btn">Valider ma réservation</button>
+                                                <button class="submit-btn" id="validateId">Valider ma réservation</button>
                                             </div>
                                         </div>
                                     </div>
@@ -279,8 +286,13 @@
         </div>
     </form>
 </div>
-
+<script src="./assets/js/jquery.min.js"></script>
 <script>
+    //lecture liste des chambre 
+    var listRoom = sessionStorage.getItem("roomList_json");
+    var listRoomObject = JSON.parse(listRoom);
+
+
     $('.form-control').each(function () {
         floatedLabel($(this));
     });
@@ -297,4 +309,29 @@
             $field.removeClass('input-not-empty');
         }
     }
+    var reservation = sessionStorage.getItem("reservation_json");
+    var reservationObject = JSON.parse(reservation);
+
+    jQuery(document).ready(function () {
+        $('#masterCardId').click(function () {
+            if ($('#masterCardId').is(':checked') === true) {
+                $("#visaId").prop('checked', false);
+                $("#carte-paiement-type").val("MASTERCARD");
+            }
+        });
+
+        $('#visaId').click(function () {
+            if ($('#visaId').is(':checked') === true) {
+                $("#masterCardId").prop('checked', false);
+                $("#carte-paiement-type").val("VISA");
+            }
+        });
+
+        $('#validateId').click(function () {
+            $("#reservation").val(JSON.stringify(reservationObject));
+            $("#room-list").val(JSON.stringify(listRoomObject.roomList));
+            $("#carte-paiement-expiration").val($("#yearId").val()+"-" + $("#mounthId").val());
+            $("#montant").val($("#amountId").html());
+        });
+    });
 </script>

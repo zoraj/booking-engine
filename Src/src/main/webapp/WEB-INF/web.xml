@@ -33,7 +33,7 @@
             <description>header and footer settings</description>
             <url-pattern>/index.jsp</url-pattern>
             <url-pattern>/payment.jsp</url-pattern>
-            <url-pattern>/reservation.jsp</url-pattern>
+            <url-pattern>/recap_resa.jsp</url-pattern>
             <url-pattern>/rooms.jsp</url-pattern>
             <url-pattern>/WEB-INF/jspf/*</url-pattern>
             <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>

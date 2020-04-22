@@ -13,10 +13,10 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,900" rel="stylesheet">
 
         <!-- Bootstrap -->
-        <link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/bootstrap.min.css" />
+        <link type="text/css" rel="stylesheet" href="./assets/css/bootstrap.min.css" />
 
         <!-- Custom stlylesheet -->
-        <link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/style.css" />
+        <link type="text/css" rel="stylesheet" href="./assets/css/style.css" />
 
     </head>
     <body>
