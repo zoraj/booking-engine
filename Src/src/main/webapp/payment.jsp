@@ -34,13 +34,13 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <input name="nom" id="nom" class="form-control" type="text">
+                                                <input name="nom" maxlength="99" id="nom" class="form-control" type="text">
                                                 <span class="form-label">Nom<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <input name="prenom" id="prenom" class="form-control" type="text">
+                                                <input name="prenom" maxlength="99" id="prenom" class="form-control" type="text">
                                                 <span class="form-label">Prénom<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
@@ -48,13 +48,13 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="adresse" id="adresse" class="form-control" type="text">
+                                                <input name="adresse" maxlength="45" id="adresse" class="form-control" type="text">
                                                 <span class="form-label">Adresse</span>
                                             </div>
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="complement" id="complement" class="form-control" type="text">
+                                                <input name="complement" maxlength="45" id="complement" class="form-control" type="text">
                                                 <span class="form-label">Complément</span>
                                             </div>
                                         </div>
@@ -62,13 +62,13 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <input name="codePostal" id="codePostal" class="form-control" type="text">
+                                                <input name="codePostal" maxlength="44" id="codePostal" class="form-control" type="text">
                                                 <span class="form-label">Code postal</span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <input name="ville" id="ville" class="form-control" type="text">
+                                                <input name="ville" maxlength="44" id="ville" class="form-control" type="text">
                                                 <span class="form-label">Ville</span>
                                             </div>
                                         </div>
@@ -87,13 +87,13 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="telephone" id="telephone" class="form-control" type="tel">
+                                                <input name="telephone" maxlength="44" id="telephone" class="form-control" type="tel">
                                                 <span class="form-label">Téléphone (mobile)<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="email" id="email" class="form-control" type="email">
+                                                <input name="email" maxlength="44" id="email" class="form-control" type="email">
                                                 <span class="form-label">Email<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
@@ -137,7 +137,7 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-1">
-                                            <input class="form-check-input" type="radio" id="masterCardId" name="" value="">
+                                            <input class="form-check-input" type="radio" id="masterCardId">
                                         </div>
                                         <div class="col-md-3">
                                             <label class="form-check-label" for="">
@@ -145,7 +145,7 @@
                                             </label>
                                         </div>
                                         <div class="col-md-1">
-                                            <input class="form-check-input" type="radio" id="visaId" name="" value="">
+                                            <input class="form-check-input" type="radio" id="visaId">
                                         </div>
                                         <div class="col-md-3">
                                             <label class="form-check-label" for="">
@@ -158,7 +158,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input class="form-control" id="carte-paiement-numero" name="carte-paiement-numero" type="text">
+                                        <input class="form-control" id="carte-paiement-numero" maxlength="15" name="carte-paiement-numero" type="text">
                                         <span class="form-label">Numéro de carte<i class="obligatoir">*</i></span>
                                     </div>
                                 </div>
@@ -206,7 +206,7 @@
                             <div class="row">
                                 <div class="col-md-7">
                                     <div class="form-group">
-                                        <input class="form-control" id="carte-paiement-titulaire" name="carte-paiement-titulaire" type="text">
+                                        <input class="form-control" maxlength="99" id="carte-paiement-titulaire" name="carte-paiement-titulaire" type="text">
                                         <span class="form-label">Nom du titulaire<i class="obligatoir">*</i></span>
                                     </div>
                                 </div>
@@ -291,8 +291,9 @@
     //lecture liste des chambre 
     var listRoom = sessionStorage.getItem("roomList_json");
     var listRoomObject = JSON.parse(listRoom);
-
-
+    var reservation = sessionStorage.getItem("reservation_json");
+    var reservationObject = JSON.parse(reservation);
+    
     $('.form-control').each(function () {
         floatedLabel($(this));
     });
@@ -309,11 +310,10 @@
             $field.removeClass('input-not-empty');
         }
     }
-    var reservation = sessionStorage.getItem("reservation_json");
-    var reservationObject = JSON.parse(reservation);
 
     jQuery(document).ready(function () {
         $('#masterCardId').click(function () {
+            console.log(" masterCardId ");
             if ($('#masterCardId').is(':checked') === true) {
                 $("#visaId").prop('checked', false);
                 $("#carte-paiement-type").val("MASTERCARD");
@@ -321,6 +321,7 @@
         });
 
         $('#visaId').click(function () {
+             console.log(" visaId ");
             if ($('#visaId').is(':checked') === true) {
                 $("#masterCardId").prop('checked', false);
                 $("#carte-paiement-type").val("VISA");

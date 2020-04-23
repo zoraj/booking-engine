@@ -6,11 +6,7 @@
 package cloud.multimicro.booking.servlet;
 
 import cloud.multimicro.booking.util.Constant;
-import org.json.simple.JSONObject;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,8 +17,10 @@ import javax.ws.rs.core.Response;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
-import org.json.simple.JSONArray;
-import org.json.simple.parser.JSONParser;
+import java.io.StringReader;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 
 /**
  *
@@ -87,7 +85,7 @@ public class Payment extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private static void postPayment(JSONObject paiment) {
+    private static void postPayment(JsonObject paiment) {
         ResteasyClient client = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = client.target(Constant.WS_CREATE_CASHING);
         System.out.println(Entity.json(paiment));
@@ -99,7 +97,6 @@ public class Payment extends HttpServlet {
 
     private static void postClient(HttpServletRequest request) {
         ResteasyClient client = new ResteasyClientBuilder().build();
-        JSONObject clientObject = new JSONObject();
         String nom = request.getParameter("nom");
         String prenom = request.getParameter("prenom");
         String adresse = request.getParameter("adresse");
@@ -111,26 +108,24 @@ public class Payment extends HttpServlet {
         String complement = request.getParameter("complement");
         String qualite = request.getParameter("qualite");
 
-        clientObject.put("code", "0900");
-        clientObject.put("nom", nom);
-        clientObject.put("prenom", prenom);
-        clientObject.put("adresse", adresse+" "+complement);
-        clientObject.put("ville", ville);
-        clientObject.put("codePostal", codePostal);
-        clientObject.put("telephone", telephone);
-        clientObject.put("email", email);
-        clientObject.put("pays", pays);
-        clientObject.put("qualite", qualite);
+        JsonObject clientObject = Json.createObjectBuilder()
+                .add("nom", nom)
+                .add("prenom", prenom)
+                .add("code", "77777")
+                .add("adresse", adresse + " " + complement)
+                .add("ville", ville)
+                .add("codePostal", codePostal)
+                .add("telephone", telephone)
+                .add("email", email) 
+                .add("pays", pays)
+                .add("qualite",qualite)
+                .build();
 
         ResteasyWebTarget target = client.target(Constant.WS_CREATE_CLIENT);
         Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "CD19FD5E87DB2FB0056168D58D24753B42CC4B9B75894632242A2E2BA257402E").header("Authorization", "Bearer 5edc790b914878af26afd0f7cc56715028420006401f2a9f4d8d238b5c2beae7").post(Entity.json(clientObject));
         //Read output in string format
         String value = response.readEntity(String.class);
         Integer clientId = getId(value);
-        
-        String roomList = request.getParameter("room-list");
-        String reservationPayload = request.getParameter("reservation");
-
         Payment.reservationCreation(clientId, request);
         response.close();
     }
@@ -151,82 +146,47 @@ public class Payment extends HttpServlet {
         return id;
     }
 
-    // create 
-    private static void reservationCreation(Integer clientId, HttpServletRequest request) {
-        String roomList = request.getParameter("room-list");
+   private static void reservationCreation(Integer clientId, HttpServletRequest request) {
+        //RESERVATION
         String reservationPayload = request.getParameter("reservation");
-        JSONObject resaJSONObject = Payment.createJSONObject(reservationPayload);
-        
         String cartePaiementType = request.getParameter("carte-paiement-type");
         String cartePaiementNumero = request.getParameter("carte-paiement-numero");
         String cartePaiementExpiration = request.getParameter("carte-paiement-expiration");
         String cartePaiementTitulaire = request.getParameter("carte-paiement-titulaire");
         String cartePaiementCVV = request.getParameter("carte-paiement-cvv");
-        
-        resaJSONObject.put("cartePaiementType", cartePaiementType);
-        resaJSONObject.put("cartePaiementNumero", cartePaiementNumero);
-        resaJSONObject.put("cartePaiementExpiration", cartePaiementExpiration);
-        resaJSONObject.put("cartePaiementTitulaire", cartePaiementTitulaire);
-        resaJSONObject.put("cartePaiementCVV", cartePaiementCVV);
-        resaJSONObject.put("mmcClientId", clientId);
-
+        reservationPayload = reservationPayload.substring(0, reservationPayload.length() - 1);
+        reservationPayload = reservationPayload +",\"cartePaiementType\":\""+cartePaiementType+"\","+"\"cartePaiementNumero\":\""+cartePaiementNumero+"\",\"cartePaiementExpiration\":\""+cartePaiementExpiration+"\",\"cartePaiementTitulaire\":\""+cartePaiementTitulaire+"\",\"cartePaiementCVV\":"+cartePaiementCVV+",\"mmcClientId\":"+clientId+"}";
+        JsonObject resaJSONObject = Payment.stringToJsonObject(reservationPayload);
         ResteasyClient reservation = new ResteasyClientBuilder().build();
         System.out.println(Entity.json(resaJSONObject));
         ResteasyWebTarget targetResa = reservation.target(Constant.WS_CREATE_BOOKING);
         Response response = targetResa.request().header("Content-Type", "application/json").header("x-api-key", "CD19FD5E87DB2FB0056168D58D24753B42CC4B9B75894632242A2E2BA257402E").header("Authorization", "Bearer 5edc790b914878af26afd0f7cc56715028420006401f2a9f4d8d238b5c2beae7").post(Entity.json(resaJSONObject));
         //Read output in string format
         String value = response.readEntity(String.class);
+        
+        //NOTE VANTILATION CHAMBRE
+        String roomList = request.getParameter("room-list");
         Integer entitieId = getId(value);
-        Payment.ventilationNoteCreation(entitieId, roomList);
+        roomList = "\"roomList\":"+roomList;
+        String payloadNoteVentillation = "{\"pmsNoteEnteteId\":"+entitieId+","+roomList+"}";
+        JsonObject payloadNoteVentillationJsonObject = Payment.stringToJsonObject(payloadNoteVentillation);
+        Payment.ventilationNoteCreation(payloadNoteVentillationJsonObject);
+         
+        //PAYMENT
         String montant = request.getParameter("montant");
-        JSONObject paiment = new JSONObject();
-        paiment.put("montant",montant);
-        paiment.put("pmsNoteEnteteId",entitieId);
-        paiment.put("mmcModeEncaissementId",1);
-        paiment.put("mmcUserId",1);
+        JsonObject paiment = Json.createObjectBuilder()
+                .add("montant",montant)
+                .add("pmsNoteEnteteId",entitieId)
+                .add("mmcModeEncaissementId",1)
+                .add("mmcUserId",1)
+                .build();
         Payment.postPayment(paiment);
 
         response.close();
     }
 
-    //list of room: modification of type String in JSONArray
-    private static JSONArray stringToJSONArrayRoomList(String roomList) {
-        JSONArray arrayList = new JSONArray();
-        JSONObject objectRoom = new JSONObject();
-        Map<String, String> myMap = new HashMap<String, String>();
-
-        roomList = roomList.replaceAll("\"", "");
-        roomList = roomList.substring(1, roomList.length() - 2);
-        String[] parts = roomList.split("},");
-
-        for (int i = 0; i < parts.length; i++) {
-            String part = parts[i];
-            part = part.substring(1, part.length());
-            String[] partList = part.split(",");
-            for (int j = 0; j < partList.length; j++) {
-                String partList1 = partList[j];
-                String[] keyValue = partList1.split(":");
-                Integer value = Integer.parseInt(keyValue[1]);
-                if (keyValue[0].equals("nbEnfant")) {
-                    objectRoom.put("nbEnfant", value);
-                } else if (keyValue[0].equals("qtyRoom")) {
-                    objectRoom.put("qteChb", value);
-                } else if (keyValue[0].equals("nbPax")) {
-                    objectRoom.put("nbAdulte", value);
-                }
-            }
-            arrayList.add(objectRoom);
-        }
-
-        return arrayList;
-    }
-
-    private static void ventilationNoteCreation(Integer entitieId, String roomList) {
-        JSONArray roomListArray = stringToJSONArrayRoomList(roomList);
+    private static void ventilationNoteCreation(JsonObject ventillationObject) {
         ResteasyClient ventillation = new ResteasyClientBuilder().build();
-        JSONObject ventillationObject = new JSONObject();
-        ventillationObject.put("pmsNoteEnteteId", entitieId);
-        ventillationObject.put("roomList", roomListArray);
         ResteasyWebTarget target = ventillation.target(Constant.WS_CREATE_VENTILLATION_NOTE);
         Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "CD19FD5E87DB2FB0056168D58D24753B42CC4B9B75894632242A2E2BA257402E").header("Authorization", "Bearer 5edc790b914878af26afd0f7cc56715028420006401f2a9f4d8d238b5c2beae7").post(Entity.json(ventillationObject));
         //Read output in string format
@@ -234,16 +194,10 @@ public class Payment extends HttpServlet {
         response.close();
     }
 
-    private static JSONObject createJSONObject(String jsonString) {
-        JSONObject jsonObject = new JSONObject();
-        JSONParser jsonParser = new JSONParser();
-        if ((jsonString != null) && !(jsonString.isEmpty())) {
-            try {
-                jsonObject = (JSONObject) jsonParser.parse(jsonString);
-            } catch (org.json.simple.parser.ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        return jsonObject;
+    private static JsonObject stringToJsonObject(String jsonString) {
+        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
+        JsonObject object = jsonReader.readObject();
+        jsonReader.close();
+        return object;
     }
 }

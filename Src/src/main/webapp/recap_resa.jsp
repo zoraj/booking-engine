@@ -5,67 +5,65 @@
             <div class="col-md-6 col-md-offset-3">
                 <div class="row" id="recap">
                     <div class="col-md-12">
-<!--                        <form>-->
-                            <div class="row">
-                                <div class="col-md-12 booking-cta">
-                                    <h2>Price Breakdown</h2>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-12 booking-cta">
+                                <h2>Price Breakdown</h2>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="row"><hr>
-                                        <div class="col-md-8">
-                                            <div class="row"><div class="col-md-12"><span id="name-user"></span></div></div>
-                                            <div class="row"><div class="col-md-12"><span>Rate: Regular Rate</span></div></div>
-                                        </div>
-                                        <div class="col-md-4" id="rate-id"><span>$0</span></div>
-                                    </div><hr>
-                                    <div class="row">
-                                        <div class="col-md-8"><span>Adults</span></div>
-                                        <div class="col-md-4"><span id="adults-id"></span></div>
-                                    </div><hr>
-                                    <div class="row">
-                                        <div class="col-md-8"><span>Children</span></div>
-                                        <div class="col-md-4"><span id="children-id"></span></div>
-                                    </div><hr>
-                                    <div class="row">
-                                        <div class="col-md-8"><span>Nights</span></div>
-                                        <div class="col-md-4"><span id="night-id">1</span></div>
-                                    </div><hr>
-                                    <div class="row">
-                                        <div class="col-md-8 font-title"><span>Dates</span></div>
-                                        <div class="col-md-4 font-title"><span>Amount</span></div>
-                                    </div><hr>
-                                    <div class="row">
-                                        <div class="col-md-8"><span id="date-arrived-id"></span></div>
-                                        <div class="col-md-4"><span id="amount-id">$0</span></div>
-                                    </div><hr>
-                                    <div class="row">
-                                        <div class="col-md-8 font-title"><span>Dates Subtotal</span></div>
-                                        <div class="col-md-4 font-title"><span id="date-sub-total-id">$135</span></div>
-                                    </div><hr>
-                                    <div class="row">
-                                        <div class="col-md-8 font-title"><span>Accommodation Subtotal</span></div>
-                                        <div class="col-md-4 font-title"><span id="accommodation-id">$135</span></div>
-                                    </div><hr>
-                                    <div class="row">
-                                        <div class="col-md-8 font-title"><span>Subtotal</span></div>
-                                        <div class="col-md-4 font-title"><span id="sub-total-id">$135</span></div>
-                                    </div><hr>
-                                    <div class="row">
-                                        <div class="col-md-8 font-title"><span>Total</span></div>
-                                        <div class="col-md-4 font-title"><span id="total-id">$135</span></div>
-                                    </div><hr>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4 col-md-offset-4">
-                                    <div class="form-btn">
-                                       <button id="valid-btn"><a href="payment" id="payer">Payer</a></button>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row"><hr>
+                                    <div class="col-md-8">
+                                        <div class="row"><div class="col-md-12"><span id="name-user"></span></div></div>
+                                        <div class="row"><div class="col-md-12"><span>Rate: Regular Rate</span></div></div>
                                     </div>
+                                    <div class="col-md-4" id="rate-id"><span>$0</span></div>
+                                </div><hr>
+                                <div class="row">
+                                    <div class="col-md-8"><span>Adults</span></div>
+                                    <div class="col-md-4"><span id="adults-id"></span></div>
+                                </div><hr>
+                                <div class="row">
+                                    <div class="col-md-8"><span>Children</span></div>
+                                    <div class="col-md-4"><span id="children-id"></span></div>
+                                </div><hr>
+                                <div class="row">
+                                    <div class="col-md-8"><span>Nights</span></div>
+                                    <div class="col-md-4"><span id="night-id">1</span></div>
+                                </div><hr>
+                                <div class="row">
+                                    <div class="col-md-8 font-title"><span>Dates</span></div>
+                                    <div class="col-md-4 font-title"><span>Amount</span></div>
+                                </div><hr>
+                                <div class="row">
+                                    <div class="col-md-8"><span id="date-arrived-id"></span></div>
+                                    <div class="col-md-4"><span id="amount-id">$0</span></div>
+                                </div><hr>
+                                <div class="row">
+                                    <div class="col-md-8 font-title"><span>Dates Subtotal</span></div>
+                                    <div class="col-md-4 font-title"><span id="date-sub-total-id">$135</span></div>
+                                </div><hr>
+                                <div class="row">
+                                    <div class="col-md-8 font-title"><span>Accommodation Subtotal</span></div>
+                                    <div class="col-md-4 font-title"><span id="accommodation-id">$135</span></div>
+                                </div><hr>
+                                <div class="row">
+                                    <div class="col-md-8 font-title"><span>Subtotal</span></div>
+                                    <div class="col-md-4 font-title"><span id="sub-total-id">$135</span></div>
+                                </div><hr>
+                                <div class="row">
+                                    <div class="col-md-8 font-title"><span>Total</span></div>
+                                    <div class="col-md-4 font-title"><span id="total-id">$135</span></div>
+                                </div><hr>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-4">
+                                <div class="form-btn">
+                                    <button id="valid-btn"><a href="payment" id="payer">Payer</a></button>
                                 </div>
                             </div>
-<!--                        </form>-->
+                        </div>
                     </div>
                 </div>	
             </div>
