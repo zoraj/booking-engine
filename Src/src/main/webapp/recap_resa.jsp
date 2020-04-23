@@ -5,7 +5,7 @@
             <div class="col-md-6 col-md-offset-3">
                 <div class="row" id="recap">
                     <div class="col-md-12">
-                        <form>
+<!--                        <form>-->
                             <div class="row">
                                 <div class="col-md-12 booking-cta">
                                     <h2>Price Breakdown</h2>
@@ -65,7 +65,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
+<!--                        </form>-->
                     </div>
                 </div>	
             </div>
@@ -88,7 +88,7 @@
         var childs = 0;
         listRoomObject.roomList.forEach(function (room) {
             childs = childs + parseInt(room.nbEnfant);
-            nbPax = nbPax + parseInt(room.nbAdulte);
+            nbPax = nbPax + parseInt(room.nbPax);
         });
 
         $("#name-user").html("#" + listRoomObject.name);

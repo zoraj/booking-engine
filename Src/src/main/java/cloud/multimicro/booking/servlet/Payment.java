@@ -209,9 +209,9 @@ public class Payment extends HttpServlet {
                 Integer value = Integer.parseInt(keyValue[1]);
                 if (keyValue[0].equals("nbEnfant")) {
                     objectRoom.put("nbEnfant", value);
-                } else if (keyValue[0].equals("qteChb")) {
+                } else if (keyValue[0].equals("qtyRoom")) {
                     objectRoom.put("qteChb", value);
-                } else if (keyValue[0].equals("nbAdulte")) {
+                } else if (keyValue[0].equals("nbPax")) {
                     objectRoom.put("nbAdulte", value);
                 }
             }
