@@ -34,13 +34,13 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <input name="nom" maxlength="99" id="nom" class="form-control" type="text">
+                                                <input name="nom" maxlength="99" id="nom" class="form-control" type="text" required autocomplete="off">
                                                 <span class="form-label">Nom<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <input name="prenom" maxlength="99" id="prenom" class="form-control" type="text">
+                                                <input name="prenom" maxlength="99" id="prenom" class="form-control" type="text" required autocomplete="off">
                                                 <span class="form-label">Prénom<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
@@ -48,13 +48,13 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="adresse" maxlength="45" id="adresse" class="form-control" type="text">
+                                                <input name="adresse" maxlength="45" id="adresse" class="form-control" type="text" autocomplete="off">
                                                 <span class="form-label">Adresse</span>
                                             </div>
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="complement" maxlength="45" id="complement" class="form-control" type="text">
+                                                <input name="complement" maxlength="45" id="complement" class="form-control" type="text" autocomplete="off">
                                                 <span class="form-label">Complément</span>
                                             </div>
                                         </div>
@@ -62,13 +62,13 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <input name="codePostal" maxlength="44" id="codePostal" class="form-control" type="text">
-                                                <span class="form-label">Code postal</span>
+                                                <input name="codePostal" maxlength="44" id="codePostal" class="form-control" type="text" autocomplete="off">
+                                                <span class="form-label">Code postal<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <input name="ville" maxlength="44" id="ville" class="form-control" type="text">
+                                                <input name="ville" maxlength="44" id="ville" class="form-control" type="text" autocomplete="off">
                                                 <span class="form-label">Ville</span>
                                             </div>
                                         </div>
@@ -87,13 +87,13 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="telephone" maxlength="44" id="telephone" class="form-control" type="tel">
+                                                <input name="telephone" maxlength="44" id="telephone" class="form-control" type="tel" required autocomplete="off">
                                                 <span class="form-label">Téléphone (mobile)<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="email" maxlength="44" id="email" class="form-control" type="email">
+                                                <input name="email" maxlength="44" id="email" class="form-control" type="email" required autocomplete="off">
                                                 <span class="form-label">Email<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
@@ -158,7 +158,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input class="form-control" id="carte-paiement-numero" maxlength="15" name="carte-paiement-numero" type="text">
+                                        <input class="form-control" id="carte-paiement-numero" maxlength="15" name="carte-paiement-numero" type="text" required autocomplete="off">
                                         <span class="form-label">Numéro de carte<i class="obligatoir">*</i></span>
                                     </div>
                                 </div>
@@ -206,13 +206,13 @@
                             <div class="row">
                                 <div class="col-md-7">
                                     <div class="form-group">
-                                        <input class="form-control" maxlength="99" id="carte-paiement-titulaire" name="carte-paiement-titulaire" type="text">
+                                        <input class="form-control" maxlength="99" id="carte-paiement-titulaire" name="carte-paiement-titulaire" type="text" required autocomplete="off">
                                         <span class="form-label">Nom du titulaire<i class="obligatoir">*</i></span>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
-                                        <input class="form-control" id="carte-paiement-cvv" name="carte-paiement-cvv" type="text" maxlength="3">
+                                        <input class="form-control" id="carte-paiement-cvv" name="carte-paiement-cvv" type="text" maxlength="3" required autocomplete="off">
                                         <span class="form-label">Cryptogramme<i class="obligatoir">*</i></span>
                                     </div>
                                 </div>
@@ -289,6 +289,7 @@
 <script src="./assets/js/jquery.min.js"></script>
 <script>
     //lecture liste des chambre 
+    var cartePaymentType = "MASTERCARD";
     var listRoom = sessionStorage.getItem("roomList_json");
     var listRoomObject = JSON.parse(listRoom);
     var reservation = sessionStorage.getItem("reservation_json");
@@ -312,19 +313,21 @@
     }
 
     jQuery(document).ready(function () {
+        
+        $("#masterCardId").prop('checked', true);
+        $("#visaId").prop('checked', false);
+        
         $('#masterCardId').click(function () {
-            console.log(" masterCardId ");
             if ($('#masterCardId').is(':checked') === true) {
                 $("#visaId").prop('checked', false);
-                $("#carte-paiement-type").val("MASTERCARD");
+                cartePaymentType = "MASTERCARD";
             }
         });
 
         $('#visaId').click(function () {
-             console.log(" visaId ");
             if ($('#visaId').is(':checked') === true) {
                 $("#masterCardId").prop('checked', false);
-                $("#carte-paiement-type").val("VISA");
+                cartePaymentType = "VISA";
             }
         });
 
@@ -333,6 +336,7 @@
             $("#room-list").val(JSON.stringify(listRoomObject.roomList));
             $("#carte-paiement-expiration").val($("#yearId").val()+"-" + $("#mounthId").val());
             $("#montant").val($("#amountId").html());
+            $("#carte-paiement-type").val(cartePaymentType);
         });
     });
 </script>
