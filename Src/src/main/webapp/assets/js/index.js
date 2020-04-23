@@ -21,7 +21,7 @@ jQuery(document).ready(function () {
                 + "<select class='form-control' id='nbEnfant" + i + "'><option>1</option><option>2</option><option>3</option></select>"
                 + "<span class='select-arrow'></span></div></div>"
                 + "<div class='col-md-2'>"
-                + "<div class='form-group'><button class='submit-btn'><a href='#' onclick='deleteRoom(" + i + ");'>(-)</a></button></div></div>"
+                + "<div class='form-group'><button class='submit-btn' id='del-chambre'><a href='#' onclick='deleteRoom(" + i + ");'>(-)</a></button></div></div>"
                 + "</div>"));
 
         i++;

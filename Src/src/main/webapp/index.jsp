@@ -81,9 +81,9 @@
                                         <span class="select-arrow"></span>
                                     </div>
                                 </div>
-                                <div class="col-md-1 col-sm-1" id="add-room">
+                                <div class="col-md-1" id="add-room">
                                     <div class="form-btn">
-                                        <button class="submit-btn"><a href="#">(+)</a></button>
+                                        <button class="submit-btn" id="add-chambre"><a href="#">(+)</a></button>
                                     </div>
                                 </div>									
                             </div>
