@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author zo
  */
-@WebServlet(name = "Reservation", urlPatterns = {"/reservation"})
-public class Reservation extends HttpServlet {
+@WebServlet(name = "Home", urlPatterns = {"/"})
+public class Home extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,7 +32,7 @@ public class Reservation extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        getServletConfig().getServletContext().getRequestDispatcher("/reservation.jsp").forward(request, response);
+        getServletConfig().getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
