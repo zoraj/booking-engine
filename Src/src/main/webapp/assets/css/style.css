@@ -168,6 +168,32 @@
 	text-transform: capitalize;
 }
 
+#add-chambre{
+	color: #fff;
+	background-color: #06a8c4;
+	font-weight: 700;
+	height: 55px;
+	padding: 5px 40px 0px 20px;
+	font-size: 18px;
+	border: none;
+	display: block;
+	width: 100%;
+	text-transform: capitalize;
+}
+
+#del-chambre{
+	color: #fff;
+	background-color: #06a8c4;
+	font-weight: 700;
+	height: 55px;
+	padding: 5px 40px 0px 20px;
+	font-size: 18px;
+	border: none;
+	display: block;
+	width: 100%;
+	text-transform: capitalize;
+}
+
 #other-room-add .form-control {
 	background-color: #fff;
 	height: 55px;

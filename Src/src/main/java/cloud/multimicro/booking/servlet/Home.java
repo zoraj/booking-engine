@@ -20,7 +20,7 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
  *
  * @author zo
  */
-@WebServlet(name = "Home", urlPatterns = {"/"})
+@WebServlet(name = "Home", urlPatterns = {"/home"})
 public class Home extends HttpServlet {
 
     /**
@@ -49,8 +49,22 @@ public class Home extends HttpServlet {
      */
         @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);  
+            throws ServletException, IOException {  
+        processRequest(request, response);
+        String codeSite = request.getParameter("code");
+        Home.getApiKeyBySite(codeSite);
+        System.out.println(" codeSite : "+codeSite);
+    }
+    
+    private static void getApiKeyBySite(String codeSite){
+         System.out.println(" siteId : "+codeSite);
+        ResteasyClient client = new ResteasyClientBuilder().build();
+        ResteasyWebTarget target = client.target("http://localhost:8080/e/api/sites/?code="+codeSite);
+        Response response = target.request().header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjbG91ZC5tdWx0aW1pY3JvIiwiaWF0IjoxNTg3NDc3MzYyLCJzdWIiOiJNTUMgVG9rZW4gZm9yIGJhY2tlbmQiLCJpc3MiOiJNTUMiLCJleHAiOjE1ODc1NjM3NjJ9.U1wOH4pvZpPoFmV_ED_mahwIIR06mq_wojqC3PxleW4").get();
+        //Read output in string format
+        String value = response.readEntity(String.class);
+        System.out.println("value : "+value);
+        response.close();
     }
 
     /**
