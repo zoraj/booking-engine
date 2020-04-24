@@ -2,7 +2,7 @@
 <actions>
         <action>
             <actionName>CUSTOM-Deploy to server dev</actionName>
-            <displayName>Deploy to server dev</displayName>
+            <displayName>Deploy to server</displayName>
             <goals>
                 <goal>wildfly:deploy</goal>
             </goals>
