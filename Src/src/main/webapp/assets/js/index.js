@@ -48,8 +48,6 @@ jQuery(document).ready(function () {
         var roomAvailable = {
             "dateArrivee": $("#dateArrivee").val(),
             "dateDepart": $("#dateDepart").val(),
-            "name": $("#name").val(),
-            "email": $("#email").val(),
             "roomList": []
         };
 
@@ -57,28 +55,37 @@ jQuery(document).ready(function () {
 
         if ($("#room").is(":hidden") == false) {
             roomAvailable.roomList.push({
-                "qtyRoom": $("#qtyRoom").val(),
-                "nbPax": parseInt($("#nbPax").val()),
-                "nbEnfant": $("#nbEnfant").val()
+                "qteChb": parseInt($("#qtyRoom").val()),
+                "nbAdulte": parseInt($("#nbPax").val()),
+                "nbEnfant": parseInt($("#nbEnfant").val())
             });
         }
 
         while (count < i) {
             if ($("#room" + count).is(":hidden") == false) {
                 roomAvailable.roomList.push({
-                    "qtyRoom": $("#qtyRoom" + count).val(),
-                    "nbPax": parseInt($("#nbPax" + count).val()),
-                    "nbEnfant": $("#nbEnfant" + count).val()
+                    "qteChb": parseInt($("#qtyRoom" + count).val()),
+                    "nbAdulte": parseInt($("#nbPax" + count).val()),
+                    "nbEnfant": parseInt($("#nbEnfant" + count).val())
                 });
             }
             count++;
         }
-
+        console.log("room-requested : "+JSON.stringify(roomAvailable));
+         $("#room-requested").val(JSON.stringify(roomAvailable));
         var roomList_json = JSON.stringify(roomAvailable);
         sessionStorage.setItem("roomList_json", roomList_json);
         var listRoom = sessionStorage.getItem("roomList_json");
         var listRoomObject = JSON.parse(listRoom);
-        console.log(roomList_json);
+        var informationPerson = {
+            "name": $("#name").val(),
+            "phone": $("#phone").val(),
+            "email": $("#email").val()
+         };
+         
+        var informationPerson_json = JSON.stringify(informationPerson);
+        sessionStorage.setItem("informationPerson_json", informationPerson_json);
+      
     });
 });
 

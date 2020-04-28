@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package cloud.multimicro.booking.servlet;
-
+import cloud.multimicro.booking.util.Constant;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +15,13 @@ import javax.ws.rs.core.Response;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+import cloud.multimicro.booking.util.Jwt;
 
+import javax.ws.rs.client.Entity;
+import java.io.StringReader;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 /**
  *
  * @author zo
@@ -54,13 +60,14 @@ public class Home extends HttpServlet {
         String codeSite = request.getParameter("code");
         Home.getApiKeyBySite(codeSite);
         System.out.println(" codeSite : "+codeSite);
+       
     }
     
     private static void getApiKeyBySite(String codeSite){
-         System.out.println(" siteId : "+codeSite);
         ResteasyClient client = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = client.target("http://localhost:8080/e/api/sites/?code="+codeSite);
-        Response response = target.request().header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjbG91ZC5tdWx0aW1pY3JvIiwiaWF0IjoxNTg3NDc3MzYyLCJzdWIiOiJNTUMgVG9rZW4gZm9yIGJhY2tlbmQiLCJpc3MiOiJNTUMiLCJleHAiOjE1ODc1NjM3NjJ9.U1wOH4pvZpPoFmV_ED_mahwIIR06mq_wojqC3PxleW4").get();
+        String bearerToken = Jwt.generateToken();
+        Response response = target.request().header("Authorization", "Bearer " + bearerToken).get();
         //Read output in string format
         String value = response.readEntity(String.class);
         System.out.println("value : "+value);
@@ -78,7 +85,30 @@ public class Home extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String roomRequested = request.getParameter("room-requested");
+         System.out.println(" roomRequested : ");
+        System.out.println(" roomRequested : "+roomRequested);
+        Home.postRoomAvailability(roomRequested);
         processRequest(request, response);
+    }
+    
+    private static void postRoomAvailability(String availableString) {
+        JsonObject availableObject = stringToJsonObject(availableString);
+        ResteasyClient client = new ResteasyClientBuilder().build();
+        ResteasyWebTarget target = client.target(Constant.WS_SEARCH_AVAILABILITY);
+        System.out.println(Entity.json(availableObject));
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "CD19FD5E87DB2FB0056168D58D24753B42CC4B9B75894632242A2E2BA257402E").header("Authorization", "Bearer 5edc790b914878af26afd0f7cc56715028420006401f2a9f4d8d238b5c2beae7").post(Entity.json(availableObject));
+        //Read output in string format
+        String value = response.readEntity(String.class);
+        System.out.println("value disponibilite  retourné ****************: "+value);
+        response.close();
+    }
+
+    private static JsonObject stringToJsonObject(String jsonString) {
+        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
+        JsonObject object = jsonReader.readObject();
+        jsonReader.close();
+        return object;
     }
 
     /**
