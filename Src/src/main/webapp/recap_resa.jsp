@@ -14,10 +14,10 @@
                             <div class="col-md-12">
                                 <div class="row"><hr>
                                     <div class="col-md-8">
-                                        <div class="row"><div class="col-md-12"><span id="name-user"></span></div></div>
-                                        <div class="row"><div class="col-md-12"><span>Rate: Regular Rate</span></div></div>
+                                        <div class="row"><div class="col-md-12"><span id="name-user"></span></div></div><br />
+                                        <div class="row"><div class="col-md-12"><span id="recapitulation-chambre-id"></span></div></div>
                                     </div>
-                                    <div class="col-md-4" id="rate-id"><span>$0</span></div>
+                                    <div class="col-md-4" id="rate-id"><span></span></div>
                                 </div><hr>
                                 <div class="row">
                                     <div class="col-md-8"><span>Adults</span></div>
@@ -32,27 +32,19 @@
                                     <div class="col-md-4"><span id="night-id">1</span></div>
                                 </div><hr>
                                 <div class="row">
-                                    <div class="col-md-8 font-title"><span>Dates</span></div>
-                                    <div class="col-md-4 font-title"><span>Amount</span></div>
+                                    <div class="col-md-4 "><span>Dates   ...................................</span></div>
+                                    <div class="col-md-8"><span id="date-id"></span></div>
                                 </div><hr>
                                 <div class="row">
                                     <div class="col-md-8"><span id="date-arrived-id"></span></div>
                                     <div class="col-md-4"><span id="amount-id">$0</span></div>
                                 </div><hr>
                                 <div class="row">
-                                    <div class="col-md-8 font-title"><span>Dates Subtotal</span></div>
-                                    <div class="col-md-4 font-title"><span id="date-sub-total-id">$135</span></div>
+                                    <div class="col-md-8 font-title"><span>Total TVA</span></div>
+                                    <div class="col-md-4 font-title"><span id="tva-id"></span></div>
                                 </div><hr>
                                 <div class="row">
-                                    <div class="col-md-8 font-title"><span>Accommodation Subtotal</span></div>
-                                    <div class="col-md-4 font-title"><span id="accommodation-id">$135</span></div>
-                                </div><hr>
-                                <div class="row">
-                                    <div class="col-md-8 font-title"><span>Subtotal</span></div>
-                                    <div class="col-md-4 font-title"><span id="sub-total-id">$135</span></div>
-                                </div><hr>
-                                <div class="row">
-                                    <div class="col-md-8 font-title"><span>Total</span></div>
+                                    <div class="col-md-8 font-title"><span>Total TCC</span></div>
                                     <div class="col-md-4 font-title"><span id="total-id">$135</span></div>
                                 </div><hr>
                             </div>
@@ -76,6 +68,10 @@
 <script>
     var listRoom = sessionStorage.getItem("roomList_json");
     var listRoomObject = JSON.parse(listRoom);
+
+    var recapJson = sessionStorage.getItem("recap_json");
+    var recapObject = JSON.parse(recapJson);
+
     var dateArrivee = new Date(listRoomObject.dateArrivee);
     var dateDepart = new Date(listRoomObject.dateDepart);
 
@@ -84,24 +80,37 @@
     jQuery(document).ready(function () {
         var nbPax = 0;
         var childs = 0;
-        listRoomObject.roomList.forEach(function (room) {
+        var montantTTC = 0;
+        var recapitulationChambre = "";
+        var rateList = "";
+        recapObject.roomList.forEach(function (room) {
             childs = childs + parseInt(room.nbEnfant);
-            nbPax = nbPax + parseInt(room.nbPax);
+            nbPax = nbPax + parseInt(room.nbAdulte);
+            montantTTC = montantTTC + parseInt(room.qty) * parseInt(room.rate);
+            recapitulationChambre = recapitulationChambre + "<div>" + room.qty + " x " + room.roomType + "</div>";
+            rateList = rateList + "<div class='col-md-4'><span>" + room.rate + "&euro;</span></div>";
         });
 
         $("#name-user").html("#" + listRoomObject.name);
-        $("#date-arrived-id").html(dateArrivee.toDateString("mm dd, yyyy"));
+        $("#date-id").html("du "+changeFormat(dateArrivee)+" au "+changeFormat(dateDepart));
 
         $("#adults-id").html(nbPax);
         $("#children-id").html(childs);
 
-        $("#rate-id").html(0);
         $("#night-id").html(1);
         $("#amount-id").html(0);
-        $("#date-sub-total-id").html(0);
-        $("#accommodation-id").html(0);
-        $("#sub-total-id").html(0);
-        $("#total-id").html(0);
+        $("#tva-id").html(100);
+        $("#total-id").html(montantTTC + "&euro;");
+        $("#recapitulation-chambre-id").html("<div></div>" + recapitulationChambre + "</ul>");
+        $("#rate-id").after("<br/><br/>" + rateList);
+
+        function changeFormat(date) {
+            options = {
+                weekday: "short",year: 'numeric', month: 'long', day: 'numeric'
+            };
+            console.log(date.toLocaleString('fr-FR', options));
+            return date.toLocaleString('fr-FR', options);
+        }
     });
 
 </script>
