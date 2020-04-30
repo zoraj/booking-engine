@@ -1,3 +1,4 @@
+<%@ page pageEncoding="UTF-8" %>
 <div id="booking" class="section">
     <div class="section-center">
         <div class="container">
@@ -88,11 +89,10 @@
                             </div>									
                         </div>
                         <div id="other-room-add"></div>
-
                         <form method="post" action="home">
                             <input type="hidden" id="room-requested" name="room-requested">
-                            <div class="form-btn">
-                                <button class="submit-btn" id="submit-book"><a href="#" id="bookNow">Book Now</a></button>
+                            <div class="form-btn" id="submit-book">
+                                <button class="submit-btn">Book Now</button>
                             </div>
                         </form>
                     </div>
@@ -101,4 +101,3 @@
         </div>
     </div>
 </div>
-<script src="./assets/js/jquery.min.js"></script>
