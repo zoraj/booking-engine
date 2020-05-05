@@ -68,7 +68,7 @@
 <script>
     var listRoom = sessionStorage.getItem("roomList_json");
     var listRoomObject = JSON.parse(listRoom);
-
+    
     var recapJson = sessionStorage.getItem("recap_json");
     var recapObject = JSON.parse(recapJson);
 
@@ -101,6 +101,7 @@
         $("#amount-id").html(0);
         $("#tva-id").html(100);
         $("#total-id").html(montantTTC + "&euro;");
+        sessionStorage.setItem("montant",montantTTC);
         $("#recapitulation-chambre-id").html("<div></div>" + recapitulationChambre + "</ul>");
         $("#rate-id").after("<br/><br/>" + rateList);
 

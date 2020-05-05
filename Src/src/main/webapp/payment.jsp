@@ -224,7 +224,7 @@
                                     <strong>Montant (Acompte)</strong>
                                 </div>
                                 <div class="col-md-2">
-                                    <strong id="amountId">219.50</strong>£
+                                    <strong id="amountId"></strong>&euro;
                                 </div>
                             </div><hr>
                             <div class="row">
@@ -294,7 +294,7 @@
     var listRoomObject = JSON.parse(listRoom);
     var reservation = sessionStorage.getItem("reservation_json");
     var reservationObject = JSON.parse(reservation);
-    
+
     $('.form-control').each(function () {
         floatedLabel($(this));
     });
@@ -313,10 +313,10 @@
     }
 
     jQuery(document).ready(function () {
-        
+        $("#amountId").html(sessionStorage.getItem("montant"));
         $("#masterCardId").prop('checked', true);
         $("#visaId").prop('checked', false);
-        
+
         $('#masterCardId').click(function () {
             if ($('#masterCardId').is(':checked') === true) {
                 $("#visaId").prop('checked', false);
@@ -334,9 +334,10 @@
         $('#validateId').click(function () {
             $("#reservation").val(JSON.stringify(reservationObject));
             $("#room-list").val(JSON.stringify(listRoomObject.roomList));
-            $("#carte-paiement-expiration").val($("#yearId").val()+"-" + $("#mounthId").val());
-            $("#montant").val($("#amountId").html());
+            $("#carte-paiement-expiration").val($("#yearId").val() + "-" + $("#mounthId").val());
+            $("#montant").val(sessionStorage.getItem("montant"));
             $("#carte-paiement-type").val(cartePaymentType);
+            sessionStorage.setItem("montant","0");
         });
     });
 </script>
