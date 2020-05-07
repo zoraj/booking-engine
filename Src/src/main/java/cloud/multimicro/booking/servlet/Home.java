@@ -35,7 +35,6 @@ import javax.json.stream.JsonParsingException;
 @WebServlet(name = "Home", urlPatterns = {"/home"})
 public class Home extends HttpServlet {
     private String apiKey;
-    //private String apiKey;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -66,7 +65,6 @@ public class Home extends HttpServlet {
         processRequest(request, response);
         String codeSite = request.getParameter("code");
         apiKey = getApiKeyBySite(codeSite);
-        //apiKey = "959859";
         System.out.println(" codeSite : "+codeSite);
        
     }
@@ -117,8 +115,10 @@ public class Home extends HttpServlet {
             JsonObject jsonLigne = jsonArray.getJsonObject(i); 
 
             JsonObject jsonTypeChambre  = jsonLigne.getJsonObject("pmsTypeChambre");
+            Integer id                  = jsonTypeChambre.getInt("id");
             String libTypeChambre       = jsonTypeChambre.getString("libelle");
             Integer persMax             = jsonTypeChambre.getInt("persMax");
+            Integer nbEnfant            = jsonTypeChambre.getInt("nbEnfant");
 
             JsonObject jsonModeleTarif  = jsonLigne.getJsonObject("pmsModelTarif");
             JsonNumber  jsonPrixDefaut  = jsonModeleTarif.getJsonNumber("prixParDefaut");
@@ -138,18 +138,20 @@ public class Home extends HttpServlet {
             Integer totalRoom = jsonLigne.getInt("totalRoom");
             Integer availableRoom = jsonLigne.getInt("availableRoom");
 
-            DataBooking room = new DataBooking(); 
+            DataBooking room = new DataBooking();
+            room.setIdTypeChambre(id);
             room.setTypeChambreLibelle(libTypeChambre); 
             room.setAvailableRoom(availableRoom); 
             room.setPrixParDefaut(prixDefaut); 
             room.setTotalRoom(totalRoom); 
-            room.setNbAdulte(persMax); 
+            room.setNbAdulte(persMax);
+            room.setNbEnfant(nbEnfant); 
             room.setTarifOptionLibelle(tarifOption); 
             rooms.add(room);
         }
       
         request.setAttribute("listRooms", rooms);
-        getServletConfig().getServletContext().getRequestDispatcher("/rooms.jsp").forward(request, response);
+        getServletConfig().getServletContext().getRequestDispatcher("/rooms").forward(request, response);
 
     }
     

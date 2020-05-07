@@ -16,5 +16,7 @@
 
         <!-- Custom stlylesheet -->
         <link type="text/css" rel="stylesheet" href="./assets/css/style.css" />
+                
+        <script src="./assets/js/jquery.min.js"></script>
     </head>
     <body>

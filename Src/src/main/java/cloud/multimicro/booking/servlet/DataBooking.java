@@ -14,10 +14,12 @@ import java.util.List;
  */
 public class DataBooking {
     
+    private Integer idTypeChambre;
     private String typeChambreLibelle;
     private Integer availableRoom;
     private Integer totalRoom;
     private Integer nbAdulte;
+    private Integer nbEnfant;
     private BigDecimal prixParDefaut;
     private List<String> tarifOptionLibelle;
 
@@ -25,6 +27,14 @@ public class DataBooking {
         
     }
     
+    public int getIdTypeChambre() {
+        return idTypeChambre;
+    }
+
+    public void setIdTypeChambre(int idTypeChambre) {
+        this.idTypeChambre = idTypeChambre;
+    }    
+
     public String getTypeChambreLibelle() {
         return typeChambreLibelle;
     }
@@ -63,6 +73,14 @@ public class DataBooking {
 
     public void setNbAdulte(int nbAdulte) {
         this.nbAdulte = nbAdulte;
+    }
+    
+    public int getNbEnfant() {
+        return nbEnfant;
+    }
+
+    public void setNbEnfant(int nbEnfant) {
+        this.nbEnfant = nbEnfant;
     }
 
     public List<String> getTarifOptionLibelle() {
