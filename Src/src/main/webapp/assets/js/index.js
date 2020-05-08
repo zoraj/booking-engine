@@ -88,6 +88,7 @@ jQuery(document).ready(function () {
     }
     
     $("#submit-book").click(function () {
+        sessionStorage.clear();
         addValueInSessionStorage();
     });
 });
