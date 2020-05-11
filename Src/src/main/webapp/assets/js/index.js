@@ -1,5 +1,25 @@
 var i = 0;
 
+function checkDate(){    
+    var dateArrive = $("#dateArrivee").val();
+    var dateDepart = $("#dateDepart").val();
+    
+    var now = new Date();
+    var dateJour = now.getFullYear()+"-"+(now.getMonth()+1)+"-"+now.getDate();
+    
+    if(new Date(dateArrive) < new Date(dateJour)){
+        alert("Your date check in is not valid!");
+        return false;
+    }else{
+        if((new Date(dateArrive) < new Date(dateDepart))){
+            return true;
+        }else{   
+            alert("Your date check out is not valid!");
+            return false;
+        }    
+    }
+}
+
 function addValueInSessionStorage(){
     var roomAvailable = {
             "dateArrivee": $("#dateArrivee").val(),
@@ -47,8 +67,8 @@ function deleteRoom(i) {
     $('#room' + i).hide();
 }
 
-jQuery(document).ready(function () {
-     sessionStorage.setItem("disponibilite_json", $('#disponibilite-id').html());
+jQuery(document).ready(function () {  
+    sessionStorage.setItem("disponibilite_json", $('#disponibilite-id').html());
     $("#add-room").click(function () {
         $('#other-room-add').append($("<div class='row' id='room" + i + "'>"
                 + "<div class='col-md-3'>"
@@ -85,11 +105,13 @@ jQuery(document).ready(function () {
         } else {
             $field.removeClass('input-not-empty');
         }
-    }
+    }    
     
     $("#submit-book").click(function () {
-        sessionStorage.clear();
-        addValueInSessionStorage();
+        if(checkDate() === true){
+            sessionStorage.clear();
+            addValueInSessionStorage();              
+        }
     });
 });
 

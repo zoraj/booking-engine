@@ -94,6 +94,12 @@ public class Home extends HttpServlet {
             throws ServletException, IOException {
         String roomRequested = request.getParameter("room-requested");
         System.out.println(" roomRequested : "+roomRequested);
+        
+        if("".equals(roomRequested)){
+            getServletConfig().getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+            return;
+        }
+         
         String value = postRoomAvailability(roomRequested);
         
         value = "{\"Availability\":"+value+"}";

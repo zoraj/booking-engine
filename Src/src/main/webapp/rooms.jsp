@@ -61,7 +61,7 @@
                             <div class="col-md-4 col-xs-12">
                                 <p>Price start at: </p>
                                 <p>
-                                    <span style="font-size:30px; font-weight:bolder" id="rate_${myIndex.index}">$ ${room.prixParDefaut}</span>
+                                    <span style="font-size:30px; font-weight:bolder">$ <label id="rate_${myIndex.index}">${room.prixParDefaut}</label></span>
                                     <span style="font-size:15px;">/per night</span>
                                 </p>	
                                 <form class="form-input">
