@@ -69,8 +69,12 @@
     var listRoom = sessionStorage.getItem("roomList_json");
     var listRoomObject = JSON.parse(listRoom);
     
-    var recapJson = sessionStorage.getItem("recap_json");
+    var recapJson = sessionStorage.getItem("informationTypeRooms_json");
     var recapObject = JSON.parse(recapJson);
+    
+    var informationPersonJson = sessionStorage.getItem("informationPerson_json");
+    var informationPersonObject = JSON.parse(informationPersonJson);
+     
 
     var dateArrivee = new Date(listRoomObject.dateArrivee);
     var dateDepart = new Date(listRoomObject.dateDepart);
@@ -83,15 +87,42 @@
         var montantTTC = 0;
         var recapitulationChambre = "";
         var rateList = "";
-        recapObject.roomList.forEach(function (room) {
+        
+        var nbEnfant = 0;
+        var qteChb = 0;
+        var nbAdulte = 0;
+        
+        listRoomObject.roomList.forEach(function (room) {
+            nbEnfant = nbEnfant + parseInt(room.nbEnfant);
+            qteChb = qteChb + parseInt(room.qteChb);
+            nbAdulte = nbAdulte + parseInt(room.nbAdulte) ;
+        });
+        
+         var reservationJson = {
+            "dateArrivee": listRoomObject.dateArrivee,
+            "dateDepart": listRoomObject.dateDepart,
+            "nbPax": nbAdulte,
+            "nbChambre": qteChb,
+            "nbEnfant": nbEnfant,
+            "pmsServiceId": 1,
+            "reservationType": "INDIV",
+            "posteUuid": "7291ee70-0d98-4e53-9077-2db1fe91edd1",
+            "origine": "BOOKING"
+        };
+        
+        var reservation_json = JSON.stringify(reservationJson);
+        sessionStorage.setItem("reservation_json", reservation_json);
+        
+        recapObject.bookRoom.forEach(function (room) {
             childs = childs + parseInt(room.nbEnfant);
             nbPax = nbPax + parseInt(room.nbAdulte);
             montantTTC = montantTTC + parseInt(room.qty) * parseInt(room.rate);
             recapitulationChambre = recapitulationChambre + "<div>" + room.qty + " x " + room.roomType + "</div>";
             rateList = rateList + "<div class='col-md-4'><span>" + room.rate + "&euro;</span></div>";
         });
+        
 
-        $("#name-user").html("#" + listRoomObject.name);
+        $("#name-user").html("#" + informationPersonObject.name);
         $("#date-id").html("du "+changeFormat(dateArrivee)+" au "+changeFormat(dateDepart));
 
         $("#adults-id").html(nbPax);
