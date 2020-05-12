@@ -89,7 +89,7 @@ public class Payment extends HttpServlet {
         ResteasyClient client = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = client.target(Constant.WS_CREATE_CASHING);
         System.out.println(Entity.json(paiment));
-        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "CD19FD5E87DB2FB0056168D58D24753B42CC4B9B75894632242A2E2BA257402E").header("Authorization", "Bearer 5edc790b914878af26afd0f7cc56715028420006401f2a9f4d8d238b5c2beae7").post(Entity.json(paiment));
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "D2B946C4954953D75C05E358AE0F1C33CF0698F762127A6DD8F15D81A4ECF1D7").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjbG91ZC5tdWx0aW1pY3JvIiwiaWF0IjoxNTg5MTk0NDcyLCJzdWIiOiJNTUMgVG9rZW4gZm9yIGJhY2tlbmQiLCJpc3MiOiJNTUMiLCJleHAiOjE1ODkyODA4NzJ9.Kx4w5ng7Bx2wtP7fWRbZQbXOmkQlh2C0WAG0fHfD1FM").post(Entity.json(paiment));
         //Read output in string format
         String value = response.readEntity(String.class);
         response.close();
@@ -122,7 +122,7 @@ public class Payment extends HttpServlet {
                 .build();
 
         ResteasyWebTarget target = client.target(Constant.WS_CREATE_CLIENT);
-        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "CD19FD5E87DB2FB0056168D58D24753B42CC4B9B75894632242A2E2BA257402E").header("Authorization", "Bearer 5edc790b914878af26afd0f7cc56715028420006401f2a9f4d8d238b5c2beae7").post(Entity.json(clientObject));
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "D2B946C4954953D75C05E358AE0F1C33CF0698F762127A6DD8F15D81A4ECF1D7").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjbG91ZC5tdWx0aW1pY3JvIiwiaWF0IjoxNTg5MTk0NDcyLCJzdWIiOiJNTUMgVG9rZW4gZm9yIGJhY2tlbmQiLCJpc3MiOiJNTUMiLCJleHAiOjE1ODkyODA4NzJ9.Kx4w5ng7Bx2wtP7fWRbZQbXOmkQlh2C0WAG0fHfD1FM").post(Entity.json(clientObject));
         //Read output in string format
         String value = response.readEntity(String.class);
         Integer clientId = getId(value);
@@ -160,7 +160,7 @@ public class Payment extends HttpServlet {
         ResteasyClient reservation = new ResteasyClientBuilder().build();
         System.out.println(Entity.json(resaJSONObject));
         ResteasyWebTarget targetResa = reservation.target(Constant.WS_CREATE_BOOKING);
-        Response response = targetResa.request().header("Content-Type", "application/json").header("x-api-key", "CD19FD5E87DB2FB0056168D58D24753B42CC4B9B75894632242A2E2BA257402E").header("Authorization", "Bearer 5edc790b914878af26afd0f7cc56715028420006401f2a9f4d8d238b5c2beae7").post(Entity.json(resaJSONObject));
+        Response response = targetResa.request().header("Content-Type", "application/json").header("x-api-key", "D2B946C4954953D75C05E358AE0F1C33CF0698F762127A6DD8F15D81A4ECF1D7").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjbG91ZC5tdWx0aW1pY3JvIiwiaWF0IjoxNTg5MTk0NDcyLCJzdWIiOiJNTUMgVG9rZW4gZm9yIGJhY2tlbmQiLCJpc3MiOiJNTUMiLCJleHAiOjE1ODkyODA4NzJ9.Kx4w5ng7Bx2wtP7fWRbZQbXOmkQlh2C0WAG0fHfD1FM").post(Entity.json(resaJSONObject));
         //Read output in string format
         String value = response.readEntity(String.class);
         
@@ -188,7 +188,7 @@ public class Payment extends HttpServlet {
     private static void ventilationNoteCreation(JsonObject ventillationObject) {
         ResteasyClient ventillation = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = ventillation.target(Constant.WS_CREATE_VENTILLATION_NOTE);
-        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "CD19FD5E87DB2FB0056168D58D24753B42CC4B9B75894632242A2E2BA257402E").header("Authorization", "Bearer 5edc790b914878af26afd0f7cc56715028420006401f2a9f4d8d238b5c2beae7").post(Entity.json(ventillationObject));
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "D2B946C4954953D75C05E358AE0F1C33CF0698F762127A6DD8F15D81A4ECF1D7").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjbG91ZC5tdWx0aW1pY3JvIiwiaWF0IjoxNTg5MTk0NDcyLCJzdWIiOiJNTUMgVG9rZW4gZm9yIGJhY2tlbmQiLCJpc3MiOiJNTUMiLCJleHAiOjE1ODkyODA4NzJ9.Kx4w5ng7Bx2wtP7fWRbZQbXOmkQlh2C0WAG0fHfD1FM").post(Entity.json(ventillationObject));
         //Read output in string format
         String value = response.readEntity(String.class);
         response.close();
