@@ -16,19 +16,25 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import cloud.multimicro.booking.util.Jwt;
-
+import cloud.multimicro.booking.servlet.DataBooking;
 import javax.ws.rs.client.Entity;
 import java.io.StringReader;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.json.JsonArray;
+import javax.json.JsonNumber;
+import java.util.*;
+import java.math.BigDecimal;
+import javax.json.stream.JsonParsingException;
+
 /**
  *
  * @author zo
  */
 @WebServlet(name = "Home", urlPatterns = {"/home"})
 public class Home extends HttpServlet {
-
+    private String apiKey;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -43,7 +49,7 @@ public class Home extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         getServletConfig().getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
     }
-
+      
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -58,12 +64,12 @@ public class Home extends HttpServlet {
             throws ServletException, IOException {  
         processRequest(request, response);
         String codeSite = request.getParameter("code");
-        Home.getApiKeyBySite(codeSite);
+        apiKey = getApiKeyBySite(codeSite);
         System.out.println(" codeSite : "+codeSite);
        
     }
     
-    private static void getApiKeyBySite(String codeSite){
+    private static String getApiKeyBySite(String codeSite){
         ResteasyClient client = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = client.target("http://localhost:8080/e/api/sites/?code="+codeSite);
         String bearerToken = Jwt.generateToken();
@@ -72,6 +78,7 @@ public class Home extends HttpServlet {
         String value = response.readEntity(String.class);
         System.out.println("value : "+value);
         response.close();
+        return value;
     }
 
     /**
@@ -86,22 +93,86 @@ public class Home extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String roomRequested = request.getParameter("room-requested");
-         System.out.println(" roomRequested : ");
         System.out.println(" roomRequested : "+roomRequested);
-        Home.postRoomAvailability(roomRequested);
-        processRequest(request, response);
+        
+        if("".equals(roomRequested)){
+            getServletConfig().getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+            return;
+        }
+         
+        String value = postRoomAvailability(roomRequested);
+        
+        value = "{\"Availability\":"+value+"}";
+
+        JsonObject jsonObj = null;
+        JsonReader jsonR = Json.createReader(new StringReader(value));        
+        try {            
+            jsonObj = jsonR.readObject();
+            jsonR.close();
+        } catch (JsonParsingException e) {
+            
+        }
+
+        // Transformer JSONObject en Array  
+        JsonArray jsonArray = jsonObj.getJsonArray("Availability");
+              
+        List<DataBooking> rooms = new ArrayList<DataBooking>();     
+        for (int i = 0; i < jsonArray.size(); i++) { 
+            JsonObject jsonLigne = jsonArray.getJsonObject(i); 
+
+            JsonObject jsonTypeChambre  = jsonLigne.getJsonObject("pmsTypeChambre");
+            Integer id                  = jsonTypeChambre.getInt("id");
+            String libTypeChambre       = jsonTypeChambre.getString("libelle");
+            Integer persMax             = jsonTypeChambre.getInt("persMax");
+            Integer nbEnfant            = jsonTypeChambre.getInt("nbEnfant");
+
+            JsonObject jsonModeleTarif  = jsonLigne.getJsonObject("pmsModelTarif");
+            JsonNumber  jsonPrixDefaut  = jsonModeleTarif.getJsonNumber("prixParDefaut");
+            BigDecimal prixDefaut       = BigDecimal.valueOf(jsonPrixDefaut.doubleValue());
+
+            JsonArray jsonTarifOptionArray = jsonLigne.getJsonArray("pmsTarifOption");
+
+            List<String> tarifOption = new ArrayList<String>();
+            for (int j = 0; j < jsonTarifOptionArray.size(); j++) { 
+                JsonObject jsonTarifOption = jsonTarifOptionArray.getJsonObject(j);
+                if(jsonTarifOption.getBoolean("isChecked")==true){
+                    String option = jsonTarifOption.getString("libelle");                   
+                    tarifOption.add(option);
+                }
+            }
+
+            Integer totalRoom = jsonLigne.getInt("totalRoom");
+            Integer availableRoom = jsonLigne.getInt("availableRoom");
+
+            DataBooking room = new DataBooking();
+            room.setIdTypeChambre(id);
+            room.setTypeChambreLibelle(libTypeChambre); 
+            room.setAvailableRoom(availableRoom); 
+            room.setPrixParDefaut(prixDefaut); 
+            room.setTotalRoom(totalRoom); 
+            room.setNbAdulte(persMax);
+            room.setNbEnfant(nbEnfant); 
+            room.setTarifOptionLibelle(tarifOption); 
+            rooms.add(room);
+        }
+      
+        request.setAttribute("listRooms", rooms);
+        getServletConfig().getServletContext().getRequestDispatcher("/rooms").forward(request, response);
+
     }
     
-    private static void postRoomAvailability(String availableString) {
+    private String postRoomAvailability(String availableString) {
         JsonObject availableObject = stringToJsonObject(availableString);
         ResteasyClient client = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = client.target(Constant.WS_SEARCH_AVAILABILITY);
         System.out.println(Entity.json(availableObject));
-        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "CD19FD5E87DB2FB0056168D58D24753B42CC4B9B75894632242A2E2BA257402E").header("Authorization", "Bearer 5edc790b914878af26afd0f7cc56715028420006401f2a9f4d8d238b5c2beae7").post(Entity.json(availableObject));
+        String bearerToken = Jwt.generateToken();
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer "+bearerToken).post(Entity.json(availableObject));
         //Read output in string format
         String value = response.readEntity(String.class);
-        System.out.println("value disponibilite  retourné ****************: "+value);
+        System.out.println("value disponibilite  retourné : "+value);
         response.close();
+        return value;
     }
 
     private static JsonObject stringToJsonObject(String jsonString) {

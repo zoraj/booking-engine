@@ -1,3 +1,4 @@
+<%@ page pageEncoding="UTF-8" %>
 <div id="booking" class="section">
     <div class="section-center">
         <div class="container">
@@ -10,7 +11,7 @@
                 </div>
                 <div class="col-md-6 col-md-offset-1">
                     <div class="booking-form">
-                        <!--                        <form>								-->
+                        <form id="criteriaForm" method="post" action="home">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -63,9 +64,10 @@
                                 <div class="form-group">
                                     <span class="form-label">Guests</span>
                                     <select class="form-control" id="nbPax">
-                                        <option>1 Person</option>
+                                        <option>1 People</option>
                                         <option>2 People</option>
                                         <option>3 People</option>
+                                        <option>4 People</option>
                                     </select>
                                     <span class="select-arrow"></span>
                                 </div>
@@ -74,6 +76,7 @@
                                 <div class="form-group">
                                     <span class="form-label">Childs</span>
                                     <select class="form-control" id="nbEnfant">
+                                        <option>0</option>
                                         <option>1</option>
                                         <option>2</option>
                                         <option>3</option>
@@ -81,18 +84,16 @@
                                     <span class="select-arrow"></span>
                                 </div>
                             </div>
-                            <div class="col-md-1" id="add-room">
-                                <div class="form-btn">
+                            <div class="col-md-1">
+                                <div class="form-btn" id="add-room">
                                     <button class="submit-btn" id="add-chambre"><a href="#">(+)</a></button>
                                 </div>
                             </div>									
                         </div>
                         <div id="other-room-add"></div>
-
-                        <form method="post" action="home">
                             <input type="hidden" id="room-requested" name="room-requested">
-                            <div class="form-btn">
-                                <button class="submit-btn" id="submit-book"><a href="#" id="bookNow">Book Now</a></button>
+                            <div class="form-btn" id="submit-book">
+                                <button class="submit-btn">Book Now</button>
                             </div>
                         </form>
                     </div>
@@ -101,4 +102,3 @@
         </div>
     </div>
 </div>
-<script src="./assets/js/jquery.min.js"></script>
