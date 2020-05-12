@@ -370,7 +370,6 @@
             $("#carte-paiement-expiration").val($("#yearId").val() + "-" + $("#mounthId").val());
             $("#montant").val(montantTTC);
             $("#carte-paiement-type").val(cartePaymentType);
-            sessionStorage.setItem("informationTypeRooms_json","");
         });
     });
 </script>
