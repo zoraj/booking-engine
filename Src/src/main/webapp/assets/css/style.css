@@ -12,16 +12,33 @@
 	transform: translateY(-50%);
 }
 
-#booking {
+body {
 	font-family: 'Montserrat', sans-serif;
 	background-image: url('../img/background.jpg');
 	background-size: cover;
 	background-position: center;
+	background-attachment: fixed;
+	position: relative;
+	height: 100vh;
+}
+
+#text-reservation{
+    margin-top: 20%;
+    margin-bottom:15px;
+    position: relative;
+    padding-bottom: 20px;
+}
+
+#form-reservation{
+    margin-top: 20%;
+    margin-bottom:15px;
+    position: relative;
+    padding-bottom: 20px;
 }
 
 #booking::before {
 	content: '';
-	position: absolute;
+	position: fixed;
 	left: 0;
 	right: 0;
 	bottom: 0;
