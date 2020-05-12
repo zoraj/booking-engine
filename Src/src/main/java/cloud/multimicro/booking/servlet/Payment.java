@@ -120,9 +120,10 @@ public class Payment extends HttpServlet {
                 .add("pays", pays)
                 .add("qualite",qualite)
                 .build();
-
+        String apiKey = Home.getApiKey();
+        String token = Home.getToken();
         ResteasyWebTarget target = client.target(Constant.WS_CREATE_CLIENT);
-        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "D2B946C4954953D75C05E358AE0F1C33CF0698F762127A6DD8F15D81A4ECF1D7").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjbG91ZC5tdWx0aW1pY3JvIiwiaWF0IjoxNTg5MTk0NDcyLCJzdWIiOiJNTUMgVG9rZW4gZm9yIGJhY2tlbmQiLCJpc3MiOiJNTUMiLCJleHAiOjE1ODkyODA4NzJ9.Kx4w5ng7Bx2wtP7fWRbZQbXOmkQlh2C0WAG0fHfD1FM").post(Entity.json(clientObject));
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer "+token).post(Entity.json(clientObject));
         //Read output in string format
         String value = response.readEntity(String.class);
         Integer clientId = getId(value);
@@ -148,6 +149,8 @@ public class Payment extends HttpServlet {
 
    private static void reservationCreation(Integer clientId, HttpServletRequest request) {
         //RESERVATION
+        String apiKey = Home.getApiKey();
+        String token = Home.getToken();
         String reservationPayload = request.getParameter("reservation");
         String cartePaiementType = request.getParameter("carte-paiement-type");
         String cartePaiementNumero = request.getParameter("carte-paiement-numero");
@@ -160,7 +163,7 @@ public class Payment extends HttpServlet {
         ResteasyClient reservation = new ResteasyClientBuilder().build();
         System.out.println(Entity.json(resaJSONObject));
         ResteasyWebTarget targetResa = reservation.target(Constant.WS_CREATE_BOOKING);
-        Response response = targetResa.request().header("Content-Type", "application/json").header("x-api-key", "D2B946C4954953D75C05E358AE0F1C33CF0698F762127A6DD8F15D81A4ECF1D7").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjbG91ZC5tdWx0aW1pY3JvIiwiaWF0IjoxNTg5MTk0NDcyLCJzdWIiOiJNTUMgVG9rZW4gZm9yIGJhY2tlbmQiLCJpc3MiOiJNTUMiLCJleHAiOjE1ODkyODA4NzJ9.Kx4w5ng7Bx2wtP7fWRbZQbXOmkQlh2C0WAG0fHfD1FM").post(Entity.json(resaJSONObject));
+        Response response = targetResa.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer "+token).post(Entity.json(resaJSONObject));
         //Read output in string format
         String value = response.readEntity(String.class);
         
@@ -171,7 +174,7 @@ public class Payment extends HttpServlet {
         String payloadNoteVentillation = "{\"pmsNoteEnteteId\":"+entitieId+","+roomList+"}";
         JsonObject payloadNoteVentillationJsonObject = Payment.stringToJsonObject(payloadNoteVentillation);
         Payment.ventilationNoteCreation(payloadNoteVentillationJsonObject);
-         
+        
         //PAYMENT
         String montant = request.getParameter("montant");
         JsonObject paiment = Json.createObjectBuilder()
