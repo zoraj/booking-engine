@@ -86,10 +86,12 @@ public class Payment extends HttpServlet {
     }// </editor-fold>
 
     private static void postPayment(JsonObject paiment) {
+        String apiKey = Home.getApiKey();
+        String token = Home.getToken();
         ResteasyClient client = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = client.target(Constant.WS_CREATE_CASHING);
         System.out.println(Entity.json(paiment));
-        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "D2B946C4954953D75C05E358AE0F1C33CF0698F762127A6DD8F15D81A4ECF1D7").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjbG91ZC5tdWx0aW1pY3JvIiwiaWF0IjoxNTg5MTk0NDcyLCJzdWIiOiJNTUMgVG9rZW4gZm9yIGJhY2tlbmQiLCJpc3MiOiJNTUMiLCJleHAiOjE1ODkyODA4NzJ9.Kx4w5ng7Bx2wtP7fWRbZQbXOmkQlh2C0WAG0fHfD1FM").post(Entity.json(paiment));
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer "+token).post(Entity.json(paiment));
         //Read output in string format
         String value = response.readEntity(String.class);
         response.close();
@@ -189,9 +191,11 @@ public class Payment extends HttpServlet {
     }
 
     private static void ventilationNoteCreation(JsonObject ventillationObject) {
+        String apiKey = Home.getApiKey();
+        String token = Home.getToken();
         ResteasyClient ventillation = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = ventillation.target(Constant.WS_CREATE_VENTILLATION_NOTE);
-        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "D2B946C4954953D75C05E358AE0F1C33CF0698F762127A6DD8F15D81A4ECF1D7").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjbG91ZC5tdWx0aW1pY3JvIiwiaWF0IjoxNTg5MTk0NDcyLCJzdWIiOiJNTUMgVG9rZW4gZm9yIGJhY2tlbmQiLCJpc3MiOiJNTUMiLCJleHAiOjE1ODkyODA4NzJ9.Kx4w5ng7Bx2wtP7fWRbZQbXOmkQlh2C0WAG0fHfD1FM").post(Entity.json(ventillationObject));
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer "+token).post(Entity.json(ventillationObject));
         //Read output in string format
         String value = response.readEntity(String.class);
         response.close();

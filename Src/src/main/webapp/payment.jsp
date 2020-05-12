@@ -212,7 +212,7 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
-                                        <input class="form-control" id="carte-paiement-cvv" name="carte-paiement-cvv" type="text" maxlength="3" required autocomplete="off">
+                                        <input class="form-control" id="carte-paiement-cvv" name="carte-paiement-cvv" type="text" maxlength="3" pattern="[0-9]{3}" required autocomplete="off">
                                         <span class="form-label">Cryptogramme<i class="obligatoir">*</i></span>
                                     </div>
                                 </div>
@@ -224,7 +224,7 @@
                                     <strong>Montant (Acompte)</strong>
                                 </div>
                                 <div class="col-md-2">
-                                    <strong id="amountId"></strong>&euro;
+                                    <strong id="amountId"></strong>
                                 </div>
                             </div><hr>
                             <div class="row">
@@ -292,8 +292,9 @@
     var cartePaymentType = "MASTERCARD";
     var listRoom = sessionStorage.getItem("roomList_json");
     var listRoomObject = JSON.parse(listRoom);
-    var reservation = sessionStorage.getItem("reservation_json");
-    var reservationObject = JSON.parse(reservation);
+
+    var recapJson = sessionStorage.getItem("informationTypeRooms_json");
+    var recapObject = JSON.parse(recapJson);
 
     $('.form-control').each(function () {
         floatedLabel($(this));
@@ -313,31 +314,63 @@
     }
 
     jQuery(document).ready(function () {
-        $("#amountId").html(sessionStorage.getItem("montant"));
+        var nbEnfant = 0;
+        var qteChb = 0;
+        var nbAdulte = 0;
+        // recuperation des nbEnfants, qteChb, nbAdulte reservé
+        listRoomObject.roomList.forEach(function (room) {
+            nbEnfant = nbEnfant + parseInt(room.nbEnfant);
+            qteChb = qteChb + parseInt(room.qteChb);
+            nbAdulte = nbAdulte + parseInt(room.nbAdulte);
+        });
+        // création de json reservation
+        var reservationJson = {
+            "dateArrivee": listRoomObject.dateArrivee,
+            "dateDepart": listRoomObject.dateDepart,
+            "nbPax": nbAdulte,
+            "nbChambre": qteChb,
+            "nbEnfant": nbEnfant,
+            "pmsServiceId": 1,
+            "reservationType": "INDIV",
+            "posteUuid": "7291ee70-0d98-4e53-9077-2db1fe91edd1",
+            "origine": "BOOKING"
+        };
+        
+        var montantTTC = 0;
+        // calcul de montant ttc
+        recapObject.bookRoom.forEach(function (room) {
+            montantTTC = montantTTC + parseInt(room.qty) * parseInt(room.rate);
+        });
+
+        // Affichage de montant ttc
+        $("#amountId").html(montantTTC+" &euro;");
+        
+        //initialisation
         $("#masterCardId").prop('checked', true);
         $("#visaId").prop('checked', false);
-
+        
+        //si on click sur masterCard
         $('#masterCardId').click(function () {
             if ($('#masterCardId').is(':checked') === true) {
                 $("#visaId").prop('checked', false);
                 cartePaymentType = "MASTERCARD";
             }
         });
-
+       //si on click sur VISA
         $('#visaId').click(function () {
             if ($('#visaId').is(':checked') === true) {
                 $("#masterCardId").prop('checked', false);
                 cartePaymentType = "VISA";
             }
         });
-
+        // Validation de paiment
         $('#validateId').click(function () {
-            $("#reservation").val(JSON.stringify(reservationObject));
+            $("#reservation").val(JSON.stringify(reservationJson));
             $("#room-list").val(JSON.stringify(listRoomObject.roomList));
             $("#carte-paiement-expiration").val($("#yearId").val() + "-" + $("#mounthId").val());
-            $("#montant").val(sessionStorage.getItem("montant"));
+            $("#montant").val(montantTTC);
             $("#carte-paiement-type").val(cartePaymentType);
-            sessionStorage.setItem("montant","0");
+            sessionStorage.setItem("informationTypeRooms_json","");
         });
     });
 </script>
