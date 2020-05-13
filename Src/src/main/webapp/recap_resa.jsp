@@ -77,7 +77,7 @@
 
     var dateArrivee = new Date(listRoomObject.dateArrivee);
     var dateDepart = new Date(listRoomObject.dateDepart);
-    
+   
     jQuery(document).ready(function () {
         var nbPax = 0;
         var childs = 0;
@@ -95,8 +95,9 @@
 
         $("#adults-id").html(nbPax);
         $("#children-id").html(childs);
-
-        $("#night-id").html(1);
+        
+         var night = dateDiff(dateArrivee,dateDepart);   
+        $("#night-id").html(night);
         $("#amount-id").html(0);
         $("#tva-id").html(100);
         $("#total-id").html(montantTTC + "&euro;");
@@ -109,6 +110,28 @@
             console.log(date.toLocaleString('fr-FR', options));
             return date.toLocaleString('fr-FR', options);
         }
-    });
+        
+         function dateDiff(date1, date2) {
+            var diff = {}                           // Initialisation du retour
+            var tmp = date2 - date1;
 
+            tmp = Math.floor(tmp / 1000);             // Nombre de secondes entre les 2 dates
+            diff.sec = tmp % 60;                    // Extraction du nombre de secondes
+
+            tmp = Math.floor((tmp - diff.sec) / 60);    // Nombre de minutes (partie entière)
+            diff.min = tmp % 60;                    // Extraction du nombre de minutes
+
+            tmp = Math.floor((tmp - diff.min) / 60);    // Nombre d'heures (entières)
+            diff.hour = tmp % 24;                   // Extraction du nombre d'heures
+
+            tmp = Math.floor((tmp - diff.hour) / 24);   // Nombre de jours restants
+            diff.day = tmp;
+
+            return tmp;
+        }
+        
+        
+    });
+    
+    
 </script>
