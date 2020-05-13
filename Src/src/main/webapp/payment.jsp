@@ -62,7 +62,7 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <input name="codePostal" maxlength="44" id="codePostal" class="form-control" type="text" autocomplete="off">
+                                                <input name="codePostal" pattern="[0-9]+" maxlength="44" id="codePostal" class="form-control" type="text" autocomplete="off">
                                                 <span class="form-label">Code postal<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
@@ -87,7 +87,7 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="telephone" maxlength="44" id="telephone" class="form-control" type="tel" required autocomplete="off">
+                                                <input name="telephone" maxlength="44" pattern="[0-9]+" id="telephone" class="form-control" type="tel" required autocomplete="off">
                                                 <span class="form-label">Téléphone (mobile)<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
@@ -158,7 +158,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input class="form-control" id="carte-paiement-numero" maxlength="15" name="carte-paiement-numero" type="text" required autocomplete="off">
+                                        <input class="form-control" id="carte-paiement-numero" pattern="[0-9]+" maxlength="15" name="carte-paiement-numero" type="text" required autocomplete="off">
                                         <span class="form-label">Numéro de carte<i class="obligatoir">*</i></span>
                                     </div>
                                 </div>
@@ -197,7 +197,7 @@
                                         <select id="yearId" class="form-control">
                                             <option value="2019">2019</option>
                                             <option value="2020">2020</option>
-                                            <option value="2020">2021</option>
+                                            <option value="2021">2021</option>
                                         </select>
                                         <span class="select-arrow"></span>
                                     </div>
@@ -335,7 +335,7 @@
             "posteUuid": "7291ee70-0d98-4e53-9077-2db1fe91edd1",
             "origine": "BOOKING"
         };
-        
+
         var montantTTC = 0;
         // calcul de montant ttc
         recapObject.bookRoom.forEach(function (room) {
@@ -343,12 +343,12 @@
         });
 
         // Affichage de montant ttc
-        $("#amountId").html(montantTTC+" &euro;");
-        
+        $("#amountId").html(montantTTC + " &euro;");
+
         //initialisation
         $("#masterCardId").prop('checked', true);
         $("#visaId").prop('checked', false);
-        
+
         //si on click sur masterCard
         $('#masterCardId').click(function () {
             if ($('#masterCardId').is(':checked') === true) {
@@ -356,20 +356,29 @@
                 cartePaymentType = "MASTERCARD";
             }
         });
-       //si on click sur VISA
+        //si on click sur VISA
         $('#visaId').click(function () {
             if ($('#visaId').is(':checked') === true) {
                 $("#masterCardId").prop('checked', false);
                 cartePaymentType = "VISA";
             }
         });
+
         // Validation de paiment
         $('#validateId').click(function () {
-            $("#reservation").val(JSON.stringify(reservationJson));
-            $("#room-list").val(JSON.stringify(listRoomObject.roomList));
-            $("#carte-paiement-expiration").val($("#yearId").val() + "-" + $("#mounthId").val());
-            $("#montant").val(montantTTC);
-            $("#carte-paiement-type").val(cartePaymentType);
+            var dateExpiration =   new Date($("#yearId").val(),parseInt($("#mounthId").val())-1,1);
+            
+            if ((dateExpiration < new Date())) {
+                $("#mounthId").get(0).setCustomValidity("Date anterieure à la date du jour");
+            } else {              
+                $("#mounthId").get(0).setCustomValidity("");
+                $("#reservation").val(JSON.stringify(reservationJson));
+                $("#room-list").val(JSON.stringify(listRoomObject.roomList));
+                $("#carte-paiement-expiration").val($("#yearId").val() + "-" + $("#mounthId").val());
+                $("#montant").val(montantTTC);
+                $("#carte-paiement-type").val(cartePaymentType);
+            }
         });
+
     });
 </script>
