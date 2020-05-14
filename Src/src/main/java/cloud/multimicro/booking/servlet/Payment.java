@@ -115,17 +115,28 @@ public class Payment extends HttpServlet {
         //RESERVATION
         String apiKey = Home.getApiKey();
         String token = Home.getToken();
+
+        String nom = request.getParameter("nom");
+        String prenom = request.getParameter("prenom");
+        String adresse = request.getParameter("adresse");
+        String ville = request.getParameter("ville");
+        String codePostal = request.getParameter("codePostal");
+        String telMobile = request.getParameter("telMobile");
+        String email = request.getParameter("email");
+        String pays = request.getParameter("pays");
+        String adresseComp = request.getParameter("adresseComp");
+        String civilite = request.getParameter("civilite");
         String reservationPayload = request.getParameter("reservation");
         String cartePaiementType = request.getParameter("carte-paiement-type");
         String cartePaiementNumero = request.getParameter("carte-paiement-numero");
         String cartePaiementExpiration = request.getParameter("carte-paiement-expiration");
         String cartePaiementTitulaire = request.getParameter("carte-paiement-titulaire");
         String cartePaiementCVV = request.getParameter("carte-paiement-cvv");
+        
         reservationPayload = reservationPayload.substring(0, reservationPayload.length() - 1);
-        reservationPayload = reservationPayload +",\"cartePaiementType\":\""+cartePaiementType+"\","+"\"cartePaiementNumero\":\""+cartePaiementNumero+"\",\"cartePaiementExpiration\":\""+cartePaiementExpiration+"\",\"cartePaiementTitulaire\":\""+cartePaiementTitulaire+"\",\"cartePaiementCVV\":"+cartePaiementCVV+",\"mmcClientId\":1}";
+        reservationPayload = reservationPayload +",\"cartePaiementType\":\""+cartePaiementType+"\","+"\"cartePaiementNumero\":\""+cartePaiementNumero+"\",\"cartePaiementExpiration\":\""+cartePaiementExpiration+"\",\"cartePaiementTitulaire\":\""+cartePaiementTitulaire+"\",\"cartePaiementCVV\":\""+cartePaiementCVV+"\",\"nom\":\""+nom+"\",\"prenom\":\""+prenom+"\",\"adresse\":\""+adresse+"\",\"ville\":\""+ville+"\",\"codePostal\":\""+codePostal+"\",\"telMobile\":\""+telMobile+"\",\"email\":\""+email+"\",\"adresseComp\":\""+adresseComp+"\",\"pays\":\""+pays+"\",\"civilite\":\""+civilite+"\",\"mmcClientId\":1}";
         JsonObject resaJSONObject = Payment.stringToJsonObject(reservationPayload);
         ResteasyClient reservation = new ResteasyClientBuilder().build();
-        System.out.println(Entity.json(resaJSONObject));
         ResteasyWebTarget targetResa = reservation.target(Constant.WS_CREATE_BOOKING);
         Response response = targetResa.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer "+token).post(Entity.json(resaJSONObject));
         //Read output in string format
