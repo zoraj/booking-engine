@@ -1,22 +1,11 @@
 var i = 0;
 
-function checkDate(){    
-    var dateArrive = $("#dateArrivee").val();
-    var dateDepart = $("#dateDepart").val();
-    
-    var now = new Date();
-    var dateJour = now.getFullYear()+"-"+(now.getMonth()+1)+"-"+now.getDate();
-    
-    if(new Date(dateArrive) < new Date(dateJour)){
-        alert("Your date check in is not valid!");
-        return false;
-    }else{
-        if((new Date(dateArrive) < new Date(dateDepart))){
-            return true;
-        }else{   
-            alert("Your date check out is not valid!");
-            return false;
-        }    
+function verifyDateCheckOut(){
+    var debut = document.getElementById("dateArrivee");
+    var fin = document.getElementById("dateDepart");
+    if(debut.value > fin.value){
+        fin.value = null;
+        alert("Departure date must be greater than arrival date!");
     }
 }
 
@@ -67,7 +56,11 @@ function deleteRoom(i) {
     $('#room' + i).hide();
 }
 
-jQuery(document).ready(function () {  
+jQuery(document).ready(function () {
+
+    document.getElementById('dateArrivee').min = new Date().toISOString().substr(0,10);
+    document.getElementById('dateDepart').min = new Date(new Date().getTime() + 24 * 60 * 60 * 1000 - new Date().getTimezoneOffset() * 60 * 1000).toISOString().substr(0,10);
+    
     sessionStorage.setItem("disponibilite_json", $('#disponibilite-id').html());
     $("#add-room").click(function () {
         $('#other-room-add').append($("<div class='row' id='room" + i + "'>"
@@ -108,10 +101,8 @@ jQuery(document).ready(function () {
     }    
     
     $("#submit-book").click(function () {
-        if(checkDate() === true){
-            sessionStorage.clear();
-            addValueInSessionStorage();              
-        }
+        sessionStorage.clear();
+        addValueInSessionStorage();
     });
 });
 
