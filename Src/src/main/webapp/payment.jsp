@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/paiement.css" />	
+<link type="text/css" rel="stylesheet" href="./assets/css/paiement.css" />	
 <div id="booking">
     <form method="post" action="payment">
         <div class="container">
