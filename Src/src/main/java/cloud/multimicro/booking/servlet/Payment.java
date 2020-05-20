@@ -142,43 +142,6 @@ public class Payment extends HttpServlet {
         response.close();
     }
 
-    private static void postClient(HttpServletRequest request) {
-        ResteasyClient client = new ResteasyClientBuilder().build();
-        String nom = request.getParameter("nom");
-        String prenom = request.getParameter("prenom");
-        String adresse = request.getParameter("adresse");
-        String ville = request.getParameter("ville");
-        String codePostal = request.getParameter("codePostal");
-        String telephone = request.getParameter("telephone");
-        String email = request.getParameter("email");
-        String pays = request.getParameter("pays");
-        String complement = request.getParameter("complement");
-        String qualite = request.getParameter("qualite");
-
-        JsonObject clientObject = Json.createObjectBuilder()
-                .add("nom", nom)
-                .add("prenom", prenom)
-                .add("code", "77777")
-                .add("adresse", adresse + " " + complement)
-                .add("ville", ville)
-                .add("codePostal", codePostal)
-                .add("telephone", telephone)
-                .add("email", email) 
-                .add("pays", pays)
-                .add("qualite",qualite)
-                .build();
-        String apiKey = Home.getApiKey();
-        String token = Home.getToken();
-        ResteasyWebTarget target = client.target(Constant.WS_CREATE_CLIENT);
-        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer "+token).post(Entity.json(clientObject));
-        //Read output in string format
-        String value = response.readEntity(String.class);
-        Integer clientId = getId(value);
-        Payment.reservationCreation(clientId, request);
-        response.close();
-    }
-
-
     private static Integer getId(String value) {
         Integer id = null;
         value = value.replaceAll("\"", "");
