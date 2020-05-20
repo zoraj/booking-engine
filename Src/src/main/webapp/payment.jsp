@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/paiement.css" />	
+<link type="text/css" rel="stylesheet" href="./assets/css/paiement.css" />	
 <div id="booking">
     <form method="post" action="payment">
         <div class="container">
@@ -23,8 +23,8 @@
                                     <div class="row">
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <span class="form-label">CivilitÈ<i class="obligatoir">*</i></span>
-                                                <select name="qualite" id="qualite" class="form-control">
+                                                <span class="form-label">Civilit√©<i class="obligatoir">*</i></span>
+                                                <select name="civilite" id="civilite" class="form-control">
                                                     <option value="MR">M.</option>
                                                     <option value="MME">Mm</option>
                                                     <option value="MLLE">Mll</option>
@@ -41,7 +41,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <input name="prenom" maxlength="99" id="prenom" class="form-control" type="text" required autocomplete="off">
-                                                <span class="form-label">PrÈnom<i class="obligatoir">*</i></span>
+                                                <span class="form-label">Pr√©nom<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
                                     </div><br>
@@ -54,15 +54,15 @@
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="complement" maxlength="45" id="complement" class="form-control" type="text" autocomplete="off">
-                                                <span class="form-label">ComplÈment</span>
+                                                <input name="adresseComp" maxlength="45" id="adresseComp" class="form-control" type="text" autocomplete="off">
+                                                <span class="form-label">Compl√©ment</span>
                                             </div>
                                         </div>
                                     </div><br>
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <input name="codePostal" maxlength="44" id="codePostal" class="form-control" type="text" autocomplete="off">
+                                                <input name="codePostal" pattern="[0-9]+" maxlength="44" id="codePostal" class="form-control" type="text" autocomplete="off">
                                                 <span class="form-label">Code postal<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
@@ -87,8 +87,8 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="telephone" maxlength="44" id="telephone" class="form-control" type="tel" required autocomplete="off">
-                                                <span class="form-label">TÈlÈphone (mobile)<i class="obligatoir">*</i></span>
+                                                <input name="telephone" maxlength="44" pattern="[0-9]+" id="telephone" class="form-control" type="tel" required autocomplete="off">
+                                                <span class="form-label">T√©l√©phone (mobile)<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
                                         <div class="col-md-5">
@@ -103,7 +103,7 @@
                                             <input type="checkbox" class="form-check-input">
                                         </div>
                                         <div class="col-md-11">
-                                            <label class="form-check-label">CrÈer mon compte utilisateur (Facultatif)</label>
+                                            <label class="form-check-label">Cr√©er mon compte utilisateur (Facultatif)</label>
                                         </div>
                                     </div>
                                 </div>							
@@ -120,12 +120,12 @@
                     <div class="row paiement-securise">
                         <br>
                         <div class="col-md-12">
-                            <h5 style="font-weight:bolder; font-size: 18px; color: #06a8c4;">Paiement sÈcurisÈ</h5><hr style="border-top: 1px dashed rgba(0, 0, 0, 0.2);">
+                            <h5 style="font-weight:bolder; font-size: 18px; color: #06a8c4;">Paiement s√©curis√©</h5><hr style="border-top: 1px dashed rgba(0, 0, 0, 0.2);">
                         </div>
                         <div class="col-md-5">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <strong>CoordonnÈes bancaires</strong>
+                                    <strong>Coordonn√©es bancaires</strong>
                                 </div>
                             </div></br>
                             <div class="row">
@@ -141,7 +141,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="form-check-label" for="">
-                                                <img src="<%=request.getContextPath()%>/assets/img/masterCard.jpg" alt="" class="image-liste">
+                                                <img src="./assets/img/masterCard.jpg" alt="" class="image-liste">
                                             </label>
                                         </div>
                                         <div class="col-md-1">
@@ -149,7 +149,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="form-check-label" for="">
-                                                <img src="<%=request.getContextPath()%>/assets/img/visa.jpg" alt="" class="image-liste">
+                                                <img src="./assets/img/visa.jpg" alt="" class="image-liste">
                                             </label>
                                         </div>
                                     </div>
@@ -158,8 +158,8 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input class="form-control" id="carte-paiement-numero" maxlength="15" name="carte-paiement-numero" type="text" required autocomplete="off">
-                                        <span class="form-label">NumÈro de carte<i class="obligatoir">*</i></span>
+                                        <input class="form-control" id="carte-paiement-numero" pattern="[0-9]+" maxlength="15" name="carte-paiement-numero" type="text" required autocomplete="off">
+                                        <span class="form-label">Num√©ro de carte<i class="obligatoir">*</i></span>
                                     </div>
                                 </div>
                             </div></br>
@@ -174,7 +174,7 @@
                                         <!--span class="form-label"></span-->
                                         <select id="mounthId" class="form-control">
                                             <option value="01">Janvier</option>
-                                            <option value="02">FÈvrier</option>
+                                            <option value="02">F√©vrier</option>
                                             <option value="03">Mars</option>
                                             <option value="04">Avril</option>
                                             <option value="05">Mai</option>
@@ -184,7 +184,7 @@
                                             <option value="09">Septembre</option>
                                             <option value="10">Octobre</option>
                                             <option value="11">Novembre</option>
-                                            <option value="12">DÈcembre</option>
+                                            <option value="12">D√©cembre</option>
                                         </select>
                                         <span class="select-arrow"></span>
                                         <!--input class="form-control" type="month">
@@ -197,7 +197,7 @@
                                         <select id="yearId" class="form-control">
                                             <option value="2019">2019</option>
                                             <option value="2020">2020</option>
-                                            <option value="2020">2021</option>
+                                            <option value="2021">2021</option>
                                         </select>
                                         <span class="select-arrow"></span>
                                     </div>
@@ -212,7 +212,7 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
-                                        <input class="form-control" id="carte-paiement-cvv" name="carte-paiement-cvv" type="text" maxlength="3" required autocomplete="off">
+                                        <input class="form-control" id="carte-paiement-cvv" name="carte-paiement-cvv" type="text" maxlength="3" pattern="[0-9]{3}" required autocomplete="off">
                                         <span class="form-label">Cryptogramme<i class="obligatoir">*</i></span>
                                     </div>
                                 </div>
@@ -224,15 +224,15 @@
                                     <strong>Montant (Acompte)</strong>
                                 </div>
                                 <div class="col-md-2">
-                                    <strong id="amountId"></strong>&euro;
+                                    <strong id="amountId"></strong>
                                 </div>
                             </div><hr>
                             <div class="row">
                                 <div class="col-md-12">
                                     <p>
-                                        L'acompte ne s'applique qu'un seule fois (pas de frais supplÈmentaires pour modification ou annulation). 
-                                        Il est non remboursable et vient en dÈduction du montant total de votre rÈservation. Le montant reste d˚ selon
-                                        l'ÈchÈance indiquÈe dans les conditions gÈnÈrales de ventes de l'Ètablissement.
+                                        L'acompte ne s'applique qu'un seule fois (pas de frais suppl√©mentaires pour modification ou annulation). 
+                                        Il est non remboursable et vient en d√©duction du montant total de votre r√©servation. Le montant reste d√ª selon
+                                        l'√©ch√©ance indiqu√©e dans les conditions g√©n√©rales de ventes de l'√©tablissement.
                                     </p>
                                 </div>
                             </div></br></br></br></br>
@@ -246,7 +246,7 @@
                                                 </div>
                                                 <div class="col-md-11">
                                                     <label class="form-check-label">En cochant cette case, je reconnais avoir pris connaissance des 
-                                                        <a href="#">Conditions GÈnÈrales de Vente</a> et je les accepte.</label>
+                                                        <a href="#">Conditions G√©n√©rales de Vente</a> et je les accepte.</label>
                                                 </div>
                                             </div>																								
                                         </div>
@@ -258,7 +258,7 @@
                                                     <input type="checkbox" class="form-check-input">
                                                 </div>
                                                 <div class="col-md-11">
-                                                    <label class="form-check-label">Informez-moi par email des nouveautÈs et des opÈration spÈciales</label>
+                                                    <label class="form-check-label">Informez-moi par email des nouveaut√©s et des op√©ration sp√©ciales</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -273,7 +273,7 @@
                                     <div class="row">
                                         <div class="col-md-offset-4 col-md-8">
                                             <div class="form-btn">
-                                                <button class="submit-btn" id="validateId">Valider ma rÈservation</button>
+                                                <button class="submit-btn" id="validateId">Valider ma r√©servation</button>
                                             </div>
                                         </div>
                                     </div>
@@ -292,8 +292,9 @@
     var cartePaymentType = "MASTERCARD";
     var listRoom = sessionStorage.getItem("roomList_json");
     var listRoomObject = JSON.parse(listRoom);
-    var reservation = sessionStorage.getItem("reservation_json");
-    var reservationObject = JSON.parse(reservation);
+
+    var recapJson = sessionStorage.getItem("informationTypeRooms_json");
+    var recapObject = JSON.parse(recapJson);
 
     $('.form-control').each(function () {
         floatedLabel($(this));
@@ -313,17 +314,49 @@
     }
 
     jQuery(document).ready(function () {
-        $("#amountId").html(sessionStorage.getItem("montant"));
+        var nbEnfant = 0;
+        var qteChb = 0;
+        var nbAdulte = 0;
+        // recuperation des nbEnfants, qteChb, nbAdulte reserv√©
+        listRoomObject.roomList.forEach(function (room) {
+            nbEnfant = nbEnfant + parseInt(room.nbEnfant);
+            qteChb = qteChb + parseInt(room.qteChb);
+            nbAdulte = nbAdulte + parseInt(room.nbAdulte);
+        });
+        // cr√©ation de json reservation
+        var reservationJson = {
+            "dateArrivee": listRoomObject.dateArrivee,
+            "dateDepart": listRoomObject.dateDepart,
+            "nbPax": nbAdulte,
+            "nbChambre": qteChb,
+            "nbEnfant": nbEnfant,
+            "pmsServiceId": 1,
+            "reservationType": "INDIV",
+            "posteUuid": "7291ee70-0d98-4e53-9077-2db1fe91edd1",
+            "origine": "BOOKING"
+        };
+
+        var montantTTC = 0;
+        // calcul de montant ttc
+        recapObject.bookRoom.forEach(function (room) {
+            montantTTC = montantTTC + parseInt(room.qty) * parseInt(room.rate);
+        });
+
+        // Affichage de montant ttc
+        $("#amountId").html(montantTTC + " &euro;");
+
+        //initialisation
         $("#masterCardId").prop('checked', true);
         $("#visaId").prop('checked', false);
 
+        //si on click sur masterCard
         $('#masterCardId').click(function () {
             if ($('#masterCardId').is(':checked') === true) {
                 $("#visaId").prop('checked', false);
                 cartePaymentType = "MASTERCARD";
             }
         });
-
+        //si on click sur VISA
         $('#visaId').click(function () {
             if ($('#visaId').is(':checked') === true) {
                 $("#masterCardId").prop('checked', false);
@@ -331,13 +364,21 @@
             }
         });
 
+        // Validation de paiment
         $('#validateId').click(function () {
-            $("#reservation").val(JSON.stringify(reservationObject));
-            $("#room-list").val(JSON.stringify(listRoomObject.roomList));
-            $("#carte-paiement-expiration").val($("#yearId").val() + "-" + $("#mounthId").val());
-            $("#montant").val(sessionStorage.getItem("montant"));
-            $("#carte-paiement-type").val(cartePaymentType);
-            sessionStorage.setItem("montant","0");
+            var dateExpiration =   new Date($("#yearId").val(),parseInt($("#mounthId").val())-1,1);
+            
+            if ((dateExpiration < new Date())) {
+                $("#mounthId").get(0).setCustomValidity("Date anterieure √† la date du jour");
+            } else {              
+                $("#mounthId").get(0).setCustomValidity("");
+                $("#reservation").val(JSON.stringify(reservationJson));
+                $("#room-list").val(JSON.stringify(listRoomObject.roomList));
+                $("#carte-paiement-expiration").val($("#yearId").val() + "-" + $("#mounthId").val());
+                $("#montant").val(montantTTC);
+                $("#carte-paiement-type").val(cartePaymentType);
+            }
         });
+
     });
 </script>

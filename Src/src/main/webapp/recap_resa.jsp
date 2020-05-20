@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/liste_type_chambre.css" />
+<link type="text/css" rel="stylesheet" href="./assets/css/liste_type_chambre.css" />
 <div id="booking">
     <div class="container">
         <div class="row">
@@ -118,10 +118,10 @@
             tmp = Math.floor(tmp / 1000);             // Nombre de secondes entre les 2 dates
             diff.sec = tmp % 60;                    // Extraction du nombre de secondes
 
-            tmp = Math.floor((tmp - diff.sec) / 60);    // Nombre de minutes (partie entière)
+            tmp = Math.floor((tmp - diff.sec) / 60);    // Nombre de minutes (partie entiï¿½re)
             diff.min = tmp % 60;                    // Extraction du nombre de minutes
 
-            tmp = Math.floor((tmp - diff.min) / 60);    // Nombre d'heures (entières)
+            tmp = Math.floor((tmp - diff.min) / 60);    // Nombre d'heures (entiï¿½res)
             diff.hour = tmp % 24;                   // Extraction du nombre d'heures
 
             tmp = Math.floor((tmp - diff.hour) / 24);   // Nombre de jours restants

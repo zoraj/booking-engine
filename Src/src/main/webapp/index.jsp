@@ -1,17 +1,15 @@
 <%@ page pageEncoding="UTF-8" %>
 <div id="booking" class="section">
-    <div class="section-center">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="booking-cta">
-                        <h1>Make your reservation</h1>
-                        <p></p>
-                    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5" id="text-reservation">
+                <div class="booking-cta">
+                    <h1>Make your reservation</h1>
                 </div>
-                <div class="col-md-6 col-md-offset-1">
-                    <div class="booking-form">
-                        <form id="criteriaForm" method="post" action="home">
+            </div>
+            <div class="col-md-6 col-md-offset-1" id="form-reservation">
+                <div class="booking-form">
+                    <form id="criteriaForm" method="post" action="home">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -91,12 +89,15 @@
                             </div>									
                         </div>
                         <div id="other-room-add"></div>
-                            <input type="hidden" id="room-requested" name="room-requested">
-                            <div class="form-btn" id="submit-book">
-                                <button class="submit-btn">Book Now</button>
+                        <input type="hidden" id="room-requested" name="room-requested">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="form-btn" id="submit-book">
+                                    <button class="submit-btn">Book Now</button>
+                                </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
