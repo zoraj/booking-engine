@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/liste_type_chambre.css" />
+<link type="text/css" rel="stylesheet" href="./assets/css/liste_type_chambre.css" />
 <div id="booking">
     <div class="container">
         <div class="row">
