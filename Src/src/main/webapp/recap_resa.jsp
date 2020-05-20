@@ -86,33 +86,7 @@
         var childs = 0;
         var montantTTC = 0;
         var recapitulationChambre = "";
-        var rateList = "";
-        
-        var nbEnfant = 0;
-        var qteChb = 0;
-        var nbAdulte = 0;
-        
-        listRoomObject.roomList.forEach(function (room) {
-            nbEnfant = nbEnfant + parseInt(room.nbEnfant);
-            qteChb = qteChb + parseInt(room.qteChb);
-            nbAdulte = nbAdulte + parseInt(room.nbAdulte) ;
-        });
-        
-         var reservationJson = {
-            "dateArrivee": listRoomObject.dateArrivee,
-            "dateDepart": listRoomObject.dateDepart,
-            "nbPax": nbAdulte,
-            "nbChambre": qteChb,
-            "nbEnfant": nbEnfant,
-            "pmsServiceId": 1,
-            "reservationType": "INDIV",
-            "posteUuid": "7291ee70-0d98-4e53-9077-2db1fe91edd1",
-            "origine": "BOOKING"
-        };
-        
-        var reservation_json = JSON.stringify(reservationJson);
-        sessionStorage.setItem("reservation_json", reservation_json);
-        
+        var rateList = "";  
         recapObject.bookRoom.forEach(function (room) {
             childs = childs + parseInt(room.nbEnfant);
             nbPax = nbPax + parseInt(room.nbAdulte);
@@ -132,7 +106,6 @@
         $("#amount-id").html(0);
         $("#tva-id").html(100);
         $("#total-id").html(montantTTC + "&euro;");
-        sessionStorage.setItem("montant",montantTTC);
         $("#recapitulation-chambre-id").html("<div></div>" + recapitulationChambre + "</ul>");
         $("#rate-id").after("<br/><br/>" + rateList);
 
