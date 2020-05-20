@@ -34,7 +34,8 @@ import javax.json.stream.JsonParsingException;
  */
 @WebServlet(name = "Home", urlPatterns = {"/home"})
 public class Home extends HttpServlet {
-    private String apiKey;
+    private static String apiKey;
+    private static String token;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -65,6 +66,7 @@ public class Home extends HttpServlet {
         processRequest(request, response);
         String codeSite = request.getParameter("code");
         apiKey = getApiKeyBySite(codeSite);
+        Home.setApiKey(apiKey);
         System.out.println(" codeSite : "+codeSite);
        
     }
@@ -73,6 +75,7 @@ public class Home extends HttpServlet {
         ResteasyClient client = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = client.target("http://localhost:8080/e/api/sites/?code="+codeSite);
         String bearerToken = Jwt.generateToken();
+        Home.setToken(bearerToken);
         Response response = target.request().header("Authorization", "Bearer " + bearerToken).get();
         //Read output in string format
         String value = response.readEntity(String.class);
@@ -180,6 +183,22 @@ public class Home extends HttpServlet {
         JsonObject object = jsonReader.readObject();
         jsonReader.close();
         return object;
+    }
+    
+    public static String getApiKey() {
+        return apiKey;
+    }
+    
+    public static void setApiKey(String value) {
+        apiKey = value;
+    }
+    
+    public static String getToken() {
+        return token;
+    }
+    
+    public static void setToken(String value) {
+        token = value;
     }
 
     /**
