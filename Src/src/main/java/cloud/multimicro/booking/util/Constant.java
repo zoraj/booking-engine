@@ -11,6 +11,7 @@ package cloud.multimicro.booking.util;
  * @author Tsiory
  */
 public class Constant {
+    public static final String SERVER_BOOKING_ADDRESS      = "booking.bymmc.com";
     public static final String WS_CREATE_CLIENT            = "http://localhost:8080/api/clients";
     public static final String WS_CREATE_BOOKING           = "http://localhost:8080/api/notes/pms/header";
     public static final String WS_CREATE_CASHING           = "http://localhost:8080/api/cashing/pms";

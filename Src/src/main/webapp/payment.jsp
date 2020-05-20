@@ -269,6 +269,11 @@
                                         <input type="hidden" id="carte-paiement-expiration" name="carte-paiement-expiration">
                                         <input type="hidden" id="carte-paiement-type" name="carte-paiement-type">
                                         <input type="hidden" id="montant" name="montant">
+                                        <input type="hidden" id="adults" name="adults">
+                                        <input type="hidden" id="dateArrivee" name="dateArrivee">
+                                        <input type="hidden" id="dateDepart" name="dateDepart">
+                                        <input type="hidden" id="recapchambre" name="recapchambre">
+                                        
                                     </div>
                                     <div class="row">
                                         <div class="col-md-offset-4 col-md-8">
@@ -292,10 +297,18 @@
     var cartePaymentType = "MASTERCARD";
     var listRoom = sessionStorage.getItem("roomList_json");
     var listRoomObject = JSON.parse(listRoom);
-
     var recapJson = sessionStorage.getItem("informationTypeRooms_json");
     var recapObject = JSON.parse(recapJson);
 
+    var recapJson = sessionStorage.getItem("informationTypeRooms_json");
+    var recapObject = JSON.parse(recapJson);
+    
+       
+    var informationPersonJson = sessionStorage.getItem("informationPerson_json");
+    var informationPersonObject = JSON.parse(informationPersonJson);
+    
+    var dateArrivee = new Date(listRoomObject.dateArrivee);
+    var dateDepart = new Date(listRoomObject.dateDepart);
     $('.form-control').each(function () {
         floatedLabel($(this));
     });
@@ -314,7 +327,10 @@
     }
 
     jQuery(document).ready(function () {
-        var nbEnfant = 0;
+        var nbPax = 0;
+        var montantTTC = 0;
+        var recapitulationChambre = "";
+	      var nbEnfant = 0;
         var qteChb = 0;
         var nbAdulte = 0;
         // recuperation des nbEnfants, qteChb, nbAdulte reservé
@@ -335,12 +351,13 @@
             "posteUuid": "7291ee70-0d98-4e53-9077-2db1fe91edd1",
             "origine": "BOOKING"
         };
-
-        var montantTTC = 0;
-        // calcul de montant ttc
+        var reservation_json = JSON.stringify(reservationJson);
+        sessionStorage.setItem("reservation_json", reservation_json);
         recapObject.bookRoom.forEach(function (room) {
+            nbPax = nbPax + parseInt(room.nbAdulte); 
             montantTTC = montantTTC + parseInt(room.qty) * parseInt(room.rate);
-        });
+            recapitulationChambre = recapitulationChambre  + room.qty + " x " + room.roomType +";";
+            });          
 
         // Affichage de montant ttc
         $("#amountId").html(montantTTC + " &euro;");
@@ -375,8 +392,21 @@
                 $("#reservation").val(JSON.stringify(reservationJson));
                 $("#room-list").val(JSON.stringify(listRoomObject.roomList));
                 $("#carte-paiement-expiration").val($("#yearId").val() + "-" + $("#mounthId").val());
+                $("#adults").val(nbPax); 
+               
                 $("#montant").val(montantTTC);
                 $("#carte-paiement-type").val(cartePaymentType);
+                $("#dateArrivee").val(changeFormat(dateArrivee));
+                $("#dateDepart").val(changeFormat(dateDepart));
+                $("#recapchambre").val(recapitulationChambre);
+                
+                   
+               function changeFormat(date) {
+                options = {
+                weekday: "short",year: 'numeric', month: 'long', day: 'numeric'
+                };            
+                return date.toLocaleString('fr-FR', options);
+                }                
             }
         });
 

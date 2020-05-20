@@ -6,6 +6,7 @@
 package cloud.multimicro.booking.servlet;
 
 import cloud.multimicro.booking.util.Constant;
+import cloud.multimicro.booking.util.ContentMail;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,9 +19,19 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import java.io.StringReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.mail.Address;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 /**
  *
@@ -28,6 +39,15 @@ import javax.json.JsonReader;
  */
 @WebServlet(name = "Payment", urlPatterns = {"/payment"})
 public class Payment extends HttpServlet {
+    private String email="";
+    private String nom="";
+    private String montant="";
+    private String adults="";
+    private String dateArrivee="";
+    private String dateDepart="";
+    private String recapchambre="";
+   
+    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,6 +62,7 @@ public class Payment extends HttpServlet {
             throws ServletException, IOException {
 
         getServletConfig().getServletContext().getRequestDispatcher("/payment.jsp").forward(request, response);
+        //getServletConfig().getServletContext().getRequestDispatcher("/mail").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -71,6 +92,29 @@ public class Payment extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //CREATION DE COMPTE CLIENT
+      //  Payment.postClient(request);
+        email=Payment.getEmail(request);
+        nom=Payment.getName(request); 
+        montant=Payment.getMontant(request);
+        adults=Payment.getadultsid(request);
+        dateArrivee=Payment.getdateArrivee(request);
+        dateDepart=Payment.getdateDepart(request);
+        recapchambre=Payment.getrecapchambre(request);                 
+        
+       try {         
+            
+            
+            boolean result = this.SendMail();
+            if (result) {
+                this.getServletContext().getRequestDispatcher("/mail.jsp").forward(request, response);
+            }
+        } catch (MessagingException ex) {
+            Logger.getLogger(Payment.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       String button = request.getParameter("button");
+        if("button".equals(button)){ 
+            
+        }
         Payment.reservationCreation(request);
         processRequest(request, response);
     }
@@ -80,6 +124,7 @@ public class Payment extends HttpServlet {
      *
      * @return a String containing servlet description
      */
+    
     @Override
     public String getServletInfo() {
         return "Short description";
@@ -96,6 +141,43 @@ public class Payment extends HttpServlet {
         String value = response.readEntity(String.class);
         response.close();
     }
+
+    private static void postClient(HttpServletRequest request) {
+        ResteasyClient client = new ResteasyClientBuilder().build();
+        String nom = request.getParameter("nom");
+        String prenom = request.getParameter("prenom");
+        String adresse = request.getParameter("adresse");
+        String ville = request.getParameter("ville");
+        String codePostal = request.getParameter("codePostal");
+        String telephone = request.getParameter("telephone");
+        String email = request.getParameter("email");
+        String pays = request.getParameter("pays");
+        String complement = request.getParameter("complement");
+        String qualite = request.getParameter("qualite");
+
+        JsonObject clientObject = Json.createObjectBuilder()
+                .add("nom", nom)
+                .add("prenom", prenom)
+                .add("code", "77777")
+                .add("adresse", adresse + " " + complement)
+                .add("ville", ville)
+                .add("codePostal", codePostal)
+                .add("telephone", telephone)
+                .add("email", email) 
+                .add("pays", pays)
+                .add("qualite",qualite)
+                .build();
+        String apiKey = Home.getApiKey();
+        String token = Home.getToken();
+        ResteasyWebTarget target = client.target(Constant.WS_CREATE_CLIENT);
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer "+token).post(Entity.json(clientObject));
+        //Read output in string format
+        String value = response.readEntity(String.class);
+        Integer clientId = getId(value);
+        Payment.reservationCreation(clientId, request);
+        response.close();
+    }
+
 
     private static Integer getId(String value) {
         Integer id = null;
@@ -117,7 +199,6 @@ public class Payment extends HttpServlet {
         //RESERVATION
         String apiKey = Home.getApiKey();
         String token = Home.getToken();
-
         String nom = request.getParameter("nom");
         String prenom = request.getParameter("prenom");
         String adresse = request.getParameter("adresse");
@@ -160,9 +241,9 @@ public class Payment extends HttpServlet {
                 .add("mmcModeEncaissementId",1)
                 .add("mmcUserId",1)
                 .build();
-        Payment.postPayment(paiment);
+        Payment.postPayment(paiment); 
 
-        response.close();
+        response.close();        
     }
 
     private static void ventilationNoteCreation(JsonObject ventillationObject) {
@@ -181,5 +262,65 @@ public class Payment extends HttpServlet {
         JsonObject object = jsonReader.readObject();
         jsonReader.close();
         return object;
+        
     }
+    
+    static String getEmail(HttpServletRequest request) {              
+        String email = request.getParameter("email");
+        return email;
+    }
+    static String getName(HttpServletRequest request) {              
+        String nom = request.getParameter("nom");
+        return nom;
+    }
+    static String getMontant(HttpServletRequest request) {
+        String montant = request.getParameter("montant");
+        return montant;        
+    }
+   static String getdateArrivee(HttpServletRequest request) {
+        String dateArrivee = request.getParameter("dateArrivee");
+       return dateArrivee;
+    }
+   static String getdateDepart(HttpServletRequest request) {
+        String dateDepart = request.getParameter("dateDepart");
+       return dateDepart;
+    }
+    static String getadultsid(HttpServletRequest request) {
+        String adults = request.getParameter("adults");
+        return adults;
+    }
+    static String getrecapchambre(HttpServletRequest request) {
+        String recapchambre = request.getParameter("recapchambre");
+        return recapchambre;
+    }
+    
+    @Resource(mappedName = "java:jboss/mail/Default")
+    private Session mailSession;
+    
+    
+    private boolean SendMail() throws AddressException, MessagingException {
+        
+        Address from = new InternetAddress(ContentMail.SENDER);
+        Address[] to = new InternetAddress[] { new InternetAddress(email) };        
+        javax.mail.internet.MimeMessage mimeMessage;
+   
+        mimeMessage = new javax.mail.internet.MimeMessage(mailSession);        
+        mimeMessage.setFrom(from);
+        mimeMessage.setSubject(ContentMail.MMC_MAIL_SUBJECT);
+        mimeMessage.setRecipients(Message.RecipientType.TO, to); 
+        
+        String mailContent = ContentMail.MMC_MAIL_DETAIL;
+        mailContent = mailContent.replace("{booking-url}", Constant.SERVER_BOOKING_ADDRESS);
+        mailContent = mailContent.replace("{booking-username}", email);
+        mailContent = mailContent.replace("{booking-name}", nom);
+        mailContent = mailContent.replace("{booking-amount}", montant);
+        mailContent = mailContent.replace("{booking-adultsid}", adults);
+        mailContent = mailContent.replace("{booking-dateArrivee}", dateArrivee);
+        mailContent = mailContent.replace("{booking-dateDepart}", dateDepart);
+        mailContent = mailContent.replace("{booking-recapchambre}", recapchambre);
+        mimeMessage.setContent(mailContent, "text/plain");
+        Transport.send(mimeMessage);
+        return true;
+    }
+    
 }
