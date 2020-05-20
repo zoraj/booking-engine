@@ -62,7 +62,7 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <input name="codePostal" maxlength="44" id="codePostal" class="form-control" type="text" autocomplete="off">
+                                                <input name="codePostal" pattern="[0-9]+" maxlength="44" id="codePostal" class="form-control" type="text" autocomplete="off">
                                                 <span class="form-label">Code postal<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
@@ -87,7 +87,7 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="telephone" maxlength="44" id="telephone" class="form-control" type="tel" required autocomplete="off">
+                                                <input name="telephone" maxlength="44" pattern="[0-9]+" id="telephone" class="form-control" type="tel" required autocomplete="off">
                                                 <span class="form-label">Téléphone (mobile)<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
@@ -158,7 +158,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input class="form-control" id="carte-paiement-numero" maxlength="15" name="carte-paiement-numero" type="text" required autocomplete="off">
+                                        <input class="form-control" id="carte-paiement-numero" pattern="[0-9]+" maxlength="15" name="carte-paiement-numero" type="text" required autocomplete="off">
                                         <span class="form-label">Numéro de carte<i class="obligatoir">*</i></span>
                                     </div>
                                 </div>
@@ -197,7 +197,7 @@
                                         <select id="yearId" class="form-control">
                                             <option value="2019">2019</option>
                                             <option value="2020">2020</option>
-                                            <option value="2020">2021</option>
+                                            <option value="2021">2021</option>
                                         </select>
                                         <span class="select-arrow"></span>
                                     </div>
@@ -212,7 +212,7 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
-                                        <input class="form-control" id="carte-paiement-cvv" name="carte-paiement-cvv" type="text" maxlength="3" required autocomplete="off">
+                                        <input class="form-control" id="carte-paiement-cvv" name="carte-paiement-cvv" type="text" maxlength="3" pattern="[0-9]{3}" required autocomplete="off">
                                         <span class="form-label">Cryptogramme<i class="obligatoir">*</i></span>
                                     </div>
                                 </div>
@@ -224,7 +224,7 @@
                                     <strong>Montant (Acompte)</strong>
                                 </div>
                                 <div class="col-md-2">
-                                    <strong id="amountId"></strong>&euro;
+                                    <strong id="amountId"></strong>
                                 </div>
                             </div><hr>
                             <div class="row">
@@ -269,12 +269,20 @@
                                         <input type="hidden" id="carte-paiement-expiration" name="carte-paiement-expiration">
                                         <input type="hidden" id="carte-paiement-type" name="carte-paiement-type">
                                         <input type="hidden" id="montant" name="montant">
+                                        <input type="hidden" id="adults" name="adults">
+                                        <input type="hidden" id="dateArrivee" name="dateArrivee">
+                                        <input type="hidden" id="dateDepart" name="dateDepart">
+                                        <input type="hidden" id="recapchambre" name="recapchambre">
+                                        
                                     </div>
                                     <div class="row">
                                         <div class="col-md-offset-4 col-md-8">
                                             <div class="form-btn">
-                                                <button class="submit-btn" id="validateId">Valider ma réservation</button>
-                                            </div>
+                                                <button  id="validateId" class="submit-btn">Valider ma réservation                                                
+                                                </button>  
+                                                <!--<a href="<%=request.getContextPath()+"/mail"%>">Valider ma réservation</a>-->
+                                            </div>                                   
+                 
                                         </div>
                                     </div>
                                 </div>
@@ -292,9 +300,16 @@
     var cartePaymentType = "MASTERCARD";
     var listRoom = sessionStorage.getItem("roomList_json");
     var listRoomObject = JSON.parse(listRoom);
-    var reservation = sessionStorage.getItem("reservation_json");
-    var reservationObject = JSON.parse(reservation);
 
+    var recapJson = sessionStorage.getItem("informationTypeRooms_json");
+    var recapObject = JSON.parse(recapJson);
+    
+       
+    var informationPersonJson = sessionStorage.getItem("informationPerson_json");
+    var informationPersonObject = JSON.parse(informationPersonJson);
+    
+    var dateArrivee = new Date(listRoomObject.dateArrivee);
+    var dateDepart = new Date(listRoomObject.dateDepart);
     $('.form-control').each(function () {
         floatedLabel($(this));
     });
@@ -313,31 +328,90 @@
     }
 
     jQuery(document).ready(function () {
-        $("#amountId").html(sessionStorage.getItem("montant"));
+       
+        var qteChb = 0;
+        var nbAdulte = 0;
+        var nbPax = 0;
+        var montantTTC = 0;
+        var recapitulationChambre = "";  
+         //recuperation des nbEnfants, qteChb, nbAdulte reservé
+        listRoomObject.roomList.forEach(function (room) {
+            
+            qteChb = qteChb + parseInt(room.qteChb);
+            nbAdulte = nbAdulte + parseInt(room.nbAdulte);
+        });
+        // création de json reservation
+        var reservationJson = {
+            "dateArrivee": listRoomObject.dateArrivee,
+            "dateDepart": listRoomObject.dateDepart,
+            "nbPax": nbAdulte,
+            "nbChambre": qteChb,
+            "pmsServiceId": 1,
+            "reservationType": "INDIV",
+            "posteUuid": "7291ee70-0d98-4e53-9077-2db1fe91edd1",
+            "origine": "BOOKING"
+        };
+        
+        var reservation_json = JSON.stringify(reservationJson);
+        sessionStorage.setItem("reservation_json", reservation_json);
+        recapObject.bookRoom.forEach(function (room) {
+            nbPax = nbPax + parseInt(room.nbAdulte); 
+            montantTTC = montantTTC + parseInt(room.qty) * parseInt(room.rate);
+            recapitulationChambre = recapitulationChambre  + room.qty + " x " + room.roomType +";";
+            });          
+
+        // Affichage de montant ttc
+        $("#amountId").html(montantTTC + " &euro;");
+              
+        //initialisation
         $("#masterCardId").prop('checked', true);
         $("#visaId").prop('checked', false);
 
+        //si on click sur masterCard
         $('#masterCardId').click(function () {
             if ($('#masterCardId').is(':checked') === true) {
                 $("#visaId").prop('checked', false);
                 cartePaymentType = "MASTERCARD";
             }
         });
-
+        //si on click sur VISA
         $('#visaId').click(function () {
             if ($('#visaId').is(':checked') === true) {
                 $("#masterCardId").prop('checked', false);
                 cartePaymentType = "VISA";
             }
         });
-
+        // Validation de paiment
         $('#validateId').click(function () {
-            $("#reservation").val(JSON.stringify(reservationObject));
-            $("#room-list").val(JSON.stringify(listRoomObject.roomList));
-            $("#carte-paiement-expiration").val($("#yearId").val() + "-" + $("#mounthId").val());
-            $("#montant").val(sessionStorage.getItem("montant"));
-            $("#carte-paiement-type").val(cartePaymentType);
-            sessionStorage.setItem("montant","0");
+            var dateExpiration =   new Date($("#yearId").val(),parseInt($("#mounthId").val())-1,1);
+            
+            if ((dateExpiration < new Date())) {
+                $("#mounthId").get(0).setCustomValidity("Date anterieure à la date du jour");
+            } else {              
+                $("#mounthId").get(0).setCustomValidity("");
+                $("#reservation").val(JSON.stringify(reservationJson));
+                $("#room-list").val(JSON.stringify(listRoomObject.roomList));
+                $("#carte-paiement-expiration").val($("#yearId").val() + "-" + $("#mounthId").val());
+                
+                $("#montant").val(montantTTC+ " $");
+                
+                $("#adults").val(nbPax); 
+               
+                $("#carte-paiement-type").val(cartePaymentType);
+                $("#dateArrivee").val(changeFormat(dateArrivee));
+                $("#dateDepart").val(changeFormat(dateDepart));
+                $("#recapchambre").val(recapitulationChambre);
+                
+                   
+               function changeFormat(date) {
+                options = {
+                weekday: "short",year: 'numeric', month: 'long', day: 'numeric'
+                };            
+                return date.toLocaleString('fr-FR', options);
+                }                
+            }
+           
         });
+
     });
 </script>

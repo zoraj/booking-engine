@@ -6,6 +6,7 @@
 package cloud.multimicro.booking.servlet;
 
 import cloud.multimicro.booking.util.Constant;
+import cloud.multimicro.booking.util.ContentMail;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,9 +19,19 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import java.io.StringReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.mail.Address;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 /**
  *
@@ -28,6 +39,15 @@ import javax.json.JsonReader;
  */
 @WebServlet(name = "Payment", urlPatterns = {"/payment"})
 public class Payment extends HttpServlet {
+    private String email="";
+    private String nom="";
+    private String montant="";
+    private String adults="";
+    private String dateArrivee="";
+    private String dateDepart="";
+    private String recapchambre="";
+   
+    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,6 +62,7 @@ public class Payment extends HttpServlet {
             throws ServletException, IOException {
 
         getServletConfig().getServletContext().getRequestDispatcher("/payment.jsp").forward(request, response);
+        //getServletConfig().getServletContext().getRequestDispatcher("/mail").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -71,8 +92,30 @@ public class Payment extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //CREATION DE COMPTE CLIENT
-        Payment.postClient(request);
-        processRequest(request, response);
+
+      //  Payment.postClient(request);
+        email=Payment.getEmail(request);
+        nom=Payment.getName(request); 
+        montant=Payment.getMontant(request);
+        adults=Payment.getadultsid(request);
+        dateArrivee=Payment.getdateArrivee(request);
+        dateDepart=Payment.getdateDepart(request);
+        recapchambre=Payment.getrecapchambre(request);                 
+        
+       try {         
+            
+            
+            boolean result = this.SendMail();
+            if (result) {
+                this.getServletContext().getRequestDispatcher("/mail.jsp").forward(request, response);
+            }
+        } catch (MessagingException ex) {
+            Logger.getLogger(Payment.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       String button = request.getParameter("button");
+        if("button".equals(button)){ 
+            
+        }
     }
 
     /**
@@ -80,16 +123,19 @@ public class Payment extends HttpServlet {
      *
      * @return a String containing servlet description
      */
+    
     @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 
     private static void postPayment(JsonObject paiment) {
+        String apiKey = Home.getApiKey();
+        String token = Home.getToken();
         ResteasyClient client = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = client.target(Constant.WS_CREATE_CASHING);
         System.out.println(Entity.json(paiment));
-        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "D2B946C4954953D75C05E358AE0F1C33CF0698F762127A6DD8F15D81A4ECF1D7").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjbG91ZC5tdWx0aW1pY3JvIiwiaWF0IjoxNTg5MTk0NDcyLCJzdWIiOiJNTUMgVG9rZW4gZm9yIGJhY2tlbmQiLCJpc3MiOiJNTUMiLCJleHAiOjE1ODkyODA4NzJ9.Kx4w5ng7Bx2wtP7fWRbZQbXOmkQlh2C0WAG0fHfD1FM").post(Entity.json(paiment));
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer "+token).post(Entity.json(paiment));
         //Read output in string format
         String value = response.readEntity(String.class);
         response.close();
@@ -120,9 +166,10 @@ public class Payment extends HttpServlet {
                 .add("pays", pays)
                 .add("qualite",qualite)
                 .build();
-
+        String apiKey = Home.getApiKey();
+        String token = Home.getToken();
         ResteasyWebTarget target = client.target(Constant.WS_CREATE_CLIENT);
-        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "D2B946C4954953D75C05E358AE0F1C33CF0698F762127A6DD8F15D81A4ECF1D7").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjbG91ZC5tdWx0aW1pY3JvIiwiaWF0IjoxNTg5MTk0NDcyLCJzdWIiOiJNTUMgVG9rZW4gZm9yIGJhY2tlbmQiLCJpc3MiOiJNTUMiLCJleHAiOjE1ODkyODA4NzJ9.Kx4w5ng7Bx2wtP7fWRbZQbXOmkQlh2C0WAG0fHfD1FM").post(Entity.json(clientObject));
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer "+token).post(Entity.json(clientObject));
         //Read output in string format
         String value = response.readEntity(String.class);
         Integer clientId = getId(value);
@@ -148,6 +195,8 @@ public class Payment extends HttpServlet {
 
    private static void reservationCreation(Integer clientId, HttpServletRequest request) {
         //RESERVATION
+        String apiKey = Home.getApiKey();
+        String token = Home.getToken();
         String reservationPayload = request.getParameter("reservation");
         String cartePaiementType = request.getParameter("carte-paiement-type");
         String cartePaiementNumero = request.getParameter("carte-paiement-numero");
@@ -160,7 +209,7 @@ public class Payment extends HttpServlet {
         ResteasyClient reservation = new ResteasyClientBuilder().build();
         System.out.println(Entity.json(resaJSONObject));
         ResteasyWebTarget targetResa = reservation.target(Constant.WS_CREATE_BOOKING);
-        Response response = targetResa.request().header("Content-Type", "application/json").header("x-api-key", "D2B946C4954953D75C05E358AE0F1C33CF0698F762127A6DD8F15D81A4ECF1D7").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjbG91ZC5tdWx0aW1pY3JvIiwiaWF0IjoxNTg5MTk0NDcyLCJzdWIiOiJNTUMgVG9rZW4gZm9yIGJhY2tlbmQiLCJpc3MiOiJNTUMiLCJleHAiOjE1ODkyODA4NzJ9.Kx4w5ng7Bx2wtP7fWRbZQbXOmkQlh2C0WAG0fHfD1FM").post(Entity.json(resaJSONObject));
+        Response response = targetResa.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer "+token).post(Entity.json(resaJSONObject));
         //Read output in string format
         String value = response.readEntity(String.class);
         
@@ -171,7 +220,7 @@ public class Payment extends HttpServlet {
         String payloadNoteVentillation = "{\"pmsNoteEnteteId\":"+entitieId+","+roomList+"}";
         JsonObject payloadNoteVentillationJsonObject = Payment.stringToJsonObject(payloadNoteVentillation);
         Payment.ventilationNoteCreation(payloadNoteVentillationJsonObject);
-         
+        
         //PAYMENT
         String montant = request.getParameter("montant");
         JsonObject paiment = Json.createObjectBuilder()
@@ -180,15 +229,17 @@ public class Payment extends HttpServlet {
                 .add("mmcModeEncaissementId",1)
                 .add("mmcUserId",1)
                 .build();
-        Payment.postPayment(paiment);
+        Payment.postPayment(paiment); 
 
-        response.close();
+        response.close();        
     }
 
     private static void ventilationNoteCreation(JsonObject ventillationObject) {
+        String apiKey = Home.getApiKey();
+        String token = Home.getToken();
         ResteasyClient ventillation = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = ventillation.target(Constant.WS_CREATE_VENTILLATION_NOTE);
-        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", "D2B946C4954953D75C05E358AE0F1C33CF0698F762127A6DD8F15D81A4ECF1D7").header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjbG91ZC5tdWx0aW1pY3JvIiwiaWF0IjoxNTg5MTk0NDcyLCJzdWIiOiJNTUMgVG9rZW4gZm9yIGJhY2tlbmQiLCJpc3MiOiJNTUMiLCJleHAiOjE1ODkyODA4NzJ9.Kx4w5ng7Bx2wtP7fWRbZQbXOmkQlh2C0WAG0fHfD1FM").post(Entity.json(ventillationObject));
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer "+token).post(Entity.json(ventillationObject));
         //Read output in string format
         String value = response.readEntity(String.class);
         response.close();
@@ -199,5 +250,65 @@ public class Payment extends HttpServlet {
         JsonObject object = jsonReader.readObject();
         jsonReader.close();
         return object;
+        
     }
+    
+    static String getEmail(HttpServletRequest request) {              
+        String email = request.getParameter("email");
+        return email;
+    }
+    static String getName(HttpServletRequest request) {              
+        String nom = request.getParameter("nom");
+        return nom;
+    }
+    static String getMontant(HttpServletRequest request) {
+        String montant = request.getParameter("montant");
+        return montant;        
+    }
+   static String getdateArrivee(HttpServletRequest request) {
+        String dateArrivee = request.getParameter("dateArrivee");
+       return dateArrivee;
+    }
+   static String getdateDepart(HttpServletRequest request) {
+        String dateDepart = request.getParameter("dateDepart");
+       return dateDepart;
+    }
+    static String getadultsid(HttpServletRequest request) {
+        String adults = request.getParameter("adults");
+        return adults;
+    }
+    static String getrecapchambre(HttpServletRequest request) {
+        String recapchambre = request.getParameter("recapchambre");
+        return recapchambre;
+    }
+    
+    @Resource(mappedName = "java:jboss/mail/Default")
+    private Session mailSession;
+    
+    
+    private boolean SendMail() throws AddressException, MessagingException {
+        
+        Address from = new InternetAddress(ContentMail.SENDER);
+        Address[] to = new InternetAddress[] { new InternetAddress(email) };        
+        javax.mail.internet.MimeMessage mimeMessage;
+   
+        mimeMessage = new javax.mail.internet.MimeMessage(mailSession);        
+        mimeMessage.setFrom(from);
+        mimeMessage.setSubject(ContentMail.MMC_MAIL_SUBJECT);
+        mimeMessage.setRecipients(Message.RecipientType.TO, to); 
+        
+        String mailContent = ContentMail.MMC_MAIL_DETAIL;
+        mailContent = mailContent.replace("{booking-url}", Constant.SERVER_BOOKING_ADDRESS);
+        mailContent = mailContent.replace("{booking-username}", email);
+        mailContent = mailContent.replace("{booking-name}", nom);
+        mailContent = mailContent.replace("{booking-amount}", montant);
+        mailContent = mailContent.replace("{booking-adultsid}", adults);
+        mailContent = mailContent.replace("{booking-dateArrivee}", dateArrivee);
+        mailContent = mailContent.replace("{booking-dateDepart}", dateDepart);
+        mailContent = mailContent.replace("{booking-recapchambre}", recapchambre);
+        mimeMessage.setContent(mailContent, "text/plain");
+        Transport.send(mimeMessage);
+        return true;
+    }
+    
 }
