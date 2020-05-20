@@ -1,4 +1,4 @@
-<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/paiement.css" />	
+<link type="text/css" rel="stylesheet" href="./assets/css/paiement.css" />	
 <div id="booking">
     <form method="post" action="payment">
         <div class="container">
@@ -24,7 +24,7 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <span class="form-label">Civilité<i class="obligatoir">*</i></span>
-                                                <select name="qualite" id="qualite" class="form-control">
+                                                <select name="civilite" id="civilite" class="form-control">
                                                     <option value="MR">M.</option>
                                                     <option value="MME">Mm</option>
                                                     <option value="MLLE">Mll</option>
@@ -54,7 +54,7 @@
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="complement" maxlength="45" id="complement" class="form-control" type="text" autocomplete="off">
+                                                <input name="adresseComp" maxlength="45" id="adresseComp" class="form-control" type="text" autocomplete="off">
                                                 <span class="form-label">Complément</span>
                                             </div>
                                         </div>
@@ -87,7 +87,7 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="telephone" maxlength="44" id="telephone" class="form-control" type="tel" required autocomplete="off">
+                                                <input name="telMobile" maxlength="44" id="telMobile" class="form-control" type="tel" required autocomplete="off">
                                                 <span class="form-label">Téléphone (mobile)<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
@@ -141,7 +141,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="form-check-label" for="">
-                                                <img src="<%=request.getContextPath()%>/assets/img/masterCard.jpg" alt="" class="image-liste">
+                                                <img src="./assets/img/masterCard.jpg" alt="" class="image-liste">
                                             </label>
                                         </div>
                                         <div class="col-md-1">
@@ -149,7 +149,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="form-check-label" for="">
-                                                <img src="<%=request.getContextPath()%>/assets/img/visa.jpg" alt="" class="image-liste">
+                                                <img src="./assets/img/visa.jpg" alt="" class="image-liste">
                                             </label>
                                         </div>
                                     </div>
