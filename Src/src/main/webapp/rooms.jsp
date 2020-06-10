@@ -66,16 +66,17 @@
                                 </p>	
                                 <form class="form-input">
                                     <p>                                    
-                                        <input type="number" class="form-control" value = "${room.availableRoom}" id="qty_${myIndex.index}" min="1" max="${room.availableRoom}">
+                                        <input type="number" class="form-control" value = "1" id="qty_${myIndex.index}" min="1" max="${room.availableRoom}">
                                     </p>
-                                </form>
-                                <p>of ${room.totalRoom} accommodations available.</p>
+                                
+                                    <p>of ${room.availableRoom} accommodations available.</p>
+                                <input type="hidden" class="form-control" value = "${room.availableRoom}" id="disponible_${myIndex.index}">
                                 <input type="hidden" class="form-control" value = "${room.nbEnfant}" id="nbEnfant_${myIndex.index}">
-
+                                </form>
                                 <div class="form-btn">
-                                    <button id="valid-btn" name="bookRoom" class="submit-btn"  data-value='${myIndex.index}' onclick="changeColor(this)">Book now</button>
+                                    <button id="valid-btn" name="bookRoom" class="submit-btn"  data-value='${myIndex.index}'>Book now</button>
                                 </div>
-
+                                
                                 <br/>
                                 <div class="form-btn">
                                     <button id="proceder" class="submit-btn">
@@ -94,33 +95,35 @@
     </div>
 </div>
 
-<script>   
-    
+<script> 
     var informationTypeRooms = {                
             "bookRoom": []
     };
-            
-    function changeColor(btn) {
-        btn.style.backgroundColor = "#aeb0ae";
-    }
-     
+    
     $(document).ready(function () {
-        $("[name='bookRoom']").click(function () {
-            let currentIndex = $(this).data("value");
-            
-            if ($("#list-room").is(":hidden") == false) {
-                informationTypeRooms.bookRoom.push({
-                    "roomTypeId": $("#room_type_id_" + currentIndex).val(),
-                    "nbAdulte": $("#nbAdulte_" + currentIndex).html(),
-                    "roomType": $("#roomType_" + currentIndex).html(),
-                    "rate": $("#rate_" + currentIndex).html(),
-                    "nbEnfant": $("#nbEnfant_" + currentIndex).val(),
-                    "qty": $("#qty_" + currentIndex).val()
-                });
-            }
-            
-            var informationTypeRooms_json = JSON.stringify(informationTypeRooms);
-            sessionStorage.setItem("informationTypeRooms_json", informationTypeRooms_json);
-        });
+        $("[name='bookRoom']").click(function () {      
+            let currentIndex = $(this).data("value"); 
+            var saisie = document.getElementById("qty_" + currentIndex).value;
+            var maxValue = document.getElementById("disponible_" + currentIndex).value;
+            console.log("saisie :"+saisie);
+            console.log("maxValue :"+maxValue);
+            if(parseInt(saisie) > parseInt(maxValue)){
+                $(this).css('background-color', '#06a8c4');
+            }else{
+                $(this).css('background-color', '#aeb0ae');
+                if ($("#list-room").is(":hidden") == false) {
+                    informationTypeRooms.bookRoom.push({
+                        "roomTypeId": $("#room_type_id_" + currentIndex).val(),
+                        "nbAdulte": $("#nbAdulte_" + currentIndex).html(),
+                        "roomType": $("#roomType_" + currentIndex).html(),
+                        "rate": $("#rate_" + currentIndex).html(),
+                        "nbEnfant": $("#nbEnfant_" + currentIndex).val(),
+                        "qty": $("#qty_" + currentIndex).val()
+                    });
+                }
+                var informationTypeRooms_json = JSON.stringify(informationTypeRooms);
+                sessionStorage.setItem("informationTypeRooms_json", informationTypeRooms_json);
+            } 
+        }); 
     });                    
 </script>
