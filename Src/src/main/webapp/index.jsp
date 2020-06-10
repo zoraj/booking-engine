@@ -19,7 +19,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <input class="form-control" type="date" id="dateDepart" required>
+                                    <input class="form-control" type="date" id="dateDepart" required onblur="verifyDateCheckOut()">
                                     <span class="form-label">Check Out</span>
                                 </div>
                             </div>
