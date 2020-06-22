@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package cloud.multimicro.booking.servlet;
+
 import cloud.multimicro.booking.util.Constant;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -34,8 +35,10 @@ import javax.json.stream.JsonParsingException;
  */
 @WebServlet(name = "Home", urlPatterns = {"/home"})
 public class Home extends HttpServlet {
+
     private static String apiKey;
     private static String token;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -50,7 +53,7 @@ public class Home extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         getServletConfig().getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
     }
-      
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -60,26 +63,26 @@ public class Home extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-        @Override
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {  
+            throws ServletException, IOException {
         processRequest(request, response);
         String codeSite = request.getParameter("code");
         apiKey = getApiKeyBySite(codeSite);
         Home.setApiKey(apiKey);
-        System.out.println(" codeSite : "+codeSite);
-       
+        System.out.println(" codeSite : " + codeSite);
+
     }
-    
-    private static String getApiKeyBySite(String codeSite){
+
+    private static String getApiKeyBySite(String codeSite) {
         ResteasyClient client = new ResteasyClientBuilder().build();
-        ResteasyWebTarget target = client.target("http://localhost:8080/e/api/sites/?code="+codeSite);
+        ResteasyWebTarget target = client.target("http://localhost:8080/e/api/sites/?code=" + codeSite);
         String bearerToken = Jwt.generateToken();
         Home.setToken(bearerToken);
         Response response = target.request().header("Authorization", "Bearer " + bearerToken).get();
         //Read output in string format
         String value = response.readEntity(String.class);
-        System.out.println("value : "+value);
+        System.out.println("value : " + value);
         response.close();
         return value;
     }
@@ -96,84 +99,85 @@ public class Home extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String roomRequested = request.getParameter("room-requested");
-        System.out.println(" roomRequested : "+roomRequested);
-        
-        if("".equals(roomRequested)){
+        System.out.println(" roomRequested : " + roomRequested);
+
+        if ("".equals(roomRequested)) {
             getServletConfig().getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
             return;
         }
-         
+
         String value = postRoomAvailability(roomRequested);
-        
-        value = "{\"Availability\":"+value+"}";
+        if (value != "") {
+            value = "{\"Availability\":" + value + "}";
 
-        JsonObject jsonObj = null;
-        JsonReader jsonR = Json.createReader(new StringReader(value));        
-        try {            
-            jsonObj = jsonR.readObject();
-            jsonR.close();
-        } catch (JsonParsingException e) {
-            
-        }
+            JsonObject jsonObj = null;
+            JsonReader jsonR = Json.createReader(new StringReader(value));
+            try {
+                jsonObj = jsonR.readObject();
+                jsonR.close();
+            } catch (JsonParsingException e) {
 
-        // Transformer JSONObject en Array  
-        JsonArray jsonArray = jsonObj.getJsonArray("Availability");
-              
-        List<DataBooking> rooms = new ArrayList<DataBooking>();     
-        for (int i = 0; i < jsonArray.size(); i++) { 
-            JsonObject jsonLigne = jsonArray.getJsonObject(i); 
-
-            JsonObject jsonTypeChambre  = jsonLigne.getJsonObject("pmsTypeChambre");
-            Integer id                  = jsonTypeChambre.getInt("id");
-            String libTypeChambre       = jsonTypeChambre.getString("libelle");
-            Integer persMax             = jsonTypeChambre.getInt("persMax");
-            Integer nbEnfant            = jsonTypeChambre.getInt("nbEnfant");
-
-            JsonObject jsonModeleTarif  = jsonLigne.getJsonObject("pmsModelTarif");
-            JsonNumber  jsonPrixDefaut  = jsonModeleTarif.getJsonNumber("prixParDefaut");
-            BigDecimal prixDefaut       = BigDecimal.valueOf(jsonPrixDefaut.doubleValue());
-
-            JsonArray jsonTarifOptionArray = jsonLigne.getJsonArray("pmsTarifOption");
-
-            List<String> tarifOption = new ArrayList<String>();
-            for (int j = 0; j < jsonTarifOptionArray.size(); j++) { 
-                JsonObject jsonTarifOption = jsonTarifOptionArray.getJsonObject(j);
-                if(jsonTarifOption.getBoolean("isChecked")==true){
-                    String option = jsonTarifOption.getString("libelle");                   
-                    tarifOption.add(option);
-                }
             }
 
-            Integer totalRoom = jsonLigne.getInt("totalRoom");
-            Integer availableRoom = jsonLigne.getInt("availableRoom");
+            // Transformer JSONObject en Array  
+            JsonArray jsonArray = jsonObj.getJsonArray("Availability");
 
-            DataBooking room = new DataBooking();
-            room.setIdTypeChambre(id);
-            room.setTypeChambreLibelle(libTypeChambre); 
-            room.setAvailableRoom(availableRoom); 
-            room.setPrixParDefaut(prixDefaut); 
-            room.setTotalRoom(totalRoom); 
-            room.setNbAdulte(persMax);
-            room.setNbEnfant(nbEnfant); 
-            room.setTarifOptionLibelle(tarifOption); 
-            rooms.add(room);
+            List<DataBooking> rooms = new ArrayList<DataBooking>();
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JsonObject jsonLigne = jsonArray.getJsonObject(i);
+
+                JsonObject jsonTypeChambre = jsonLigne.getJsonObject("pmsTypeChambre");
+                Integer id = jsonTypeChambre.getInt("id");
+                String libTypeChambre = jsonTypeChambre.getString("libelle");
+                Integer persMax = jsonTypeChambre.getInt("persMax");
+                Integer nbEnfant = jsonTypeChambre.getInt("nbEnfant");
+
+                JsonObject jsonModeleTarif = jsonLigne.getJsonObject("pmsModelTarif");
+                JsonNumber jsonPrixDefaut = jsonModeleTarif.getJsonNumber("prixParDefaut");
+                BigDecimal prixDefaut = BigDecimal.valueOf(jsonPrixDefaut.doubleValue());
+
+                JsonArray jsonTarifOptionArray = jsonLigne.getJsonArray("pmsTarifOption");
+
+                List<String> tarifOption = new ArrayList<String>();
+                for (int j = 0; j < jsonTarifOptionArray.size(); j++) {
+                    JsonObject jsonTarifOption = jsonTarifOptionArray.getJsonObject(j);
+                    if (jsonTarifOption.getBoolean("isChecked") == true) {
+                        String option = jsonTarifOption.getString("libelle");
+                        tarifOption.add(option);
+                    }
+                }
+
+                Integer totalRoom = jsonLigne.getInt("totalRoom");
+                Integer availableRoom = jsonLigne.getInt("availableRoom");
+
+                DataBooking room = new DataBooking();
+                room.setIdTypeChambre(id);
+                room.setTypeChambreLibelle(libTypeChambre);
+                room.setAvailableRoom(availableRoom);
+                room.setPrixParDefaut(prixDefaut);
+                room.setTotalRoom(totalRoom);
+                room.setNbAdulte(persMax);
+                room.setNbEnfant(nbEnfant);
+                room.setTarifOptionLibelle(tarifOption);
+                rooms.add(room);
+            }
+
+            request.setAttribute("listRooms", rooms);
         }
-      
-        request.setAttribute("listRooms", rooms);
-        getServletConfig().getServletContext().getRequestDispatcher("/rooms").forward(request, response);
 
+        getServletConfig().getServletContext().getRequestDispatcher("/rooms").forward(request, response);
     }
-    
+
     private String postRoomAvailability(String availableString) {
         JsonObject availableObject = stringToJsonObject(availableString);
         ResteasyClient client = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = client.target(Constant.WS_SEARCH_AVAILABILITY);
         System.out.println(Entity.json(availableObject));
         String bearerToken = Jwt.generateToken();
-        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer "+bearerToken).post(Entity.json(availableObject));
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer " + bearerToken).post(Entity.json(availableObject));
         //Read output in string format
         String value = response.readEntity(String.class);
-        System.out.println("value disponibilite  retourné : "+value);
+        System.out.println("value disponibilite  retourné : " + value);
         response.close();
         return value;
     }
@@ -184,19 +188,19 @@ public class Home extends HttpServlet {
         jsonReader.close();
         return object;
     }
-    
+
     public static String getApiKey() {
         return apiKey;
     }
-    
+
     public static void setApiKey(String value) {
         apiKey = value;
     }
-    
+
     public static String getToken() {
         return token;
     }
-    
+
     public static void setToken(String value) {
         token = value;
     }
