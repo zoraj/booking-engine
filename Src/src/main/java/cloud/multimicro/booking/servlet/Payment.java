@@ -180,7 +180,7 @@ public class Payment extends HttpServlet {
         String cartePaiementCVV = request.getParameter("carte-paiement-cvv");
         
         reservationPayload = reservationPayload.substring(0, reservationPayload.length() - 1);
-        reservationPayload = reservationPayload +",\"cartePaiementType\":\""+cartePaiementType+"\","+"\"cartePaiementNumero\":\""+cartePaiementNumero+"\",\"cartePaiementExpiration\":\""+cartePaiementExpiration+"\",\"cartePaiementTitulaire\":\""+cartePaiementTitulaire+"\",\"cartePaiementCVV\":\""+cartePaiementCVV+"\",\"nom\":\""+nom+"\",\"prenom\":\""+prenom+"\",\"adresse\":\""+adresse+"\",\"ville\":\""+ville+"\",\"codePostal\":\""+codePostal+"\",\"telMobile\":\""+telMobile+"\",\"email\":\""+email+"\",\"adresseComp\":\""+adresseComp+"\",\"pays\":\""+pays+"\",\"civilite\":\""+civilite+"\",\"mmcClientId\":1}";
+        reservationPayload = reservationPayload +",\"cartePaiementType\":\""+cartePaiementType+"\","+"\"cartePaiementNumero\":\""+cartePaiementNumero+"\",\"cartePaiementExpiration\":\""+cartePaiementExpiration+"\",\"cartePaiementTitulaire\":\""+cartePaiementTitulaire+"\",\"cartePaiementCVV\":\""+cartePaiementCVV+"\",\"nom\":\""+nom+"\",\"prenom\":\""+prenom+"\",\"adresse\":\""+adresse+"\",\"ville\":\""+ville+"\",\"codePostal\":\""+codePostal+"\",\"telMobile\":\""+telMobile+"\",\"email\":\""+email+"\",\"adresseComp\":\""+adresseComp+"\",\"pays\":\""+pays+"\",\"civilite\":\""+civilite+"\",\"mmcClientId\":1,\"statut\":\"NOTE\"}";
         JsonObject resaJSONObject = Payment.stringToJsonObject(reservationPayload);
         ResteasyClient reservation = new ResteasyClientBuilder().build();
         ResteasyWebTarget targetResa = reservation.target(Constant.WS_CREATE_BOOKING);
