@@ -588,7 +588,6 @@
             "nbPax": nbAdulte,
             "nbChambre": qteChb,
             "nbEnfant": nbEnfant,
-            "pmsServiceId": 1,
             "reservationType": "INDIV",
             "posteUuid": "7291ee70-0d98-4e53-9077-2db1fe91edd1",
             "origine": "BOOKING"
