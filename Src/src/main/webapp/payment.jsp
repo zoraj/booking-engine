@@ -589,7 +589,7 @@
             "nbChambre": qteChb,
             "nbEnfant": nbEnfant,
             "reservationType": "INDIV",
-            "posteUuid": "7291ee70-0d98-4e53-9077-2db1fe91edd1",
+            "posteUuid": "1000",
             "origine": "BOOKING"
         };
         var reservation_json = JSON.stringify(reservationJson);
