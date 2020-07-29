@@ -76,7 +76,7 @@ public class Home extends HttpServlet {
 
     private static String getApiKeyBySite(String codeSite) {
         ResteasyClient client = new ResteasyClientBuilder().build();
-        ResteasyWebTarget target = client.target("http://localhost:8080/e/api/sites/?code=" + codeSite);
+        ResteasyWebTarget target = client.target(Constant.WS_GET_CODE_SITE + codeSite);
         String bearerToken = Jwt.generateToken();
         Home.setToken(bearerToken);
         Response response = target.request().header("Authorization", "Bearer " + bearerToken).get();
@@ -141,7 +141,7 @@ public class Home extends HttpServlet {
                 List<String> tarifOption = new ArrayList<String>();
                 for (int j = 0; j < jsonTarifOptionArray.size(); j++) {
                     JsonObject jsonTarifOption = jsonTarifOptionArray.getJsonObject(j);
-                    if (jsonTarifOption.getBoolean("isChecked") == true) {
+                    if (jsonTarifOption.getBoolean("checked") == true) {
                         String option = jsonTarifOption.getString("libelle");
                         tarifOption.add(option);
                     }
