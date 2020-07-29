@@ -203,6 +203,7 @@ public class Payment extends HttpServlet {
                 .add("pmsNoteEnteteId",entitieId)
                 .add("mmcModeEncaissementId",1)
                 .add("mmcUserId",1)
+                .add("posteUuid",1000)
                 .build();
         Payment.postPayment(paiment); 
 
