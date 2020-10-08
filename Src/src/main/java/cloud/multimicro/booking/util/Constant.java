@@ -13,8 +13,8 @@ package cloud.multimicro.booking.util;
 public class Constant {
     public static final String SERVER_BOOKING_ADDRESS           = "booking.bymmc.com";
     
-    public static final String LOCALHOST_URL                    = "http://localhost:8080/api/";
-    public static final String LOCALHOST_ESTABLISHEMENT_URL     = "http://localhost:8080/e/api/";
+    public static final String LOCALHOST_URL                    = "http://localdev.lan:8081/api/";
+    public static final String LOCALHOST_ESTABLISHEMENT_URL     = "http://localdev.lan:8081/e/api/";
     
     public static final String PROD_URL                         = "http://api.bymmc.com";
     public static final String PROD_ESTABLISHEMENT_URL          = "http://api.bymmc.com";
@@ -28,10 +28,10 @@ public class Constant {
     
     
     public static final String WS_CREATE_CLIENT            = LOCALHOST_URL + "clients";
-    public static final String WS_CREATE_BOOKING           = LOCALHOST_URL + "notes/pms/header";
+    public static final String WS_CREATE_BOOKING           = LOCALHOST_URL + "reservation/";
     public static final String WS_CREATE_CASHING           = LOCALHOST_URL + "cashing/pms";
     public static final String WS_CREATE_VENTILLATION_NOTE = LOCALHOST_URL + "notes/pms/room-ventillation";
-    public static final String WS_SEARCH_AVAILABILITY      = LOCALHOST_URL + "booking-availability/";
+    public static final String WS_SEARCH_AVAILABILITY      = LOCALHOST_URL + "booking/room-available-by-type";
     public static final String WS_GET_CODE_SITE            = LOCALHOST_ESTABLISHEMENT_URL + "sites/?code=";
     
     

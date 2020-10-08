@@ -164,13 +164,13 @@ public class Payment extends HttpServlet {
         String token = Home.getToken();
         String nom = request.getParameter("nom");
         String prenom = request.getParameter("prenom");
-        String adresse = request.getParameter("adresse");
+        String adresse1 = request.getParameter("adresse");
         String ville = request.getParameter("ville");
         String codePostal = request.getParameter("codePostal");
         String telMobile = request.getParameter("telMobile");
         String email = request.getParameter("email");
         String pays = request.getParameter("pays");
-        String adresseComp = request.getParameter("adresseComp");
+        String adresse2 = request.getParameter("adresseComp");
         String civilite = request.getParameter("civilite");
         String reservationPayload = request.getParameter("reservation");
         String cartePaiementType = request.getParameter("carte-paiement-type");
@@ -178,9 +178,10 @@ public class Payment extends HttpServlet {
         String cartePaiementExpiration = request.getParameter("carte-paiement-expiration");
         String cartePaiementTitulaire = request.getParameter("carte-paiement-titulaire");
         String cartePaiementCVV = request.getParameter("carte-paiement-cvv");
+        System.out.println(" reservationPayload : "+reservationPayload);
         
         reservationPayload = reservationPayload.substring(0, reservationPayload.length() - 1);
-        reservationPayload = reservationPayload +",\"cartePaiementType\":\""+cartePaiementType+"\","+"\"cartePaiementNumero\":\""+cartePaiementNumero+"\",\"cartePaiementExpiration\":\""+cartePaiementExpiration+"\",\"cartePaiementTitulaire\":\""+cartePaiementTitulaire+"\",\"cartePaiementCVV\":\""+cartePaiementCVV+"\",\"nomNote\":\""+nom+" "+prenom+"\",\"nom\":\""+nom+"\",\"prenom\":\""+prenom+"\",\"adresse\":\""+adresse+"\",\"ville\":\""+ville+"\",\"codePostal\":\""+codePostal+"\",\"telMobile\":\""+telMobile+"\",\"email\":\""+email+"\",\"adresseComp\":\""+adresseComp+"\",\"pays\":\""+pays+"\",\"civilite\":\""+civilite+"\",\"pmsTarifGrilleId\":1,\"statut\":\"NOTE\"}";
+        reservationPayload = reservationPayload +",\"cbType\":\""+cartePaiementType+"\","+"\"cbNumero\":\""+cartePaiementNumero+"\",\"cbExp\":\""+cartePaiementExpiration+"\",\"cbTitulaire\":\""+cartePaiementTitulaire+"\",\"cbCvv\":\""+cartePaiementCVV+"\",\"nomReservation\":\""+nom+" "+prenom+"\",\"nom\":\""+nom+"\",\"prenom\":\""+prenom+"\",\"adresse1\":\""+adresse1+"\",\"adresse2\":\""+adresse2+"\",\"ville\":\""+ville+"\",\"cp\":\""+codePostal+"\",\"tel\":\""+telMobile+"\",\"email\":\""+email+"\",\"pays\":\""+pays+"\",\"civilite\":\""+civilite+"\"}";
         JsonObject resaJSONObject = Payment.stringToJsonObject(reservationPayload);
         ResteasyClient reservation = new ResteasyClientBuilder().build();
         ResteasyWebTarget targetResa = reservation.target(Constant.WS_CREATE_BOOKING);

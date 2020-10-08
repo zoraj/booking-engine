@@ -5,7 +5,6 @@
  */
 package cloud.multimicro.booking.servlet;
 
-
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,33 +16,36 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author HERIZO
  */
-@WebServlet(name = "Mail", urlPatterns = {"/mail"})
+@WebServlet(name = "Mail", urlPatterns = { "/mail" })
 public class Mail extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        getServletConfig().getServletContext().getRequestDispatcher("/mail.jsp").forward(request, response);
+        String message = "<span><h2>thank you for your visit,</h2></span><span><h3>a summary email has been sent to you.</h3></span>";
+        request.setAttribute("message", message);
+        getServletConfig().getServletContext().getRequestDispatcher("/info.jsp").forward(request, response);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
+    // + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -54,11 +56,11 @@ public class Mail extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */   
+     * @throws IOException      if an I/O error occurs
+     */
 
     /**
      * Returns a short description of the servlet.
@@ -70,8 +72,4 @@ public class Mail extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-     
-   
 }
-    
-

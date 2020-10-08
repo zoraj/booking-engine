@@ -1,3 +1,4 @@
+<%@ page pageEncoding="UTF-8" %>
 <link type="text/css" rel="stylesheet" href="./assets/css/paiement.css" />	
 <div id="booking">
     <form method="post" action="payment">
@@ -23,7 +24,7 @@
                                     <div class="row">
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <span class="form-label">Civilité<i class="obligatoir">*</i></span>
+                                                <span class="form-label">CivilitÃ©<i class="obligatoir">*</i></span>
                                                 <select name="civilite" id="civilite" class="form-control">
                                                     <option value="MR">M.</option>
                                                     <option value="MME">Mm</option>
@@ -41,7 +42,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <input name="prenom" maxlength="99" id="prenom" class="form-control" type="text" required autocomplete="off">
-                                                <span class="form-label">Prénom<i class="obligatoir">*</i></span>
+                                                <span class="form-label">PrÃ©nom<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
                                     </div><br>
@@ -55,7 +56,7 @@
                                         <div class="col-md-5">
                                             <div class="form-group">
                                                 <input name="adresseComp" maxlength="45" id="adresseComp" class="form-control" type="text" autocomplete="off">
-                                                <span class="form-label">Complément</span>
+                                                <span class="form-label">Complement</span>
                                             </div>
                                         </div>
                                     </div><br>
@@ -322,7 +323,7 @@
                                         <div class="col-md-5">
                                             <div class="form-group">
                                                 <input name="telephone" maxlength="44" pattern="[0-9]+" id="telephone" class="form-control" type="tel" required autocomplete="off">
-                                                <span class="form-label">Téléphone (mobile)<i class="obligatoir">*</i></span>
+                                                <span class="form-label">TÃ©lÃ©phone (mobile)<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
                                         <div class="col-md-5">
@@ -337,7 +338,7 @@
                                             <input type="checkbox" class="form-check-input">
                                         </div>
                                         <div class="col-md-11">
-                                            <label class="form-check-label">Créer mon compte utilisateur (Facultatif)</label>
+                                            <label class="form-check-label">CrÃ©er mon compte utilisateur (Facultatif)</label>
                                         </div>
                                     </div>
                                 </div>							
@@ -354,12 +355,12 @@
                     <div class="row paiement-securise">
                         <br>
                         <div class="col-md-12">
-                            <h5 style="font-weight:bolder; font-size: 18px; color: #06a8c4;">Paiement sécurisé</h5><hr style="border-top: 1px dashed rgba(0, 0, 0, 0.2);">
+                            <h5 style="font-weight:bolder; font-size: 18px; color: #06a8c4;">Paiement sÃ©curisÃ©</h5><hr style="border-top: 1px dashed rgba(0, 0, 0, 0.2);">
                         </div>
                         <div class="col-md-5">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <strong>Coordonnées bancaires</strong>
+                                    <strong>CoordonnÃ©es bancaires</strong>
                                 </div>
                             </div></br>
                             <div class="row">
@@ -393,7 +394,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <input class="form-control" id="carte-paiement-numero" pattern="[0-9]+" maxlength="15" name="carte-paiement-numero" type="text" required autocomplete="off">
-                                        <span class="form-label">Numéro de carte<i class="obligatoir">*</i></span>
+                                        <span class="form-label">NumÃ©ro de carte<i class="obligatoir">*</i></span>
                                     </div>
                                 </div>
                             </div></br>
@@ -408,7 +409,7 @@
                                         <!--span class="form-label"></span-->
                                         <select id="mounthId" class="form-control" onchange="window.open('payment.jsp?mois='+document.forms[0].mois.selectedValue,'_self');">
                                             <option value="01">Janvier</option>
-                                            <option value="02">Février</option>
+                                            <option value="02">FÃ©vrier</option>
                                             <option value="03">Mars</option>
                                             <option value="04">Avril</option>
                                             <option value="05">Mai</option>
@@ -418,7 +419,7 @@
                                             <option value="09">Septembre</option>
                                             <option value="10">Octobre</option>
                                             <option value="11">Novembre</option>
-                                            <option value="12">Décembre</option>
+                                            <option value="12">DÃ©cembre</option>
                                         </select>
                                         <span class="select-arrow"></span>
                                         <!--input class="form-control" type="month">
@@ -467,9 +468,9 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <p>
-                                        L'acompte ne s'applique qu'un seule fois (pas de frais supplémentaires pour modification ou annulation). 
-                                        Il est non remboursable et vient en déduction du montant total de votre réservation. Le montant reste dû selon
-                                        l'échéance indiquée dans les conditions générales de ventes de l'établissement.
+                                        L'acompte ne s'applique qu'un seule fois (pas de frais supplÃ©mentaires pour modification ou annulation). 
+                                        Il est non remboursable et vient en d'Ã©duction du montant total de votre rÃ©servation. Le montant reste de selon
+                                        l'Ã©cheance indiquÃ©e dans les conditions gÃ©nÃ©rales de ventes de l'Ã©tablissement.
                                     </p>
                                 </div>
                             </div></br></br></br></br>
@@ -483,7 +484,7 @@
                                                 </div>
                                                 <div class="col-md-11">
                                                     <label class="form-check-label">En cochant cette case, je reconnais avoir pris connaissance des 
-                                                        <a href="#">Conditions Générales de Vente</a> et je les accepte.</label>
+                                                        <a href="#">Conditions GÃ©nÃ©rales de Vente</a> et je les accepte.</label>
                                                 </div>
                                             </div>																								
                                         </div>
@@ -495,7 +496,7 @@
                                                     <input type="checkbox" class="form-check-input">
                                                 </div>
                                                 <div class="col-md-11">
-                                                    <label class="form-check-label">Informez-moi par email des nouveautés et des opération spéciales</label>
+                                                    <label class="form-check-label">Informez-moi par email des nouveautÃ©s et des opÃ©ration spÃ©ciales</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -515,7 +516,7 @@
                                     <div class="row">
                                         <div class="col-md-offset-4 col-md-8">
                                             <div class="form-btn">
-                                                <button class="submit-btn" id="validateId">Valider ma réservation</button>
+                                                <button class="submit-btn" id="validateId">Valider ma rÃ©servation</button>
                                             </div>
                                         </div>
                                     </div>
@@ -575,13 +576,13 @@
         var nbEnfant = 0;
         var qteChb = 0;
         var nbAdulte = 0;
-        // recuperation des nbEnfants, qteChb, nbAdulte reservé
+        // recuperation des nbEnfants, qteChb, nbAdulte reservï¿½
         listRoomObject.roomList.forEach(function (room) {
             nbEnfant = nbEnfant + parseInt(room.nbEnfant);
             qteChb = qteChb + parseInt(room.qteChb);
             nbAdulte = nbAdulte + parseInt(room.nbAdulte);
         });
-        // création de json reservation
+        // crï¿½ation de json reservation
         var reservationJson = {
             "dateArrivee": listRoomObject.dateArrivee,
             "dateDepart": listRoomObject.dateDepart,
@@ -627,9 +628,8 @@
             var dateExpiration = new Date($("#yearId").val(), parseInt($("#mounthId").val()) - 1, 1);
 
             if ((dateExpiration < new Date())) {
-                $("#mounthId").get(0).setCustomValidity("Date anterieure à la date du jour");
+                $("#mounthId").get(0).setCustomValidity("Date anterieure ï¿½ la date du jour");
             } else {
-
                 $("#mounthId").get(0).setCustomValidity("");
                 $("#reservation").val(JSON.stringify(reservationJson));
                 $("#room-list").val(JSON.stringify(informationNoteVentilationObject.roomList));
