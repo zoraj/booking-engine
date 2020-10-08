@@ -6,89 +6,107 @@
 
 package cloud.multimicro.booking.servlet;
 
-import java.math.BigDecimal;
 import java.util.List;
 /**
  *
  * @author Naly
  */
+
 public class DataBooking {
-    
-    private Integer idTypeChambre;
-    private String typeChambreLibelle;
-    private Integer availableRoom;
-    private Integer totalRoom;
-    private Integer nbAdulte;
-    private Integer nbEnfant;
-    private BigDecimal prixParDefaut;
-    private List<String> tarifOptionLibelle;
+    private Integer qteDispo;
+    private String typeChambre;
+    private Integer qteTotal;
+    private Integer pmsTypeChambreId;
+    private Integer nbChild;
+    private Integer persMin;
+    private Integer persMax;
+    private Integer typeTarifId;
+    private String typeTarifLibelle;
+    private Double amount;
 
     public DataBooking() {
         
     }
     
-    public int getIdTypeChambre() {
-        return idTypeChambre;
+    public Integer getPmsTypeChambreId() {
+        return pmsTypeChambreId;
     }
 
-    public void setIdTypeChambre(int idTypeChambre) {
-        this.idTypeChambre = idTypeChambre;
+    public void setPmsTypeChambreId(Integer pmsTypeChambreId) {
+        this.pmsTypeChambreId = pmsTypeChambreId;
     }    
 
-    public String getTypeChambreLibelle() {
-        return typeChambreLibelle;
+    public String getTypeChambre() {
+        return typeChambre;
     }
 
-    public void setTypeChambreLibelle(String typeChambreLibelle) {
-        this.typeChambreLibelle = typeChambreLibelle;
+    public void setTypeChambre(String typeChambre) {
+        this.typeChambre = typeChambre;
+    }    
+
+    public Integer getQteDispo() {
+        return qteDispo;
     }
 
-    public int getAvailableRoom() {
-        return availableRoom;
+    public void setQteDispo(Integer qteDispo) {
+        this.qteDispo = qteDispo;
     }
 
-    public void setAvailableRoom(int availableRoom) {
-        this.availableRoom = availableRoom;
+    public Integer getQteTotal() {
+        return qteTotal;
     }
 
-    public BigDecimal getPrixParDefaut() {
-        return prixParDefaut;
+    public void setQteTotal(Integer qteTotal) {
+        this.qteTotal = qteTotal;
     }
 
-    public void setPrixParDefaut(BigDecimal prixParDefaut) {
-        this.prixParDefaut = prixParDefaut;
+    public int getNbChild() {
+        return nbChild;
     }
 
-    public int getTotalRoom() {
-        return totalRoom;
-    }
-
-    public void setTotalRoom(int totalRoom) {
-        this.totalRoom = totalRoom;
-    }
-
-    public int getNbAdulte() {
-        return nbAdulte;
-    }
-
-    public void setNbAdulte(int nbAdulte) {
-        this.nbAdulte = nbAdulte;
+    public void setNbChild(Integer nbChild) {
+        this.nbChild = nbChild;
     }
     
-    public int getNbEnfant() {
-        return nbEnfant;
+    public int getPersMin() {
+        return persMin;
     }
 
-    public void setNbEnfant(int nbEnfant) {
-        this.nbEnfant = nbEnfant;
+    public void setPersMin(Integer persMin) {
+        this.persMin = persMin;
     }
 
-    public List<String> getTarifOptionLibelle() {
-        return tarifOptionLibelle;
+    public Integer getPersMax() {
+        return persMax;
     }
 
-    public void setTarifOptionLibelle(List<String> tarifOptionLibelle) {
-        this.tarifOptionLibelle = tarifOptionLibelle;
+    public void setPersMax(Integer persMax) {
+        this.persMax = persMax;
+    }
+
+
+    public int getTypeTarifId() {
+        return typeTarifId;
+    }
+
+    public void setTypeTarifId(Integer typeTarifId) {
+        this.typeTarifId = typeTarifId;
+    }
+    
+    public String getTypeTarifLibelle() {
+        return typeTarifLibelle;
+    }
+
+    public void setTypeTarifLibelle(String typeTarifLibelle) {
+        this.typeTarifLibelle = typeTarifLibelle;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
 }

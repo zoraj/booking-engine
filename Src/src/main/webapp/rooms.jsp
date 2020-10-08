@@ -1,3 +1,4 @@
+<%@ page pageEncoding="UTF-8" %>
 <%@page import="java.util.List"%>
 <link type="text/css" rel="stylesheet" href="./assets/css/liste_type_chambre.css" />
 <div id="booking">
@@ -7,12 +8,12 @@
                 <c:forEach var="room" items="${listRooms}" varStatus="myIndex">
                     <!-- Debut Premier liste type chambre -->
                     <div class="row" id="list-room">	
-                        <input type="hidden" id="room_type_id_${myIndex.index}" class="form-control" value = "${room.idTypeChambre}">
+                        <input type="hidden" id="room_type_id_${myIndex.index}" class="form-control" value = "${room.pmsTypeChambreId}">
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-12 booking-cta">
-                                    <h2> ${room.typeChambreLibelle} Room </h2>
-                                    <p>${room.typeChambreLibelle} Rooms are designed in open-concept living area and have many facilities.</p>
+                                    <h2> ${room.typeChambre} Room </h2>
+                                    <p>${room.typeChambre} Rooms are designed in open-concept living area and have many facilities.</p>
                                 </div>
                             </div>
                             <br/>
@@ -31,7 +32,7 @@
                                                     <i class="fa fa-male"></i>
                                                 </div>
                                                 <div class="col-md-5">
-                                                    <span id="nbAdulte_${myIndex.index}">${room.nbAdulte}</span>
+                                                  <span>GUESTS : </span> <span id="nbAdulte_${myIndex.index}">${room.persMax} </span>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -39,39 +40,26 @@
                                                     <i class="fa fa-bookmark"> </i>
                                                 </div>
                                                 <div class="col-md-5">
-                                                    <span id="roomType_${myIndex.index}">${room.typeChambreLibelle} </span>
+                                                     <span>TYPE : </span><span id="roomType_${myIndex.index}">${room.typeChambre} </span>
                                                 </div>
                                             </div>
-
-                                        </div>
-                                        <div class="col-md-6 col-xs-6">
-                                            <c:forEach var="option" items="${room.tarifOptionLibelle}">    
-                                                <div class="row">
-                                                    <div class="col-md-1">
-                                                        <i class="fa fa-eye"> </i>
-                                                    </div>
-                                                    <div class="col-md-5">
-                                                        <span> ${option} </span>
-                                                    </div>
-                                                </div>
-                                            </c:forEach> 
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-xs-12">
-                                    <p>Price start at: </p>
+                                    <p>${room.typeTarifLibelle}</p>
                                     <p>
-                                        <span style="font-size:30px; font-weight:bolder">$ <label id="rate_${myIndex.index}">${room.prixParDefaut}</label></span>
+                                        <span style="font-size:30px; font-weight:bolder"> <label id="rate_${myIndex.index}">${room.amount}</label>&euro;</span>
                                         <span style="font-size:15px;">/per night</span>
                                     </p>	
                                     <form class="form-input">
                                         <p>                                    
-                                            <input type="number" class="form-control" value = "1" id="qty_${myIndex.index}" min="1" max="${room.availableRoom}">
+                                            <input type="number" class="form-control" value = "1" id="qty_${myIndex.index}" min="1" max="${room.qteDispo}">
                                         </p>
 
-                                        <p>of ${room.availableRoom} accommodations available.</p>
-                                        <input type="hidden" class="form-control" value = "${room.availableRoom}" id="disponible_${myIndex.index}">
-                                        <input type="hidden" class="form-control" value = "${room.nbEnfant}" id="nbEnfant_${myIndex.index}">
+                                        <p>of ${room.qteTotal} accommodations available.</p>
+                                        <input type="hidden" class="form-control" value = "${room.qteDispo}" id="disponible_${myIndex.index}">
+                                        <input type="hidden" class="form-control" value = "${room.nbChild}" id="nbEnfant_${myIndex.index}">
                                     </form>
                                     <div class="form-btn">
                                         <button id="valid-btn" name="bookRoom" class="submit-btn"  data-value='${myIndex.index}'>Book now</button>
