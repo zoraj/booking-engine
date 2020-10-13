@@ -6,14 +6,10 @@ function verifyDateCheckOut() {
     var fin = document.getElementById("dateDepart");
 
     if (new Date(debut.value) > new Date(fin.value)) {
-        console.log(" debut.value : " + debut.value)
-        console.log(" fin.value : " + fin.value)
-        console.log("debut lehibe nohon fin")
-            //  fin.value = null;
+        //  fin.value = null;
         isStartGreatThanEnd = true;
 
     } else {
-        console.log("fin lehibe nohon debut")
         isStartGreatThanEnd = false;
     }
 }
@@ -70,18 +66,14 @@ jQuery(document).ready(function() {
     document.getElementById('dateDepart').min = new Date(new Date().getTime() + 24 * 60 * 60 * 1000 - new Date().getTimezoneOffset() * 60 * 1000).toISOString().substr(0, 10);
     $("#dateDepart").change(function() {
         verifyDateCheckOut();
-        // document.getElementById('dateArrivee').min = new Date().toISOString().substr(0, 10);
-        //document.getElementById('dateDepart').min = new Date(new Date().getTime() + 24 * 60 * 60 * 1000 - new Date().getTimezoneOffset() * 60 * 1000).toISOString().substr(0, 10);
     });
 
     $("#dateArrivee").change(function() {
         verifyDateCheckOut();
-
     });
 
-
     sessionStorage.setItem("disponibilite_json", $('#disponibilite-id').html());
-    $("#add-room").click(function() {
+    $("#add-chambre").click(function() {
         $('#other-room-add').append($("<div class='row' id='room" + i + "'>" +
             "<div class='col-md-3'>" +
             "<div class='form-group'><span class='form-label'></span>" +
@@ -96,7 +88,7 @@ jQuery(document).ready(function() {
             "<select class='form-control' id='nbEnfant" + i + "'><option>0</option><option>1</option><option>2</option><option>3</option></select>" +
             "<span class='select-arrow'></span></div></div>" +
             "<div class='col-md-2'>" +
-            "<div class='form-group'><button class='submit-btn' id='del-chambre'><a href='#' onclick='deleteRoom(" + i + ");'>(-)</a></button></div></div>" +
+            "<div id='del-chambre' onclick='deleteRoom(" + i + ");'><span>(-)</span></div></div>" +
             "</div>"));
 
         i++;

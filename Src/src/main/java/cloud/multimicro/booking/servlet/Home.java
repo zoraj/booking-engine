@@ -138,18 +138,21 @@ public class Home extends HttpServlet {
                 dataBooking.setQteDispo(jsonLigne.getInt("qteDispo"));
                 JsonArray jsonTarifArray = jsonLigne.getJsonArray("tarif");
                 for (int j = 0; j < jsonTarifArray.size(); j++) {
+                    DataBooking data = new DataBooking(dataBooking);
                     JsonObject jsonTarif = jsonTarifArray.getJsonObject(j);
-                    dataBooking.setTypeTarifId(jsonTarif.getInt("typeTarifId"));
-                    dataBooking.setAmount(Double.parseDouble(jsonTarif.get("amount").toString()));
-                    dataBooking.setTypeTarifLibelle(jsonTarif.getString("typeTarifLibelle"));
-                    rooms.add(dataBooking);
+                    data.setTypeTarifId(jsonTarif.getInt("typeTarifId"));
+                    data.setAmount(Double.parseDouble(jsonTarif.get("amount").toString()));
+                    data.setTypeTarifLibelle(jsonTarif.getString("typeTarifLibelle"));
+                   
+                    data.setPmsTarifGrilleDetailId(jsonTarif.getInt("pmsTarifGrilleDetailId"));
+                    rooms.add(data);
                 }
             }
             request.setAttribute("listRooms", rooms);
             getServletConfig().getServletContext().getRequestDispatcher("/rooms").forward(request, response);
 
         } else {
-            String message = "<span><h3>Désolé. Aucune chambre disponible correspond à vos critères.</h3></span>";
+            String message = "<span><h3 style = 'text-align: center;'>Désolé. Aucune chambre disponible correspond à vos critères.</h3></span>";
             request.setAttribute("message", message);
             getServletConfig().getServletContext().getRequestDispatcher("/info.jsp").forward(request, response);
 
