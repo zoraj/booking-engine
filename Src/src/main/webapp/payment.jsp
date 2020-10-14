@@ -49,13 +49,13 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="adresse" maxlength="45" id="adresse" class="form-control" type="text" autocomplete="off">
+                                                <input name="adresse1" maxlength="45" id="adresse" class="form-control" type="text" autocomplete="off">
                                                 <span class="form-label">Adresse</span>
                                             </div>
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="adresseComp" maxlength="45" id="adresseComp" class="form-control" type="text" autocomplete="off">
+                                                <input name="adresse2" maxlength="45" id="adresseComp" class="form-control" type="text" autocomplete="off">
                                                 <span class="form-label">Complement</span>
                                             </div>
                                         </div>
@@ -63,7 +63,7 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <input name="codePostal" pattern="[0-9]+" maxlength="44" id="codePostal" class="form-control" type="text" autocomplete="off">
+                                                <input name="cp" pattern="[0-9]+" maxlength="44" id="codePostal" class="form-control" type="text" autocomplete="off">
                                                 <span class="form-label">Code postal<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
@@ -322,7 +322,7 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="telephone" maxlength="44" pattern="[0-9]+" id="telephone" class="form-control" type="tel" required autocomplete="off">
+                                                <input name="tel" maxlength="44" pattern="[0-9]+" id="telephone" class="form-control" type="tel" required autocomplete="off">
                                                 <span class="form-label">Téléphone (mobile)<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
@@ -510,7 +510,9 @@
                                         <input type="hidden" id="adults" name="adults">
                                         <input type="hidden" id="dateArrivee" name="dateArrivee">
                                         <input type="hidden" id="dateDepart" name="dateDepart">
-                                        <input type="hidden" id="recapchambre" name="recapchambre">
+                                        <input type="hidden" id="ventillation" name="ventillation">
+                                        <input type="hidden" id="informationRate" name="informationRate">
+
 
                                     </div>
                                     <div class="row">
@@ -533,33 +535,26 @@
 <script>
     //lecture liste des chambre 
     var cartePaymentType = "MASTERCARD";
+    
     var listRoom = sessionStorage.getItem("roomList_json");
 
     var informationNoteVentilation = sessionStorage.getItem("informationNoteVentilation_json");
     var informationNoteVentilationObject = JSON.parse(informationNoteVentilation);
-
+    var informationVentilation = sessionStorage.getItem("ventillation_json");
+    var informationRate = sessionStorage.getItem("reservationTarif_json");
     var listRoomObject = JSON.parse(listRoom);
-
     var recapJson = sessionStorage.getItem("informationTypeRooms_json");
     var recapObject = JSON.parse(recapJson);
-
-    var recapJson = sessionStorage.getItem("informationTypeRooms_json");
-    var recapObject = JSON.parse(recapJson);
-
-
     var informationPersonJson = sessionStorage.getItem("informationPerson_json");
     var informationPersonObject = JSON.parse(informationPersonJson);
-
     var dateArrivee = new Date(listRoomObject.dateArrivee);
     var dateDepart = new Date(listRoomObject.dateDepart);
     $('.form-control').each(function () {
         floatedLabel($(this));
     });
-
     $('.form-control').on('input', function () {
         floatedLabel($(this));
     });
-
     function floatedLabel(input) {
         var $field = input.closest('.form-group');
         if (input.val()) {
@@ -568,8 +563,8 @@
             $field.removeClass('input-not-empty');
         }
     }
-
     jQuery(document).ready(function () {
+         $("#carte-paiement-type").val(cartePaymentType);
         var nbPax = 0;
         var montantTTC = 0;
         var recapitulationChambre = "";
@@ -582,7 +577,7 @@
             qteChb = qteChb + parseInt(room.qteChb);
             nbAdulte = nbAdulte + parseInt(room.nbAdulte);
         });
-        // cr�ation de json reservation
+        // création de json reservation
         var reservationJson = {
             "dateArrivee": listRoomObject.dateArrivee,
             "dateDepart": listRoomObject.dateDepart,
@@ -593,26 +588,22 @@
             "posteUuid": "1000",
             "origine": "BOOKING"
         };
-        var reservation_json = JSON.stringify(reservationJson);
-        sessionStorage.setItem("reservation_json", reservation_json);
         recapObject.bookRoom.forEach(function (room) {
             nbPax = nbPax + parseInt(room.nbAdulte);
             montantTTC = montantTTC + parseInt(room.qty) * parseInt(room.rate);
             recapitulationChambre = recapitulationChambre + room.qty + " x " + room.roomType + ";";
         });
-
         // Affichage de montant ttc
         $("#amountId").html(montantTTC + " &euro;");
-
         //initialisation
         $("#masterCardId").prop('checked', true);
         $("#visaId").prop('checked', false);
-
         //si on click sur masterCard
         $('#masterCardId').click(function () {
             if ($('#masterCardId').is(':checked') === true) {
                 $("#visaId").prop('checked', false);
                 cartePaymentType = "MASTERCARD";
+                 $("#carte-paiement-type").val(cartePaymentType);
             }
         });
         //si on click sur VISA
@@ -620,28 +611,27 @@
             if ($('#visaId').is(':checked') === true) {
                 $("#masterCardId").prop('checked', false);
                 cartePaymentType = "VISA";
+                 $("#carte-paiement-type").val(cartePaymentType);
             }
         });
-
         // Validation de paiment
         $('#validateId').click(function () {
             var dateExpiration = new Date($("#yearId").val(), parseInt($("#mounthId").val()) - 1, 1);
 
-            if ((dateExpiration < new Date())) {
+            if ((dateExpiration <= new Date())) {
                 $("#mounthId").get(0).setCustomValidity("Date anterieure � la date du jour");
             } else {
                 $("#mounthId").get(0).setCustomValidity("");
                 $("#reservation").val(JSON.stringify(reservationJson));
-                $("#room-list").val(JSON.stringify(informationNoteVentilationObject.roomList));
-                $("#carte-paiement-expiration").val($("#yearId").val() + "-" + $("#mounthId").val());
+                $("#carte-paiement-expiration").val($("#yearId").val() + "-" + $("#mounthId").val()+"-"+"01");
                 $("#adults").val(nbPax);
-
                 $("#montant").val(montantTTC);
                 $("#carte-paiement-type").val(cartePaymentType);
                 $("#dateArrivee").val(changeFormat(dateArrivee));
                 $("#dateDepart").val(changeFormat(dateDepart));
-                $("#recapchambre").val(recapitulationChambre);
-
+                $("#ventillation").val(informationVentilation);
+                $("#informationRate").val(informationRate);
+                
                 function changeFormat(date) {
                     options = {
                         weekday: "short", year: 'numeric', month: 'long', day: 'numeric'

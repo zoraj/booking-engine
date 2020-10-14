@@ -23,9 +23,20 @@ public class DataBooking {
     private Integer typeTarifId;
     private String typeTarifLibelle;
     private Double amount;
+    private Integer pmsTarifGrilleDetailId;
 
     public DataBooking() {
         
+    }
+
+    public DataBooking(DataBooking data) {
+        this.qteDispo = data.getQteDispo();
+        this.typeChambre = data.getTypeChambre();
+        this.qteTotal = data.getQteTotal();
+        this.pmsTypeChambreId = data.getPmsTypeChambreId();
+        this.nbChild = data.getNbChild();
+        this.persMin = data.getPersMin();
+        this.persMax = data.getPersMax();
     }
     
     public Integer getPmsTypeChambreId() {
@@ -107,6 +118,14 @@ public class DataBooking {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public Integer getPmsTarifGrilleDetailId(){
+        return pmsTarifGrilleDetailId;
+    }
+
+    public void setPmsTarifGrilleDetailId(Integer pmsTarifGrilleDetailId){
+        this.pmsTarifGrilleDetailId = pmsTarifGrilleDetailId;
     }
 
 }

@@ -32,7 +32,7 @@
                                                     <i class="fa fa-male"></i>
                                                 </div>
                                                 <div class="col-md-5">
-                                                  <span>GUESTS : </span> <span id="nbAdulte_${myIndex.index}">${room.persMax} </span>
+                                                  <span>GUESTS : </span> <span id="nbPax_${myIndex.index}">${room.persMax}</span>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -40,7 +40,7 @@
                                                     <i class="fa fa-bookmark"> </i>
                                                 </div>
                                                 <div class="col-md-5">
-                                                     <span>TYPE : </span><span id="roomType_${myIndex.index}">${room.typeChambre} </span>
+                                                     <span>TYPE : </span><span id="roomType_${myIndex.index}">${room.typeChambre}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -59,7 +59,7 @@
 
                                         <p>of ${room.qteTotal} accommodations available.</p>
                                         <input type="hidden" class="form-control" value = "${room.qteDispo}" id="disponible_${myIndex.index}">
-                                        <input type="hidden" class="form-control" value = "${room.nbChild}" id="nbEnfant_${myIndex.index}">
+                                        <input type="hidden" class="form-control" value = "${room.nbChild}" id="nbChild_${myIndex.index}">
                                     </form>
                                     <div class="form-btn">
                                         <button id="valid-btn" name="bookRoom" class="submit-btn"  data-value='${myIndex.index}'>Book now</button>
@@ -71,6 +71,7 @@
                                             <a href="recap-resa" id="proceder_paiement">Proceder au paiement</a>
                                         </button>
                                     </div>
+                                    <div id="pmsTarifGrilleDetailId_${myIndex.index}" style = "display:none;">${room.pmsTarifGrilleDetailId}</div>
                                 </div>
                             </div>
                         </div>
@@ -84,26 +85,39 @@
 </div>
 
 <script>
-    var informationTypeRooms = {
+        var informationTypeRooms = {
         "bookRoom": []
     };
 
-    var informationNoteVentilation = {
-        "roomList": []
-    };
+    function checkQuantityAvailable(qtyAvailable, qteRequested, roomType) {
+        var typeRoomListJson = sessionStorage.getItem("informationTypeRooms_json");
+        var typeRoomObject = JSON.parse(typeRoomListJson);
+        var qty = parseInt(qteRequested);
+        var available = true;
+        if (typeRoomObject != null) {
+            typeRoomObject.bookRoom.forEach(function(room) {
+                if (parseInt(room.roomTypeId) == parseInt(roomType)) {
+                    qty = qty + parseInt(room.qty);
+                    if (qty > parseInt(qtyAvailable)) {
+                        available = false;
+                    }
+                }
+            })
+        }
+        return available;
+    }
 
-    $(document).ready(function () {
-        $("[name='bookRoom']").click(function () {
+    $(document).ready(function() {
+        $("[name='bookRoom']").click(function() {
             let currentIndex = $(this).data("value");
             var saisie = document.getElementById("qty_" + currentIndex).value;
             var maxValue = document.getElementById("disponible_" + currentIndex).value;
-            if (parseInt(saisie) > parseInt(maxValue)) {
+            var available = checkQuantityAvailable(maxValue, saisie, $("#room_type_id_" + currentIndex).val());
+            if ((parseInt(saisie) > parseInt(maxValue))) {
                 $(this).css('background-color', '#06a8c4');
             } else {
-
                 if ($(this).css('background-color') == 'rgb(174, 176, 174)') {
                     $(this).css('background-color', 'rgb(6, 168, 196)');
-
                     var typeRoomListJson = sessionStorage.getItem("informationTypeRooms_json");
                     var typeRoomObject = JSON.parse(typeRoomListJson);
                     sessionStorage.setItem("informationTypeRooms_json", null);
@@ -111,33 +125,22 @@
                     informationTypeRooms = {
                         "bookRoom": []
                     };
-
-                    informationNoteVentilation = {
-                        "roomList": []
-                    };
-
-                    typeRoomObject.bookRoom.forEach(function (room) {
+                    typeRoomObject.bookRoom.forEach(function(room) {
                         if (parseInt(room.roomTypeId) != parseInt($("#room_type_id_" + currentIndex).val())) {
                             informationTypeRooms.bookRoom.push({
-                                "roomTypeId": room.roomTypeId,
-                                "nbAdulte": room.nbAdulte,
+                                "roomTypeId": parseInt(room.roomTypeId),
+                                "nbPax": parseInt(room.nbPax),
                                 "roomType": room.roomType,
-                                "rate": room.rate,
-                                "nbEnfant": room.nbEnfant,
-                                "qty": room.qty
+                                "rate": parseFloat(room.rate),
+                                "nbChild": parseInt(room.nbChild),
+                                "qty": parseInt(room.qty),
+                                "pmsTarifGrilleDetailId": parseInt(room.pmsTarifGrilleDetailId)
                             });
-                            for (var i = 0; i < parseInt(room.qty); i++)
-                                informationNoteVentilation.roomList.push({
-                                    "pmsTypeChambreId": parseInt(room.roomTypeId),
-                                    "nbAdulte": parseInt(room.nbAdulte),
-                                    "nbEnfant": parseInt(room.nbEnfant)
-                                });
                         }
-
                     });
 
 
-                } else {
+                } else if(available == true){
                     var typeRoomJson = sessionStorage.getItem("informationTypeRooms_json");
                     var typeObject = JSON.parse(typeRoomJson);
 
@@ -155,27 +158,19 @@
                     $(this).css('background-color', '#aeb0ae');
                     if ($("#list-room").is(":hidden") == false) {
                         informationTypeRooms.bookRoom.push({
-                            "roomTypeId": $("#room_type_id_" + currentIndex).val(),
-                            "nbAdulte": $("#nbAdulte_" + currentIndex).html(),
+                            "roomTypeId": parseInt($("#room_type_id_" + currentIndex).val()),
+                            "nbPax": parseInt($("#nbPax_" + currentIndex).html()),
                             "roomType": $("#roomType_" + currentIndex).html(),
-                            "rate": $("#rate_" + currentIndex).html(),
-                            "nbEnfant": $("#nbEnfant_" + currentIndex).val(),
-                            "qty": $("#qty_" + currentIndex).val()
+                            "rate": parseFloat($("#rate_" + currentIndex).html()),
+                            "nbChild": parseInt($("#nbChild_" + currentIndex).val()),
+                            "qty": parseInt($("#qty_" + currentIndex).val()),
+                            "pmsTarifGrilleDetailId": parseInt($("#pmsTarifGrilleDetailId_" + currentIndex).html()),
                         });
-                        for (var i = 0; i < parseInt($("#qty_" + currentIndex).val()); i++)
-                            informationNoteVentilation.roomList.push({
-                                "pmsTypeChambreId": parseInt($("#room_type_id_" + currentIndex).val()),
-                                "nbAdulte": parseInt($("#nbAdulte_" + currentIndex).html()),
-                                "nbEnfant": parseInt($("#nbEnfant_" + currentIndex).val())
-                            });
                     }
                 }
-
                 var informationTypeRooms_json = JSON.stringify(informationTypeRooms);
                 sessionStorage.setItem("informationTypeRooms_json", informationTypeRooms_json);
 
-                var informationNoteVentilation_json = JSON.stringify(informationNoteVentilation);
-                sessionStorage.setItem("informationNoteVentilation_json", informationNoteVentilation_json);
             }
         });
     });

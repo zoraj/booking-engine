@@ -78,6 +78,15 @@
 
     var dateArrivee = new Date(listRoomObject.dateArrivee);
     var dateDepart = new Date(listRoomObject.dateDepart);
+    var reservationTarif = {
+                        "reservationTarif": []
+                    };
+
+    var ventillation = {
+        "ventillation": []
+    };
+
+
    
     jQuery(document).ready(function () {
         var nbPax = 0;
@@ -85,11 +94,42 @@
         var montantTTC = 0;
         var recapitulationChambre = "";
         recapObject.bookRoom.forEach(function (room) {
-            childs = childs + parseInt(room.nbEnfant);
-            nbPax = nbPax + parseInt(room.nbAdulte);
+            var isExist = false;
+            var qty = 0;
+            reservationTarif.reservationTarif.push({
+                 "qteChb": room.qty,
+                 "pmsTypeChambreId": room.roomTypeId,
+                 "pmsTarifGrilleDetailId": room.pmsTarifGrilleDetailId,
+                 "nbAdult":room.nbPax,
+                 "nbEnf":room.nbChild
+            });
+            if(ventillation.ventillation.length>0){
+                for (var i = 0; i < ventillation.ventillation.length; i++) {
+                    if(ventillation.ventillation[i].pmsTypeChambreId == room.roomTypeId){
+                       ventillation.ventillation[i].qteChb = ventillation.ventillation[i].qteChb + room.qty;
+                       isExist = true;
+                       break;
+                    } 
+                }
+            }
+            if(isExist == false){
+                  ventillation.ventillation.push({
+                      "qteChb": room.qty,
+                      "pmsTypeChambreId": room.roomTypeId
+                  });
+            }
+
+            childs = childs + (parseInt(room.nbChild)*parseInt(room.qty));
+            nbPax = nbPax + (parseInt(room.nbPax)*parseInt(room.qty));
             montantTTC = montantTTC + parseInt(room.qty) * parseInt(room.rate);
             recapitulationChambre = recapitulationChambre + "<div class='col-md-8'>" + room.qty + " x " + room.roomType + "</div>" + "<div class='col-md-4'><span>" + room.rate + "&euro;</span></div>";
         });
+
+        var ventillation_json = JSON.stringify(ventillation);
+        sessionStorage.setItem("ventillation_json", ventillation_json);
+
+        var reservationTarif_json = JSON.stringify(reservationTarif);
+        sessionStorage.setItem("reservationTarif_json", reservationTarif_json);
 
         $("#name-user").html("#" + informationPersonObject.name);
         $("#date-id").html("du " + changeFormat(dateArrivee) + " au " + changeFormat(dateDepart));
@@ -131,8 +171,5 @@
             return tmp;
         }
         
-        
     });
-    
-    
 </script>

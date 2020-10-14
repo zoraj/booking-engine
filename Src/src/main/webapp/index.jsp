@@ -83,9 +83,7 @@
                                 </div>
                             </div>
                             <div class="col-md-1">
-                                <div class="form-btn" id="add-room">
-                                    <button class="submit-btn" id="add-chambre"><a href="#">(+)</a></button>
-                                </div>
+                                <div id="add-chambre"><span>(+)</span></div>
                             </div>									
                         </div>
                         <div id="other-room-add"></div>
