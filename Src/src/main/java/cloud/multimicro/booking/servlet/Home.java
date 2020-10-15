@@ -143,14 +143,19 @@ public class Home extends HttpServlet {
                     data.setTypeTarifId(jsonTarif.getInt("typeTarifId"));
                     data.setAmount(Double.parseDouble(jsonTarif.get("amount").toString()));
                     data.setTypeTarifLibelle(jsonTarif.getString("typeTarifLibelle"));
-                   
                     data.setPmsTarifGrilleDetailId(jsonTarif.getInt("pmsTarifGrilleDetailId"));
                     rooms.add(data);
                 }
             }
-            request.setAttribute("listRooms", rooms);
-            getServletConfig().getServletContext().getRequestDispatcher("/rooms").forward(request, response);
-
+            
+            if(rooms.size()>0){
+                request.setAttribute("listRooms", rooms);
+                getServletConfig().getServletContext().getRequestDispatcher("/rooms").forward(request, response);
+            }else{
+                String message = "<span><h3 style = 'text-align: center;'>Désolé. Les tarif ne sont pas encore prêt pour ces dates.</h3></span>";
+                request.setAttribute("message", message);
+                getServletConfig().getServletContext().getRequestDispatcher("/info.jsp").forward(request, response);
+            }
         } else {
             String message = "<span><h3 style = 'text-align: center;'>Désolé. Aucune chambre disponible correspond à vos critères.</h3></span>";
             request.setAttribute("message", message);

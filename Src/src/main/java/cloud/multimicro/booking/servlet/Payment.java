@@ -21,7 +21,9 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -110,6 +112,7 @@ public class Payment extends HttpServlet {
         JsonObject ventillationObject = Payment.stringToJsonObject(ventillation);
         String informationRate = request.getParameter("informationRate");
         JsonObject informationRateObject = Payment.stringToJsonObject(informationRate);
+        String observation = request.getParameter("observation");
         JsonObject payload = Json.createObjectBuilder()
                 .add("dateArrivee", reservationObject.getString("dateArrivee"))
                 .add("dateDepart", reservationObject.getString("dateDepart"))
@@ -132,20 +135,45 @@ public class Payment extends HttpServlet {
                 .add("ville", ville)
                 .add("pays", pays)
                 .add("origine", "BOOKING")
+                .add("posteUuid", "_BOOKING_")
                 .add("cbType", cartePaiementType)
                 .add("cbNumero", cartePaiementNumero)
                 .add("cbTitulaire", cartePaiementTitulaire)
                 .add("cbExp", cartePaiementExpiration)
                 .add("cbCvv", cartePaiementCVV)
+                .add("observation", observation)
                 .add("ventillation", ventillationObject.getJsonArray("ventillation"))
                 .add("reservationTarif", informationRateObject.getJsonArray("reservationTarif"))
                 .build();
         Payment.reservationCreation(payload);
+        List<String> dataMailList = new ArrayList<String>();
+        String amount = request.getParameter("montant");
+        String recap= request.getParameter("recapitulationChambre");
+        dataMailList.add(email);
+        dataMailList.add(nom);
+        dataMailList.add(nbPax);
+        dataMailList.add(payload.getString("dateArrivee"));
+        dataMailList.add(payload.getString("dateDepart"));
+        dataMailList.add(amount);
+        dataMailList.add(recap);
+        try {
+            boolean sended = this.sendMail(dataMailList);
+           if(sended == true){
+                String message = "<span><h2 style = 'text-align: center;'><b>Votre réservation a été pris en compte.</b></h2></span><span><h3 style = 'text-align: center;'><b>Un email de récapitulation vous sera envoyé.</b></h3></span>"; //
+                request.setAttribute("message", message);
+                this.getServletContext().getRequestDispatcher("/info.jsp").forward(request, response);
+           }    
+            
+        } catch (AddressException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         response.setContentType("text/html;charset=UTF-8");
-        String message = "<span><h2 style = 'text-align: center;'>Thank you for your visit,</h2></span><span></span>"; //<h3 style = 'text-align: center;'>a summary email has been sent to you.</h3>
-        request.setAttribute("message", message);
-        this.getServletContext().getRequestDispatcher("/info.jsp").forward(request, response);
+        
     }
 
     /**
@@ -158,19 +186,6 @@ public class Payment extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    private static void postPayment(JsonObject paiment) {
-        String apiKey = Home.getApiKey();
-        String token = Home.getToken();
-        ResteasyClient client = new ResteasyClientBuilder().build();
-        ResteasyWebTarget target = client.target(Constant.WS_CREATE_CASHING);
-        System.out.println(Entity.json(paiment));
-        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey)
-                .header("Authorization", "Bearer " + token).post(Entity.json(paiment));
-        // Read output in string format
-        String value = response.readEntity(String.class);
-        response.close();
-    }
 
     private static void reservationCreation(JsonObject resaJSONObject) {
         String apiKey = Home.getApiKey();
@@ -194,13 +209,11 @@ public class Payment extends HttpServlet {
 
     @Resource(mappedName = "java:jboss/mail/Default")
     private Session mailSession;
-/*
-    private boolean SendMail() throws AddressException, MessagingException {
 
+    private boolean sendMail(List<String> dataMailList) throws AddressException, MessagingException {
         Address from = new InternetAddress(ContentMail.SENDER);
-        Address[] to = new InternetAddress[] { new InternetAddress(email) };
+        Address[] to = new InternetAddress[] { new InternetAddress(dataMailList.get(0)) };
         javax.mail.internet.MimeMessage mimeMessage;
-
         mimeMessage = new javax.mail.internet.MimeMessage(mailSession);
         mimeMessage.setFrom(from);
         mimeMessage.setSubject(ContentMail.MMC_MAIL_SUBJECT);
@@ -208,16 +221,16 @@ public class Payment extends HttpServlet {
 
         String mailContent = ContentMail.MMC_MAIL_DETAIL;
         mailContent = mailContent.replace("{booking-url}", Constant.SERVER_BOOKING_ADDRESS);
-        mailContent = mailContent.replace("{booking-username}", email);
-        mailContent = mailContent.replace("{booking-name}", nom);
-        mailContent = mailContent.replace("{booking-amount}", montant);
-        mailContent = mailContent.replace("{booking-adultsid}", adults);
-        mailContent = mailContent.replace("{booking-dateArrivee}", dateArrivee);
-        mailContent = mailContent.replace("{booking-dateDepart}", dateDepart);
-        mailContent = mailContent.replace("{booking-recapchambre}", recapchambre);
+        mailContent = mailContent.replace("{booking-username}", dataMailList.get(0));
+        mailContent = mailContent.replace("{booking-name}", dataMailList.get(1));
+        mailContent = mailContent.replace("{booking-amount}", dataMailList.get(5));
+        mailContent = mailContent.replace("{booking-adultsid}", dataMailList.get(2));
+        mailContent = mailContent.replace("{booking-dateArrivee}", dataMailList.get(3));
+        mailContent = mailContent.replace("{booking-dateDepart}", dataMailList.get(4));
+        mailContent = mailContent.replace("{booking-recapchambre}", dataMailList.get(6));
         mimeMessage.setContent(mailContent, "text/plain");
         Transport.send(mimeMessage);
         return true;
-    }*/
+    }
 
 }

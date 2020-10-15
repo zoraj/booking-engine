@@ -332,15 +332,13 @@
                                                 <span class="form-label">Email<i class="obligatoir">*</i></span>
                                             </div>
                                         </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <input name="observation" maxlength="44" id="observation" class="form-control" type="text" autocomplete="off">
+                                                <span class="form-label">Observation</span>
+                                            </div>
+                                        </div>
                                     </div><br>
-                                    <div class="row">
-                                        <div class="col-md-1">
-                                            <input type="checkbox" class="form-check-input">
-                                        </div>
-                                        <div class="col-md-11">
-                                            <label class="form-check-label">Créer mon compte utilisateur (Facultatif)</label>
-                                        </div>
-                                    </div>
                                 </div>							
                                 <div class="col-md-4">
                                     <div class="row">
@@ -512,6 +510,7 @@
                                         <input type="hidden" id="dateDepart" name="dateDepart">
                                         <input type="hidden" id="ventillation" name="ventillation">
                                         <input type="hidden" id="informationRate" name="informationRate">
+                                        <input type="hidden" id="recapitulationChambre" name="recapitulationChambre">
 
 
                                     </div>
@@ -590,7 +589,7 @@
         };
         recapObject.bookRoom.forEach(function (room) {
             nbPax = nbPax + parseInt(room.nbAdulte);
-            montantTTC = montantTTC + parseInt(room.qty) * parseInt(room.rate);
+            montantTTC = parseFloat(montantTTC) + parseFloat(room.qty) * parseFloat(room.rate);
             recapitulationChambre = recapitulationChambre + room.qty + " x " + room.roomType + ";";
         });
         // Affichage de montant ttc
@@ -631,6 +630,7 @@
                 $("#dateDepart").val(changeFormat(dateDepart));
                 $("#ventillation").val(informationVentilation);
                 $("#informationRate").val(informationRate);
+                $("#recapitulationChambre").val(recapitulationChambre);
                 
                 function changeFormat(date) {
                     options = {
