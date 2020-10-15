@@ -44,7 +44,7 @@
                                     <div class="col-md-4 font-title"><span id="tva-id"></span></div>
                                 </div><hr>
                                 <div class="row">
-                                    <div class="col-md-8 font-title"><span>Total TCC</span></div>
+                                    <div class="col-md-8 font-title"><span>Prix TCC</span></div>
                                     <div class="col-md-4 font-title"><span id="total-id">$135</span></div>
                                 </div><hr>
                             </div>
@@ -121,7 +121,7 @@
 
             childs = childs + (parseInt(room.nbChild)*parseInt(room.qty));
             nbPax = nbPax + (parseInt(room.nbPax)*parseInt(room.qty));
-            montantTTC = montantTTC + parseInt(room.qty) * parseInt(room.rate);
+            montantTTC = parseFloat(montantTTC)  + parseFloat(room.qty) * parseFloat(room.rate);
             recapitulationChambre = recapitulationChambre + "<div class='col-md-8'>" + room.qty + " x " + room.roomType + "</div>" + "<div class='col-md-4'><span>" + room.rate + "&euro;</span></div>";
         });
 
