@@ -569,29 +569,27 @@
         var recapitulationChambre = "";
         var nbEnfant = 0;
         var qteChb = 0;
-        var nbAdulte = 0;
-        // recuperation des nbEnfants, qteChb, nbAdulte reserv�
-        listRoomObject.roomList.forEach(function (room) {
-            nbEnfant = nbEnfant + parseInt(room.nbEnfant);
-            qteChb = qteChb + parseInt(room.qteChb);
-            nbAdulte = nbAdulte + parseInt(room.nbAdulte);
+
+         recapObject.bookRoom.forEach(function (room) {
+            nbPax = parseInt(nbPax) + parseInt(room.nbPax);
+            montantTTC = parseFloat(montantTTC) + parseFloat(room.qty) * parseFloat(room.rate);
+            recapitulationChambre = recapitulationChambre + room.qty + " x " + room.roomType + ";";
+            qteChb = parseInt(qteChb) + parseInt(room.qty);
+            nbEnfant = parseInt(nbEnfant) + parseInt(room.nbChild);
         });
+
         // création de json reservation
         var reservationJson = {
             "dateArrivee": listRoomObject.dateArrivee,
             "dateDepart": listRoomObject.dateDepart,
-            "nbPax": nbAdulte,
+            "nbPax": nbPax,
             "nbChambre": qteChb,
             "nbEnfant": nbEnfant,
             "reservationType": "INDIV",
             "posteUuid": "1000",
             "origine": "BOOKING"
         };
-        recapObject.bookRoom.forEach(function (room) {
-            nbPax = nbPax + parseInt(room.nbAdulte);
-            montantTTC = parseFloat(montantTTC) + parseFloat(room.qty) * parseFloat(room.rate);
-            recapitulationChambre = recapitulationChambre + room.qty + " x " + room.roomType + ";";
-        });
+
         // Affichage de montant ttc
         $("#amountId").html(montantTTC + " &euro;");
         //initialisation
