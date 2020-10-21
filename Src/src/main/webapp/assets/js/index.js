@@ -5,7 +5,7 @@ function verifyDateCheckOut() {
     var debut = document.getElementById("dateArrivee");
     var fin = document.getElementById("dateDepart");
 
-    if (new Date(debut.value) > new Date(fin.value)) {
+    if (new Date(debut.value) >= new Date(fin.value)) {
         //  fin.value = null;
         isStartGreatThanEnd = true;
 
