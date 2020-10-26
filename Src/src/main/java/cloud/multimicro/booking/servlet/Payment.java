@@ -7,6 +7,8 @@ package cloud.multimicro.booking.servlet;
 
 import cloud.multimicro.booking.util.Constant;
 import cloud.multimicro.booking.util.ContentMail;
+import cloud.multimicro.booking.util.Util;
+
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,13 +21,8 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import java.io.StringReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -37,6 +34,9 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 /**
  *
@@ -170,7 +170,10 @@ public class Payment extends HttpServlet {
         } catch (MessagingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } catch (NamingException e) {
+            e.printStackTrace();
         }
+
 
         response.setContentType("text/html;charset=UTF-8");
         
@@ -188,10 +191,11 @@ public class Payment extends HttpServlet {
     }// </editor-fold>
 
     private static void reservationCreation(JsonObject resaJSONObject) {
+        final String urlBooking = Util.getContextVar("api-url").concat(Constant.WS_CREATE_BOOKING);
         String apiKey = Home.getApiKey();
         String token = Home.getToken();
         ResteasyClient reservation = new ResteasyClientBuilder().build();
-        ResteasyWebTarget targetResa = reservation.target(Constant.WS_CREATE_BOOKING);
+        ResteasyWebTarget targetResa = reservation.target(urlBooking);
         Response response = targetResa.request().header("Content-Type", "application/json").header("x-api-key", apiKey)
                 .header("Authorization", "Bearer " + token).post(Entity.json(resaJSONObject));
         // Read output in string format
@@ -210,7 +214,9 @@ public class Payment extends HttpServlet {
     @Resource(mappedName = "java:jboss/mail/Default")
     private Session mailSession;
 
-    private boolean sendMail(List<String> dataMailList) throws AddressException, MessagingException {
+    private boolean sendMail(List<String> dataMailList) throws NamingException, AddressException, MessagingException {
+        final String bookingUrl = Util.getContextVar("booking-url");
+
         Address from = new InternetAddress(ContentMail.SENDER);
         Address[] to = new InternetAddress[] { new InternetAddress(dataMailList.get(0)) };
         javax.mail.internet.MimeMessage mimeMessage;
@@ -220,7 +226,8 @@ public class Payment extends HttpServlet {
         mimeMessage.setRecipients(Message.RecipientType.TO, to);
 
         String mailContent = ContentMail.MMC_MAIL_DETAIL;
-        mailContent = mailContent.replace("{booking-url}", Constant.SERVER_BOOKING_ADDRESS);
+
+        mailContent = mailContent.replace("{booking-url}", bookingUrl);
         mailContent = mailContent.replace("{booking-username}", dataMailList.get(0));
         mailContent = mailContent.replace("{booking-name}", dataMailList.get(1));
         mailContent = mailContent.replace("{booking-amount}", dataMailList.get(5));

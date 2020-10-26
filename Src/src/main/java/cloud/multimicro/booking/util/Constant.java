@@ -11,28 +11,12 @@ package cloud.multimicro.booking.util;
  * @author Tsiory
  */
 public class Constant {
-    public static final String SERVER_BOOKING_ADDRESS           = "booking.bymmc.com";
     
-    public static final String LOCALHOST_URL                    = "http://localdev.lan:8081/api/";
-    public static final String LOCALHOST_ESTABLISHEMENT_URL     = "http://localdev.lan:8081/e/api/";
-    
-    public static final String PROD_URL                         = "http://api.bymmc.com";
-    public static final String PROD_ESTABLISHEMENT_URL          = "http://api.bymmc.com";
-    
-    public static final String DEVELOPMENT_URL                  = "https://development-api.bymmc.com";
-    public static final String DEVELOPMENT_ESTABLISHEMENT_URL   = "https://development.bymmc.com/api";
-    
-    public static final String STAGING_URL                      = "https://staging-api.bymmc.com";
-    public static final String STAGING_ESTABLISHEMENT_URL       = "https://staging.bymmc.com/api";
-    
-    
-    
-    public static final String WS_CREATE_CLIENT            = LOCALHOST_URL + "clients";
-    public static final String WS_CREATE_BOOKING           = LOCALHOST_URL + "reservation/";
-    public static final String WS_CREATE_CASHING           = LOCALHOST_URL + "cashing/pms";
-    public static final String WS_CREATE_VENTILLATION_NOTE = LOCALHOST_URL + "notes/pms/room-ventillation";
-    public static final String WS_SEARCH_AVAILABILITY      = LOCALHOST_URL + "booking/room-available-by-type";
-    public static final String WS_GET_CODE_SITE            = LOCALHOST_ESTABLISHEMENT_URL + "sites/?code=";
+    public static final String WS_CREATE_BOOKING           = "reservation/";
+    public static final String WS_CREATE_CASHING           = "cashing/pms";
+    public static final String WS_CREATE_VENTILLATION_NOTE = "notes/pms/room-ventillation";
+    public static final String WS_SEARCH_AVAILABILITY      = "booking/room-available-by-type";
+    public static final String WS_GET_CODE_SITE            = "sites/?code=";
     
     
     public static final String MMC_JWT_SECRET_KEY = "83fxrLVgeZt5jprz4KVvAhuQs2zCGP4R9gmv2MimAunrzWteUQdE9DULLGVhVZ3oxAbmnQWM84EdocoK7Vd72Nke7HGDrL";

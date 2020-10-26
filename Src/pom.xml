@@ -3,16 +3,47 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cloud.multimicro.mmc</groupId>
     <artifactId>Booking</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>war</packaging>
     <name>Booking</name>
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <webXmlPath>src/main/webapp/WEB-INF/local/web.xml</webXmlPath>
     </properties>
-    
+    <profiles>
+        <profile>
+            <id>local</id>
+            <properties>
+              <webXmlPath>src/main/webapp/WEB-INF/local/web.xml</webXmlPath>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod-a</id>
+            <properties>
+              <webXmlPath>src/main/webapp/WEB-INF/prod/web.xml</webXmlPath>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod-b</id>
+            <properties>
+              <webXmlPath>src/main/webapp/WEB-INF/prod/web.xml</webXmlPath>
+            </properties>
+        </profile>
+        <profile>
+            <id>develop</id>
+            <properties>
+              <webXmlPath>src/main/webapp/WEB-INF/develop/web.xml</webXmlPath>
+            </properties>
+        </profile>
+        <profile>
+            <id>staging</id>
+            <properties>
+              <webXmlPath>src/main/webapp/WEB-INF/staging/web.xml</webXmlPath>
+            </properties>
+        </profile>
+    </profiles>
+     
     <dependencies>
       <dependency>
         <groupId>javax</groupId>
@@ -70,7 +101,10 @@
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.8.0</version>
-        </plugin>
+          <configuration>
+              <release>11</release>
+          </configuration>          
+         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.22.1</version>
@@ -78,7 +112,11 @@
         <plugin>
           <artifactId>maven-war-plugin</artifactId>
           <version>3.2.2</version>
-        </plugin>
+          <configuration>
+            <failOnMissingWebXml>true</failOnMissingWebXml>
+            <webXml>${webXmlPath}</webXml>
+          </configuration>
+         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
           <version>2.5.2</version>

@@ -6,10 +6,26 @@
 
 package cloud.multimicro.booking.util;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+
 /**
  *
- * @author Tsiory
+ * @author zo 
  */
 public class Util {
-   // public static final String generateToken()
+   public static String getContextVar(String lookupString) {
+      String contextVar = null;
+      try {
+         Context context = new InitialContext();
+         Context env = (Context) context.lookup("java:comp/env");
+         contextVar = (String) env.lookup(lookupString);
+      }
+      catch(NamingException e) {
+         e.printStackTrace();
+      }
+      return contextVar;  
+   }
 }
