@@ -43,16 +43,16 @@
     <env-entry> 
         <env-entry-name>booking-url</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>http://localhost:8080/booking</env-entry-value> 
+        <env-entry-value>http://192.168.1.108:8070/booking</env-entry-value> 
     </env-entry>
     <env-entry> 
         <env-entry-name>api-url</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>http://localhost:8080/api</env-entry-value> 
+        <env-entry-value>http://192.168.1.108:8070/api</env-entry-value> 
     </env-entry>    
    <env-entry> 
         <env-entry-name>e-api-url</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>http://localhost:8080/e/api</env-entry-value> 
+        <env-entry-value>http://192.168.1.108:8070/e/api</env-entry-value> 
     </env-entry> 
 </web-app>
