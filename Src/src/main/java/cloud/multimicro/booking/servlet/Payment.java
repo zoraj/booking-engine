@@ -89,7 +89,7 @@ public class Payment extends HttpServlet {
             throws ServletException, IOException {
         String reservation = request.getParameter("reservation");
         JsonObject reservationObject = Payment.stringToJsonObject(reservation);
-        String nbChambre =  reservationObject.get("nbChambre").toString();
+        String nbChambre = reservationObject.get("nbChambre").toString();
         String nbPax = reservationObject.get("nbPax").toString();
         String nbEnfant = reservationObject.get("nbEnfant").toString();
         String nom = request.getParameter("nom");
@@ -113,42 +113,22 @@ public class Payment extends HttpServlet {
         String informationRate = request.getParameter("informationRate");
         JsonObject informationRateObject = Payment.stringToJsonObject(informationRate);
         String observation = request.getParameter("observation");
-        JsonObject payload = Json.createObjectBuilder()
-                .add("dateArrivee", reservationObject.getString("dateArrivee"))
-                .add("dateDepart", reservationObject.getString("dateDepart"))
-                .add("nomReservation", nomReservation)
-                .add("nbChambre", nbChambre)
-                .add("nbPax", nbPax)
-                .add("nbEnfant", nbEnfant)
-                .add("reservationType", "INDIV")
-                .add("pmsTarifGrilleId", 1)
-                .add("cardex", "")
-                .add("civilite", civilite)
-                .add("nationalite", pays)
-                .add("nom", nom)
-                .add("prenom", prenom)
-                .add("adresse1", adresse1)
-                .add("adresse2", adresse2)
-                .add("tel", telMobile)
-                .add("email", email)
-                .add("cp", codePostal)
-                .add("ville", ville)
-                .add("pays", pays)
-                .add("origine", "BOOKING")
-                .add("posteUuid", "_BOOKING_")
-                .add("cbType", cartePaiementType)
-                .add("cbNumero", cartePaiementNumero)
-                .add("cbTitulaire", cartePaiementTitulaire)
-                .add("cbExp", cartePaiementExpiration)
-                .add("cbCvv", cartePaiementCVV)
-                .add("observation", observation)
+        JsonObject payload = Json.createObjectBuilder().add("dateArrivee", reservationObject.getString("dateArrivee"))
+                .add("dateDepart", reservationObject.getString("dateDepart")).add("nomReservation", nomReservation)
+                .add("nbChambre", nbChambre).add("nbPax", nbPax).add("nbEnfant", nbEnfant)
+                .add("reservationType", "INDIV").add("pmsTarifGrilleId", 1).add("cardex", "").add("civilite", civilite)
+                .add("nationalite", pays).add("nom", nom).add("prenom", prenom).add("adresse1", adresse1)
+                .add("adresse2", adresse2).add("tel", telMobile).add("email", email).add("cp", codePostal)
+                .add("ville", ville).add("pays", pays).add("origine", "BOOKING").add("posteUuid", "_BOOKING_")
+                .add("cbType", cartePaiementType).add("cbNumero", cartePaiementNumero)
+                .add("cbTitulaire", cartePaiementTitulaire).add("cbExp", cartePaiementExpiration)
+                .add("cbCvv", cartePaiementCVV).add("observation", observation)
                 .add("ventillation", ventillationObject.getJsonArray("ventillation"))
-                .add("reservationTarif", informationRateObject.getJsonArray("reservationTarif"))
-                .build();
+                .add("reservationTarif", informationRateObject.getJsonArray("reservationTarif")).build();
         Payment.reservationCreation(payload);
         List<String> dataMailList = new ArrayList<String>();
         String amount = request.getParameter("montant");
-        String recap= request.getParameter("recapitulationChambre");
+        String recap = request.getParameter("recapitulationChambre");
         dataMailList.add(email);
         dataMailList.add(nom);
         dataMailList.add(nbPax);
@@ -158,12 +138,12 @@ public class Payment extends HttpServlet {
         dataMailList.add(recap);
         try {
             boolean sended = this.sendMail(dataMailList);
-           if(sended == true){
+            if (sended == true) {
                 String message = "<span><h2 style = 'text-align: center;'><b>Votre réservation a été pris en compte.</b></h2></span><span><h3 style = 'text-align: center;'><b>Un email de récapitulation vous sera envoyé.</b></h3></span>"; //
                 request.setAttribute("message", message);
                 this.getServletContext().getRequestDispatcher("/info.jsp").forward(request, response);
-           }    
-            
+            }
+
         } catch (AddressException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -174,9 +154,8 @@ public class Payment extends HttpServlet {
             e.printStackTrace();
         }
 
-
         response.setContentType("text/html;charset=UTF-8");
-        
+
     }
 
     /**

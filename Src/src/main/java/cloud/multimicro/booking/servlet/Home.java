@@ -18,6 +18,7 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import cloud.multimicro.booking.util.Jwt;
 import cloud.multimicro.booking.servlet.DataBooking;
+import cloud.multimicro.booking.util.Util;
 import javax.ws.rs.client.Entity;
 import java.io.StringReader;
 import javax.json.Json;
@@ -78,7 +79,7 @@ public class Home extends HttpServlet {
 
     private static String getApiKeyBySite(String codeSite) {
         ResteasyClient client = new ResteasyClientBuilder().build();
-        ResteasyWebTarget target = client.target(Constant.WS_GET_CODE_SITE + codeSite);
+        ResteasyWebTarget target = client.target(Util.getContextVar("e-api-url").concat(Constant.WS_GET_CODE_SITE + codeSite));
         String bearerToken = Jwt.generateToken();
         Home.setToken(bearerToken);
         Response response = target.request().header("Authorization", "Bearer " + bearerToken).get();
@@ -165,9 +166,10 @@ public class Home extends HttpServlet {
     }
 
     private String postRoomAvailability(String availableString) {
+        final String urlAvailability = Util.getContextVar("api-url").concat(Constant.WS_SEARCH_AVAILABILITY);
         JsonObject availableObject = stringToJsonObject(availableString);
         ResteasyClient client = new ResteasyClientBuilder().build();
-        ResteasyWebTarget target = client.target(Constant.WS_SEARCH_AVAILABILITY);
+        ResteasyWebTarget target = client.target(urlAvailability);
         System.out.println(Entity.json(availableObject));
         String bearerToken = Jwt.generateToken();
         Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey)
