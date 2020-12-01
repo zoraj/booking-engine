@@ -57,7 +57,7 @@
                                             <input type="number" class="form-control" value = "1" id="qty_${myIndex.index}" min="1" max="${room.qteDispo}">
                                         </p>
 
-                                        <p>of ${room.qteTotal} accommodations available.</p>
+                                        <p>of ${room.qteDispo} accommodations available.</p>
                                         <input type="hidden" class="form-control" value = "${room.qteDispo}" id="disponible_${myIndex.index}">
                                         <input type="hidden" class="form-control" value = "${room.nbChild}" id="nbChild_${myIndex.index}">
                                     </form>

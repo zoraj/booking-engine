@@ -571,11 +571,11 @@
         var qteChb = 0;
 
          recapObject.bookRoom.forEach(function (room) {
-            nbPax = parseInt(nbPax) + parseInt(room.nbPax);
+            nbPax = parseInt(nbPax) + (parseInt(room.nbPax)*parseInt(room.qty));
             montantTTC = parseFloat(montantTTC) + parseFloat(room.qty) * parseFloat(room.rate);
             recapitulationChambre = recapitulationChambre + room.qty + " x " + room.roomType + ";";
             qteChb = parseInt(qteChb) + parseInt(room.qty);
-            nbEnfant = parseInt(nbEnfant) + parseInt(room.nbChild);
+            nbEnfant = parseInt(nbEnfant) + (parseInt(room.nbChild)*parseInt(room.qty));
         });
 
         // création de json reservation
@@ -616,7 +616,7 @@
             var dateExpiration = new Date($("#yearId").val(), parseInt($("#mounthId").val()) - 1, 1);
 
             if ((dateExpiration <= new Date())) {
-                $("#mounthId").get(0).setCustomValidity("Date anterieure � la date du jour");
+                $("#mounthId").get(0).setCustomValidity("Date anterieure à la date du jour");
             } else {
                 $("#mounthId").get(0).setCustomValidity("");
                 $("#reservation").val(JSON.stringify(reservationJson));
