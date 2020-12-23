@@ -28,19 +28,19 @@
                                     <div class="row">
                                         <div class="col-md-6 col-xs-6">
                                             <div class="row">
-                                                <div class="col-md-1">
-                                                    <i class="fa fa-male"></i>
+                                                <div class="col-md-5">
+                                                    <i class="fa fa-male"></i><b>GUESTS :</b>
                                                 </div>
                                                 <div class="col-md-5">
-                                                  <span>GUESTS : </span> <span id="nbPax_${myIndex.index}">${room.persMax}</span>
+                                                  <span id="nbPax_${myIndex.index}">${room.persMax}</span>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-1">
-                                                    <i class="fa fa-bookmark"> </i>
+                                                <div class="col-md-5">
+                                                    <i class="fa fa-bookmark">  </i><b>TYPE :</b>
                                                 </div>
                                                 <div class="col-md-5">
-                                                     <span>TYPE : </span><span id="roomType_${myIndex.index}">${room.typeChambre}</span>
+                                                     <span id="roomType_${myIndex.index}">${room.typeChambre}</span>
                                                 </div>
                                             </div>
                                         </div>
