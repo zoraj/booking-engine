@@ -1,4 +1,9 @@
+ <% 
+    String backgroundImage = (String) request.getAttribute("backgroundImage");
+ %>
+
 <%@ page pageEncoding="UTF-8" %>
+<body style = "background-image: url('../room-type-image/<%out.print(backgroundImage);%>');">
 <div id="booking" class="section">
     <div class="container">
         <div class="row">
@@ -101,3 +106,4 @@
         </div>
     </div>
 </div>
+</body>

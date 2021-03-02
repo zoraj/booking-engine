@@ -73,6 +73,7 @@ public class Payment extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setAttribute("backgroundImage", Home.getBackgroundimage());
         processRequest(request, response);
     }
 
@@ -141,6 +142,7 @@ public class Payment extends HttpServlet {
             if (sended == true) {
                 String message = "<span><h2 style = 'text-align: center;'><b>Votre réservation a été pris en compte.</b></h2></span><span><h3 style = 'text-align: center;'><b>Un email de récapitulation vous sera envoyé.</b></h3></span>"; //
                 request.setAttribute("message", message);
+                request.setAttribute("backgroundImage", Home.getBackgroundimage());
                 this.getServletContext().getRequestDispatcher("/info.jsp").forward(request, response);
             }
 

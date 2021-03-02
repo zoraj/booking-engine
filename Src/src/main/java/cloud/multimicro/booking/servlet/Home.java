@@ -39,6 +39,7 @@ public class Home extends HttpServlet {
 
     private static String apiKey;
     private static String token;
+    private static String backgroundimage;
     private String roomRequested;
 
     /**
@@ -69,23 +70,44 @@ public class Home extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
         String codeSite = request.getParameter("code");
         apiKey = getApiKeyBySite(codeSite);
         Home.setApiKey(apiKey);
+
+        String backgroundImage = getBackGroundImage();
+        JsonObject backgroundImageObject = stringToJsonObject(backgroundImage);
+        Home.setBackgroundimage(backgroundImageObject.getString("valeur"));
+        request.setAttribute("backgroundImage", backgroundImageObject.getString("valeur"));
+        processRequest(request, response);
+
         System.out.println(" codeSite : " + codeSite);
 
     }
 
     private static String getApiKeyBySite(String codeSite) {
         ResteasyClient client = new ResteasyClientBuilder().build();
-        ResteasyWebTarget target = client.target(Util.getContextVar("e-api-url").concat(Constant.WS_GET_CODE_SITE + codeSite));
+        ResteasyWebTarget target = client
+                .target(Util.getContextVar("e-api-url").concat(Constant.WS_GET_CODE_SITE + codeSite));
         String bearerToken = Jwt.generateToken();
         Home.setToken(bearerToken);
         Response response = target.request().header("Authorization", "Bearer " + bearerToken).get();
         // Read output in string format
         String value = response.readEntity(String.class);
         System.out.println("value : " + value);
+        response.close();
+        return value;
+    }
+
+    private static String getBackGroundImage() {
+        final String urlgetbackgroundimage = Util.getContextVar("api-url").concat(Constant.WS_GET_BACKGROUND_IMAGE);
+        ResteasyClient client = new ResteasyClientBuilder().build();
+        ResteasyWebTarget target = client.target(urlgetbackgroundimage);
+        String bearerToken = Jwt.generateToken();
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey)
+                .header("Authorization", "Bearer " + bearerToken).get();
+        // Read output in string format
+        String value = response.readEntity(String.class);
+        System.out.println("value disponibilite  retourné : " + value);
         response.close();
         return value;
     }
@@ -148,18 +170,20 @@ public class Home extends HttpServlet {
                     rooms.add(data);
                 }
             }
-            
-            if(rooms.size()>0){
+
+            if (rooms.size() > 0) {
                 request.setAttribute("listRooms", rooms);
                 getServletConfig().getServletContext().getRequestDispatcher("/rooms").forward(request, response);
-            }else{
+            } else {
                 String message = "<span><h3 style = 'text-align: center;'>Désolé. Les tarif ne sont pas encore prêt pour ces dates.</h3></span>";
                 request.setAttribute("message", message);
+                request.setAttribute("backgroundImage", Home.getBackgroundimage());
                 getServletConfig().getServletContext().getRequestDispatcher("/info.jsp").forward(request, response);
             }
         } else {
             String message = "<span><h3 style = 'text-align: center;'>Désolé. Aucune chambre disponible correspond à vos critères.</h3></span>";
             request.setAttribute("message", message);
+            request.setAttribute("backgroundImage", Home.getBackgroundimage());
             getServletConfig().getServletContext().getRequestDispatcher("/info.jsp").forward(request, response);
 
         }
@@ -202,6 +226,14 @@ public class Home extends HttpServlet {
 
     public static void setToken(String value) {
         token = value;
+    }
+
+    public static String getBackgroundimage() {
+        return backgroundimage;
+    }
+
+    public static void setBackgroundimage(String value) {
+        backgroundimage = value;
     }
 
     /**
