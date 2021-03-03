@@ -1,5 +1,9 @@
 <%@ page pageEncoding="UTF-8" %>
 <link type="text/css" rel="stylesheet" href="./assets/css/liste_type_chambre.css" />
+ <% 
+    String backgroundImage = (String) request.getAttribute("backgroundImage");
+ %>
+<body style = "background-image: url('../room-type-image/<%out.print(backgroundImage);%>');">
 <div id="booking">
     <div class="container">
         <div class="row">

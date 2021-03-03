@@ -1,5 +1,9 @@
 <%@ page pageEncoding="UTF-8" %>
 <link type="text/css" rel="stylesheet" href="./assets/css/paiement.css" />	
+ <% 
+    String backgroundImage = (String) request.getAttribute("backgroundImage");
+ %>
+<body style = "background-image: url('../room-type-image/<%out.print(backgroundImage);%>');">
 <div id="booking">
     <form method="post" action="payment">
         <div class="container">

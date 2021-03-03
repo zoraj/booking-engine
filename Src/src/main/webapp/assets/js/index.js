@@ -72,6 +72,8 @@ jQuery(document).ready(function() {
         verifyDateCheckOut();
     });
 
+    // $("body").css("background-image", "url('../../../../room-type-image/image1002.jpg')");
+
     sessionStorage.setItem("disponibilite_json", $('#disponibilite-id').html());
     $("#add-chambre").click(function() {
         $('#other-room-add').append($("<div class='row' id='room" + i + "'>" +
