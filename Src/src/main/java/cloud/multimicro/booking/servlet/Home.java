@@ -34,7 +34,7 @@ import javax.json.stream.JsonParsingException;
  *
  * @author zo
  */
-@WebServlet(name = "Home", urlPatterns = { "/home" })
+@WebServlet(name = "Home", urlPatterns = { "/" })
 public class Home extends HttpServlet {
 
     private static String apiKey;
@@ -70,8 +70,10 @@ public class Home extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String codeSite = request.getParameter("code");
-        apiKey = getApiKeyBySite(codeSite);
+        String establishmentName = request.getServletPath();        
+        apiKey = getApiKeyBySiteName(establishmentName);
+        JsonObject apikeyObject = stringToJsonObject(apiKey);
+        apiKey = apikeyObject.getString("apiKey");
         Home.setApiKey(apiKey);
 
         String backgroundImage = getBackGroundImage();
@@ -80,20 +82,17 @@ public class Home extends HttpServlet {
         request.setAttribute("backgroundImage", backgroundImageObject.getString("valeur"));
         processRequest(request, response);
 
-        System.out.println(" codeSite : " + codeSite);
-
     }
-
-    private static String getApiKeyBySite(String codeSite) {
+    
+    private static String getApiKeyBySiteName(String establishmentName) {
         ResteasyClient client = new ResteasyClientBuilder().build();
-        ResteasyWebTarget target = client
-                .target(Util.getContextVar("e-api-url").concat(Constant.WS_GET_CODE_SITE + codeSite));
+        ResteasyWebTarget target = client.target(Util.getContextVar("e-api-url").concat(Constant.WS_GET_NAME_SITE + establishmentName));
         String bearerToken = Jwt.generateToken();
         Home.setToken(bearerToken);
         Response response = target.request().header("Authorization", "Bearer " + bearerToken).get();
         // Read output in string format
         String value = response.readEntity(String.class);
-        System.out.println("value : " + value);
+		System.out.println("value : " + value);
         response.close();
         return value;
     }
@@ -107,7 +106,7 @@ public class Home extends HttpServlet {
                 .header("Authorization", "Bearer " + bearerToken).get();
         // Read output in string format
         String value = response.readEntity(String.class);
-        System.out.println("value disponibilite  retourné : " + value);
+        System.out.println("value Image retourné : " + value);
         response.close();
         return value;
     }
