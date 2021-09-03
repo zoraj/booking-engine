@@ -3,7 +3,8 @@
  %>
 
 <%@ page pageEncoding="UTF-8" %>
-<body style = "background-image: url('../room-type-image/<%out.print(backgroundImage);%>');">
+<!--body style = "background-image: url('../room-type-image/<%out.print(backgroundImage);%>');"-->
+<body style = "background-image: url('assets/img/background.jpg');">
 <div id="booking" class="section">
     <div class="container">
         <div class="row">
