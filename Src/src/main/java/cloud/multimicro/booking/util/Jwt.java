@@ -33,7 +33,8 @@ public class Jwt {
         Date now = new Date(nowMillis);
 
         //We will sign our JWT with our ApiKey secret
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(Constant.MMC_JWT_SECRET_KEY);
+        final String jwtSecretKey = Util.getEnvString("jwt-secret-key");
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(jwtSecretKey);
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
         //Let's set the JWT Claims
@@ -57,8 +58,9 @@ public class Jwt {
     public static boolean isTokenValid(String token) {
         try {
             //This line will throw an exception if it is not a signed JWS (as expected)
+            final String jwtSecretKey = Util.getEnvString("jwt-secret-key");
             Claims claims = Jwts.parser()
-            .setSigningKey(DatatypeConverter.parseBase64Binary(Constant.MMC_JWT_SECRET_KEY))
+            .setSigningKey(DatatypeConverter.parseBase64Binary(jwtSecretKey))
             .parseClaimsJws(token).getBody();
             return claims != null;
         
