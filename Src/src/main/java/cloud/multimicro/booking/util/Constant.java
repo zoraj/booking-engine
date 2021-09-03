@@ -16,7 +16,7 @@ public class Constant {
     public static final String WS_GET_NAME_SITE = "/sites/";
     public static final String WS_GET_BACKGROUND_IMAGE = "/settings/NAME_BACKGROUND_IMAGE";
 
-    public static final String MMC_JWT_SECRET_KEY = "83fxrLVgeZt5jprz4KVvAhuQs2zCGP4R9gmv2MimAunrzWteUQdE9DULLGVhVZ3oxAbmnQWM84EdocoK7Vd72Nke7HGDrL";
+
     public static final String MMC_JWT_ID = "cloud.multimicro";
     public static final String MMC_JWT_ISSUER = "MMC";
     public static final String MMC_JWT_SUBJECT = "MMC Token for backend";

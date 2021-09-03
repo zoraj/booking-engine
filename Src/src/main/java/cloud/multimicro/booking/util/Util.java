@@ -28,4 +28,20 @@ public class Util {
       }
       return contextVar;  
    }
+   
+    public static String getEnvString(String key) {
+        String result = "";
+        try {
+            Context context = new InitialContext();
+            Context env = (Context) context.lookup("java:comp/env");
+
+            result = (String) env.lookup(key);
+            return result;
+        } catch (NamingException e) {
+            //todo: handle exception
+        }
+        return result;
+   }
 }
+
+
