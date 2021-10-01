@@ -209,6 +209,7 @@ public class Payment extends HttpServlet {
         String mailContent = ContentMail.MMC_MAIL_DETAIL;
 
         mailContent = mailContent.replace("{booking-url}", bookingUrl);
+        
         mailContent = mailContent.replace("{booking-username}", dataMailList.get(0));
         mailContent = mailContent.replace("{booking-name}", dataMailList.get(1));
         mailContent = mailContent.replace("{booking-amount}", dataMailList.get(5));

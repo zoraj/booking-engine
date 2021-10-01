@@ -3,7 +3,7 @@
  <% 
     String backgroundImage = (String) request.getAttribute("backgroundImage");
  %>
-<body style = "background-image: url('../room-type-image/<%out.print(backgroundImage);%>');">
+<body onload="afficherAnnee();" style = "background-image: url('../room-type-image/<%out.print(backgroundImage);%>');">
 <div id="booking">
     <form method="post" action="payment">
         <div class="container">
@@ -45,8 +45,8 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <input name="prenom" maxlength="99" id="prenom" class="form-control" type="text" required autocomplete="off">
-                                                <span class="form-label">Prénom<i class="obligatoir">*</i></span>
+                                                <input name="prenom" maxlength="99" id="prenom" class="form-control" type="text"  autocomplete="off">
+                                                <span class="form-label">Prénom</span>
                                             </div>
                                         </div>
                                     </div><br>
@@ -68,7 +68,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <input name="cp" pattern="[0-9]+" maxlength="44" id="codePostal" class="form-control" type="text" autocomplete="off">
-                                                <span class="form-label">Code postal<i class="obligatoir">*</i></span>
+                                                <span class="form-label">Code postal</span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -326,8 +326,8 @@
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <input name="tel" maxlength="44" pattern="[0-9]+" id="telephone" class="form-control" type="tel" required autocomplete="off">
-                                                <span class="form-label">Téléphone (mobile)<i class="obligatoir">*</i></span>
+                                                <input name="tel" maxlength="44" pattern="[0-9]+" id="telephone" class="form-control" type="tel"  autocomplete="off">
+                                                <span class="form-label">Téléphone (mobile)</span>
                                             </div>
                                         </div>
                                         <div class="col-md-5">
@@ -432,12 +432,12 @@
                                     <div class="form-group">
                                         <!--span class="form-label"></span-->
                                         <select id="yearId" class="form-control">
-                                            <option value="2020">2020</option>
+                                            <!--<option value="2020">2020</option>
                                             <option value="2021">2021</option>
                                             <option value="2022">2022</option>
                                             <option value="2023">2023</option>
                                             <option value="2024">2024</option>
-                                            <option value="2025">2025</option>
+                                            <option value="2025">2025</option>-->
                                         </select>
                                         <span class="select-arrow"></span>
                                     </div>
@@ -566,6 +566,24 @@
             $field.removeClass('input-not-empty');
         }
     }
+    function getYear(number) {
+let ladate=new Date();
+return ladate.getFullYear()+number;
+
+}
+
+
+
+function afficherAnnee(){
+     $("#yearId").html(
+             '<option value="'+getYear(0)+'">'+getYear(0)+'</option>'+
+             '<option value="'+getYear(1)+'">'+getYear(1)+'</option>'+
+             '<option value="'+getYear(2)+'">'+getYear(2)+'</option>'+
+             '<option value="'+getYear(3)+'">'+getYear(3)+'</option>'+
+             '<option value="'+getYear(4)+'">'+getYear(4)+'</option>'+
+             '<option value="'+getYear(5)+'">'+getYear(5)+'</option>'
+                                                            );                                                       
+}
     jQuery(document).ready(function () {
          $("#carte-paiement-type").val(cartePaymentType);
         var nbPax = 0;

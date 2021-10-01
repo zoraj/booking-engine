@@ -3,8 +3,10 @@
  %>
 
 <%@ page pageEncoding="UTF-8" %>
-<!--body style = "background-image: url('../room-type-image/<%out.print(backgroundImage);%>');"-->
-<body style = "background-image: url('assets/img/background.jpg');">
+<body  style = "background-image: url('../room-type-image/<%out.print(backgroundImage);%>');">
+    <label id="establishmentName"    name="establishmentName" hidden> 
+        <%String attribut = (String) request.getAttribute("establishmentName");
+    out.println(attribut);%> </label>
 <div id="booking" class="section">
     <div class="container">
         <div class="row">
@@ -33,7 +35,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <input class="form-control" type="text" name="name" id="name" required>
+                                    <input  class="form-control" type="text" name="name" id="name" required>
                                     <span class="form-label">Name</span>
                                 </div>
                             </div>									
@@ -67,7 +69,7 @@
                             <div class="col-md-4 col-sm-4">
                                 <div class="form-group">
                                     <span class="form-label">Guests</span>
-                                    <select class="form-control" id="nbPax">
+                                    <select  class="form-control" id="nbPax">
                                         <option>1 People</option>
                                         <option>2 People</option>
                                         <option>3 People</option>
@@ -79,7 +81,7 @@
                             <div class="col-md-3 col-sm-3">
                                 <div class="form-group">
                                     <span class="form-label">Childs</span>
-                                    <select class="form-control" id="nbEnfant">
+                                    <select  class="form-control" id="nbEnfant">
                                         <option>0</option>
                                         <option>1</option>
                                         <option>2</option>
@@ -97,7 +99,7 @@
                         <div class="row">
                             <div class="col-md-12 col-sm-12">
                                 <div class="form-btn" id="submit-book">
-                                    <button class="submit-btn">Book Now</button>
+                                    <button name="bookNow" class="submit-btn" >Book Now</button>
                                 </div>
                             </div>
                         </div>
@@ -107,4 +109,13 @@
         </div>
     </div>
 </div>
+ <script>
+
+$(document).ready(function() {
+        $("[name='bookNow']").click(function() {
+           let establishmentName = document.getElementById("establishmentName").innerHTML;
+           localStorage.setItem("nameEstablishment", JSON.stringify(establishmentName));
+        });
+    });
+ </script>
 </body>
