@@ -29,6 +29,7 @@ import javax.json.JsonNumber;
 import java.util.*;
 import java.math.BigDecimal;
 import javax.json.stream.JsonParsingException;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -70,7 +71,14 @@ public class Home extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String establishmentName = request.getServletPath();        
+        HttpSession session = request.getSession(true);
+        String establishmentName = request.getServletPath();  
+        //session.setAttribute("establishmentName", establishmentName);
+        if (establishmentName != null) {
+            request.setAttribute("establishmentName", establishmentName);
+        }
+
+        
         apiKey = getApiKeyBySiteName(establishmentName);
         JsonObject apikeyObject = stringToJsonObject(apiKey);
         apiKey = apikeyObject.getString("apiKey");
