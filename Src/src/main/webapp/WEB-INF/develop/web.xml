@@ -43,16 +43,21 @@
     <env-entry> 
         <env-entry-name>booking-url</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>https://booking-develop.bymmc.com</env-entry-value> 
+        <env-entry-value>http://develop.local/booking</env-entry-value>
     </env-entry>
     <env-entry> 
         <env-entry-name>api-url</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>https://api-develop.bymmc.com</env-entry-value> 
+        <env-entry-value>http://develop.local/api</env-entry-value>
     </env-entry>    
    <env-entry> 
         <env-entry-name>e-api-url</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
-        <env-entry-value>https://develop.bymmc.com/api</env-entry-value> 
+        <env-entry-value>http://develop.local/e/api</env-entry-value>
+    </env-entry> 
+    <env-entry>
+      <env-entry-name>jwt-secret-key</env-entry-name>
+      <env-entry-type>java.lang.String</env-entry-type>
+      <env-entry-value>mnQWM84EdocoK7Vd72Nke7HGDrL8zWteUQdE9DULLGVhVZ3oxAb3fxrLVgeZt5jprz4KVvAhuQs2zCGP4R9gmv2MimAunr</env-entry-value> 
     </env-entry> 
 </web-app>
