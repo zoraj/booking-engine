@@ -11,6 +11,17 @@
         out.println(info);
     }
   %>
+   <p style = "text-align: center"> <a onclick="redirection();">Revenir à la page principale</a></p>
 </div>
+
+  <script>
+        let nameEstablishment = JSON.parse(localStorage.getItem("nameEstablishment"));
+        function redirection() {
+
+    let url = "/booking" + nameEstablishment;
+    let redirection = url.split(" ").join("");
+    location.href = redirection;
+}
+    </script>
 
 
