@@ -43,14 +43,17 @@
     <env-entry> 
         <env-entry-name>booking-url</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>http://192.168.88.28:8081/booking</env-entry-value> 
     </env-entry>
     <env-entry> 
         <env-entry-name>api-url</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>http://192.168.88.28:8081/api</env-entry-value>
     </env-entry>    
    <env-entry> 
         <env-entry-name>e-api-url</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>http://192.168.88.28:8081/e/api</env-entry-value>
     </env-entry> 
     <env-entry>
       <env-entry-name>jwt-secret-key</env-entry-name>

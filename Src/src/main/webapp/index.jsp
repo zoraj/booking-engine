@@ -110,13 +110,4 @@
         </div>
     </div>
 </div>
- <script>
-
-$(document).ready(function() {
-        $("[name='bookNow']").click(function() {
-           let establishmentName = document.getElementById("establishmentName").innerHTML;
-           localStorage.setItem("nameEstablishment", JSON.stringify(establishmentName));
-        });
-    });
- </script>
 </body>
