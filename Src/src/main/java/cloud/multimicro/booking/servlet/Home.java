@@ -93,9 +93,13 @@ public class Home extends HttpServlet {
     }
     
     private static String getApiKeyBySiteName(String establishmentName) {
+        System.out.println("Jwt.generateToken()"+Jwt.generateToken());
         ResteasyClient client = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = client.target(Util.getContextVar("e-api-url").concat(Constant.WS_GET_NAME_SITE + establishmentName));
+        System.out.println("target_target"+target);
+        //System.out.println("Jwt.generateToken()"+Jwt.generateToken());
         String bearerToken = Jwt.generateToken();
+        
         Home.setToken(bearerToken);
         Response response = target.request().header("Authorization", "Bearer " + bearerToken).get();
         // Read output in string format

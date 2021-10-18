@@ -62,6 +62,8 @@ function deleteRoom(i) {
 }
 
 jQuery(document).ready(function() {
+   
+        
     document.getElementById('dateArrivee').min = new Date().toISOString().substr(0, 10);
     document.getElementById('dateDepart').min = new Date(new Date().getTime() + 24 * 60 * 60 * 1000 - new Date().getTimezoneOffset() * 60 * 1000).toISOString().substr(0, 10);
     $("#dateDepart").change(function() {
@@ -122,4 +124,9 @@ jQuery(document).ready(function() {
             addValueInSessionStorage();
         }
     });
+    
+     $("[name='bookNow']").click(function() {
+           let establishmentName = document.getElementById("establishmentName").innerHTML;
+           localStorage.setItem("nameEstablishment", JSON.stringify(establishmentName));
+        });
 });
