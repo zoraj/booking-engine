@@ -1,1 +1,14 @@
-/Src/target/
+target/**
+.project
+.settings/
+.classpath
+.factorypath
+# Java class files
+*.class
+nb-configuration.xml
+.idea/
+*.iml
+*.bak
+/target/
+src/main/webapp/WEB-INF/web.develop.xml
+src/main/webapp/WEB-INF/web.prod.xml
