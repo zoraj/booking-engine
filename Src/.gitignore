@@ -3,3 +3,5 @@ target/**
 # Java class files
 *.class
 /target/
+src/main/webapp/WEB-INF/web.develop.xml
+src/main/webapp/WEB-INF/web.prod.xml
