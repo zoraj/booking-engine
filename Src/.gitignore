@@ -2,3 +2,4 @@ target/**
 
 # Java class files
 *.class
+/target/
