@@ -183,6 +183,47 @@ public class Payment extends HttpServlet {
         String value = response.readEntity(String.class);
         response.close();
     }
+    
+    private String getSettingsByBookingHeader() {
+        final String urlBooking = Util.getContextVar("api-url").concat(Constant.WS_GET_SETTINGS_BOOKING_HEADER);
+        String apiKey = Home.getApiKey();
+        String token = Home.getToken();
+        ResteasyClient cuisson = new ResteasyClientBuilder().build();
+        ResteasyWebTarget target = cuisson.target(urlBooking);
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer " + token).get();
+        // Read output in string format
+        String value = response.readEntity(String.class);
+        response.close();
+        return value;
+    }
+    
+    private String getSettingsByBookingDetail() {
+        final String urlBooking = Util.getContextVar("api-url").concat(Constant.WS_GET_SETTINGS_BOOKING_DETAIL);
+        String apiKey = Home.getApiKey();
+        String token = Home.getToken();
+        ResteasyClient cuisson = new ResteasyClientBuilder().build();
+        ResteasyWebTarget target = cuisson.target(urlBooking);
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer " + token).get();
+        // Read output in string format
+        String value = response.readEntity(String.class);
+        response.close();
+        return value;
+    }
+    
+    private String getSettingsByBookingFooter() {
+        final String urlBooking = Util.getContextVar("api-url").concat(Constant.WS_GET_SETTINGS_BOOKING_FOOTER);
+        String apiKey = Home.getApiKey();
+        String token = Home.getToken();
+        ResteasyClient cuisson = new ResteasyClientBuilder().build();
+        ResteasyWebTarget target = cuisson.target(urlBooking);
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer " + token).get();
+        // Read output in string format
+        String value = response.readEntity(String.class);
+        response.close();
+        return value;
+    }
+
+    
 
     private static JsonObject stringToJsonObject(String jsonString) {
         JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
@@ -207,7 +248,20 @@ public class Payment extends HttpServlet {
         mimeMessage.setRecipients(Message.RecipientType.TO, to);
 
         String mailContent = ContentMail.MMC_MAIL_DETAIL;
-
+        
+        String bookingHeader = getSettingsByBookingHeader();
+        JsonObject getSettingsByBookingHeaderObject = stringToJsonObject(bookingHeader);
+        bookingHeader = getSettingsByBookingHeaderObject.getString("valeur"); 
+        
+        String bookingDetail = getSettingsByBookingDetail();
+        JsonObject getSettingsByBookingDetailObject = stringToJsonObject(bookingDetail);
+        bookingDetail = getSettingsByBookingDetailObject.getString("valeur"); 
+        
+        String bookingFooter = getSettingsByBookingFooter();
+        JsonObject getSettingsByBookingFooterObject = stringToJsonObject(bookingFooter);
+        bookingFooter = getSettingsByBookingFooterObject.getString("valeur"); 
+        
+        
         mailContent = mailContent.replace("{booking-url}", bookingUrl);
         
         mailContent = mailContent.replace("{booking-username}", dataMailList.get(0));
@@ -217,7 +271,10 @@ public class Payment extends HttpServlet {
         mailContent = mailContent.replace("{booking-dateArrivee}", dataMailList.get(3));
         mailContent = mailContent.replace("{booking-dateDepart}", dataMailList.get(4));
         mailContent = mailContent.replace("{booking-recapchambre}", dataMailList.get(6));
-        mimeMessage.setContent(mailContent, "text/plain");
+        mailContent = mailContent.replace("{booking-bookingHeader}", bookingHeader);
+        mailContent = mailContent.replace("{booking-bookingDetail}", bookingDetail);
+        mailContent = mailContent.replace("{booking-bookingFooter}", bookingFooter);
+        mimeMessage.setContent(mailContent, "text/html; charset=UTF-8");
         Transport.send(mimeMessage);
         return true;
     }
