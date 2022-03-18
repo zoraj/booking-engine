@@ -15,6 +15,9 @@ public class Constant {
     public static final String WS_SEARCH_AVAILABILITY = "/booking/room-available-by-type";
     public static final String WS_GET_NAME_SITE = "/sites/";
     public static final String WS_GET_BACKGROUND_IMAGE = "/settings/NAME_BACKGROUND_IMAGE";
+    public static final String WS_GET_SETTINGS_BOOKING_HEADER = "/settings/BOOKING_MAIL_HEADER";
+    public static final String WS_GET_SETTINGS_BOOKING_DETAIL = "/settings/BOOKING_MAIL_DETAIL";
+    public static final String WS_GET_SETTINGS_BOOKING_FOOTER = "/settings/BOOKING_MAIL_FOOTER";
 
 
     public static final String MMC_JWT_ID = "cloud.multimicro";
