@@ -12,7 +12,7 @@
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-12 booking-cta">
-                                <h2>Price Breakdown</h2>
+                                <h2><fmt:message key="BOOKING.PRICE.BREAKDOWN"/></h2>
                             </div>
                         </div>
                         <div class="row">
@@ -24,19 +24,19 @@
                                     </div>
                                 </div><hr>
                                 <div class="row">
-                                    <div class="col-md-8"><span>Adults</span></div>
+                                    <div class="col-md-8"><span><fmt:message key="BOOKING.ADULTS"/></span></div>
                                     <div class="col-md-4"><span id="adults-id"></span></div>
                                 </div><hr>
                                 <div class="row">
-                                    <div class="col-md-8"><span>Children</span></div>
+                                    <div class="col-md-8"><span><fmt:message key="BOOKING.CHILDREN"/></span></div>
                                     <div class="col-md-4"><span id="children-id"></span></div>
                                 </div><hr>
                                 <div class="row">
-                                    <div class="col-md-8"><span>Nights</span></div>
+                                    <div class="col-md-8"><span><fmt:message key="BOOKING.NIGHTS"/></span></div>
                                     <div class="col-md-4"><span id="night-id">1</span></div>
                                 </div><hr>
                                 <div class="row">
-                                    <div class="col-md-4 "><span>Dates   ...................................</span></div>
+                                    <div class="col-md-4 "><span><fmt:message key="BOOKING.DATES"/>   ...................................</span></div>
                                     <div class="col-md-8"><span id="date-id"></span></div>
                                 </div><hr>
                                 <!--                                <div class="row">
@@ -44,11 +44,11 @@
                                                                     <div class="col-md-4"><span id="amount-id">$0</span></div>
                                                                 </div><hr>-->
                                 <div class="row">
-                                    <div class="col-md-8 font-title"><span>Total TVA</span></div>
+                                    <div class="col-md-8 font-title"><span><fmt:message key="BOOKING.TOTAL.TVA"/></span></div>
                                     <div class="col-md-4 font-title"><span id="tva-id"></span></div>
                                 </div><hr>
                                 <div class="row">
-                                    <div class="col-md-8 font-title"><span>Prix TCC</span></div>
+                                    <div class="col-md-8 font-title"><span><fmt:message key="BOOKING.PRICE.TTC"/></span></div>
                                     <div class="col-md-4 font-title"><span id="total-id">$135</span></div>
                                 </div><hr>
                             </div>
@@ -56,7 +56,7 @@
                         <div class="row">
                             <div class="col-md-4 col-md-offset-4">
                                 <div class="form-btn">
-                                    <button id="valid-btn"><a href="payment" id="payer">Payer</a></button>
+                                    <button id="valid-btn"><a href="payment" id="payer"><fmt:message key="BOOKING.PAY"/></a></button>
                                 </div>
                             </div>
                         </div>
@@ -148,12 +148,12 @@
         $("#total-id").html(montantTTC + "&euro;");
         $("#recapitulation-chambre-id").html("<div class = 'row'>" + recapitulationChambre + "</div>");
 
-        function changeFormat(date) {
+        function changeFormat(date) {           
+            var lang= document.getElementById('lang').innerHTML;
             options = {
                 weekday: "short", year: 'numeric', month: 'long', day: 'numeric'
-            };
-            console.log(date.toLocaleString('fr-FR', options));
-            return date.toLocaleString('fr-FR', options);
+            };      
+            return date.toLocaleString(lang, options);
         }
         
          function dateDiff(date1, date2) {

@@ -35,6 +35,8 @@
             <url-pattern>/payment.jsp</url-pattern>
             <url-pattern>/recap_resa.jsp</url-pattern>
             <url-pattern>/rooms.jsp</url-pattern>
+            <url-pattern>/erreur_tarif_info.jsp</url-pattern>
+            <url-pattern>/erreur_info.jsp</url-pattern>
             <url-pattern>/WEB-INF/jspf/*</url-pattern>
             <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>
             <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
