@@ -42,17 +42,17 @@ import javax.naming.NamingException;
  *
  * @author zo
  */
-@WebServlet(name = "Payment", urlPatterns = { "/payment" })
+@WebServlet(name = "Payment", urlPatterns = {"/payment"})
 public class Payment extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -65,10 +65,10 @@ public class Payment extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -80,10 +80,10 @@ public class Payment extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -140,8 +140,8 @@ public class Payment extends HttpServlet {
         try {
             boolean sended = this.sendMail(dataMailList);
             if (sended == true) {
-                String message = "<span><h2 style = 'text-align: center;'><b>Votre réservation a été pris en compte.</b></h2></span><span><h3 style = 'text-align: center;'><b>Un email de récapitulation vous sera envoyé.</b></h3></span>"; //
-                request.setAttribute("message", message);
+                /*String message = "<span><h2 style = 'text-align: center;'><b>Votre réservation a été pris en compte.</b></h2></span><span><h3 style = 'text-align: center;'><b>Un email de récapitulation vous sera envoyé.</b></h3></span>"; //
+                request.setAttribute("message", message);*/
                 request.setAttribute("backgroundImage", Home.getBackgroundimage());
                 this.getServletContext().getRequestDispatcher("/info.jsp").forward(request, response);
             }
@@ -165,7 +165,6 @@ public class Payment extends HttpServlet {
      *
      * @return a String containing servlet description
      */
-
     @Override
     public String getServletInfo() {
         return "Short description";
@@ -183,7 +182,7 @@ public class Payment extends HttpServlet {
         String value = response.readEntity(String.class);
         response.close();
     }
-    
+
     private String getSettingsByBookingHeader() {
         final String urlBooking = Util.getContextVar("api-url").concat(Constant.WS_GET_SETTINGS_BOOKING_HEADER);
         String apiKey = Home.getApiKey();
@@ -196,7 +195,7 @@ public class Payment extends HttpServlet {
         response.close();
         return value;
     }
-    
+
     private String getSettingsByBookingDetail() {
         final String urlBooking = Util.getContextVar("api-url").concat(Constant.WS_GET_SETTINGS_BOOKING_DETAIL);
         String apiKey = Home.getApiKey();
@@ -209,7 +208,7 @@ public class Payment extends HttpServlet {
         response.close();
         return value;
     }
-    
+
     private String getSettingsByBookingFooter() {
         final String urlBooking = Util.getContextVar("api-url").concat(Constant.WS_GET_SETTINGS_BOOKING_FOOTER);
         String apiKey = Home.getApiKey();
@@ -222,8 +221,6 @@ public class Payment extends HttpServlet {
         response.close();
         return value;
     }
-
-    
 
     private static JsonObject stringToJsonObject(String jsonString) {
         JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
@@ -240,7 +237,7 @@ public class Payment extends HttpServlet {
         final String bookingUrl = Util.getContextVar("booking-url");
 
         Address from = new InternetAddress(ContentMail.SENDER);
-        Address[] to = new InternetAddress[] { new InternetAddress(dataMailList.get(0)) };
+        Address[] to = new InternetAddress[]{new InternetAddress(dataMailList.get(0))};
         javax.mail.internet.MimeMessage mimeMessage;
         mimeMessage = new javax.mail.internet.MimeMessage(mailSession);
         mimeMessage.setFrom(from);
@@ -248,22 +245,21 @@ public class Payment extends HttpServlet {
         mimeMessage.setRecipients(Message.RecipientType.TO, to);
 
         String mailContent = ContentMail.MMC_MAIL_DETAIL;
-        
+
         String bookingHeader = getSettingsByBookingHeader();
         JsonObject getSettingsByBookingHeaderObject = stringToJsonObject(bookingHeader);
-        bookingHeader = getSettingsByBookingHeaderObject.getString("valeur"); 
-        
+        bookingHeader = getSettingsByBookingHeaderObject.getString("valeur");
+
         String bookingDetail = getSettingsByBookingDetail();
         JsonObject getSettingsByBookingDetailObject = stringToJsonObject(bookingDetail);
-        bookingDetail = getSettingsByBookingDetailObject.getString("valeur"); 
-        
+        bookingDetail = getSettingsByBookingDetailObject.getString("valeur");
+
         String bookingFooter = getSettingsByBookingFooter();
         JsonObject getSettingsByBookingFooterObject = stringToJsonObject(bookingFooter);
-        bookingFooter = getSettingsByBookingFooterObject.getString("valeur"); 
-        
-        
+        bookingFooter = getSettingsByBookingFooterObject.getString("valeur");
+
         mailContent = mailContent.replace("{booking-url}", bookingUrl);
-        
+
         mailContent = mailContent.replace("{booking-username}", dataMailList.get(0));
         mailContent = mailContent.replace("{booking-name}", dataMailList.get(1));
         mailContent = mailContent.replace("{booking-amount}", dataMailList.get(5));

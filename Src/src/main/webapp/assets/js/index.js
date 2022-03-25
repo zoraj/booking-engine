@@ -15,6 +15,10 @@ function verifyDateCheckOut() {
 }
 
 function addValueInSessionStorage() {
+    sessionStorage.setItem("erreur", document.getElementById('erreur').innerHTML);
+    sessionStorage.setItem("erreurTarif", document.getElementById('erreurTarif').innerHTML);
+    sessionStorage.setItem("mainPage", document.getElementById('mainPage').innerHTML);
+    sessionStorage.setItem("mainPage", document.getElementById('lang').innerHTML);
     var roomAvailable = {
         "dateArrivee": $("#dateArrivee").val(),
         "dateDepart": $("#dateDepart").val(),
@@ -61,48 +65,48 @@ function deleteRoom(i) {
     $('#room' + i).hide();
 }
 
-jQuery(document).ready(function() {
-   
-        
+jQuery(document).ready(function () {
+
+
     document.getElementById('dateArrivee').min = new Date().toISOString().substr(0, 10);
     document.getElementById('dateDepart').min = new Date(new Date().getTime() + 24 * 60 * 60 * 1000 - new Date().getTimezoneOffset() * 60 * 1000).toISOString().substr(0, 10);
-    $("#dateDepart").change(function() {
+    $("#dateDepart").change(function () {
         verifyDateCheckOut();
     });
 
-    $("#dateArrivee").change(function() {
+    $("#dateArrivee").change(function () {
         verifyDateCheckOut();
     });
 
     // $("body").css("background-image", "url('../../../../room-type-image/image1002.jpg')");
 
     sessionStorage.setItem("disponibilite_json", $('#disponibilite-id').html());
-    $("#add-chambre").click(function() {
+    $("#add-chambre").click(function () {
         $('#other-room-add').append($("<div class='row' id='room" + i + "'>" +
-            "<div class='col-md-3'>" +
-            "<div class='form-group'><span class='form-label'></span>" +
-            "<select class='form-control' id='qtyRoom" + i + "'><option>1</option><option>2</option><option>3</option></select>" +
-            "<span class='select-arrow'></span></div></div>" +
-            "<div class='col-md-4'>" +
-            "<div class='form-group'><span class='form-label'></span>" +
-            "<select class='form-control' id='nbPax" + i + "'><option>1 People</option><option>2 People</option><option>3 People</option><option>4 People</option></select>" +
-            "<span class='select-arrow'></span></div></div>" +
-            "<div class='col-md-3'>" +
-            "<div class='form-group'><span class='form-label'></span>" +
-            "<select class='form-control' id='nbEnfant" + i + "'><option>0</option><option>1</option><option>2</option><option>3</option></select>" +
-            "<span class='select-arrow'></span></div></div>" +
-            "<div class='col-md-2'>" +
-            "<div id='del-chambre' onclick='deleteRoom(" + i + ");'><span>(-)</span></div></div>" +
-            "</div>"));
+                "<div class='col-md-3'>" +
+                "<div class='form-group'><span class='form-label'></span>" +
+                "<select class='form-control' id='qtyRoom" + i + "'><option>1</option><option>2</option><option>3</option></select>" +
+                "<span class='select-arrow'></span></div></div>" +
+                "<div class='col-md-4'>" +
+                "<div class='form-group'><span class='form-label'></span>" +
+                "<select class='form-control' id='nbPax" + i + "'><option>1 People</option><option>2 People</option><option>3 People</option><option>4 People</option></select>" +
+                "<span class='select-arrow'></span></div></div>" +
+                "<div class='col-md-3'>" +
+                "<div class='form-group'><span class='form-label'></span>" +
+                "<select class='form-control' id='nbEnfant" + i + "'><option>0</option><option>1</option><option>2</option><option>3</option></select>" +
+                "<span class='select-arrow'></span></div></div>" +
+                "<div class='col-md-2'>" +
+                "<div id='del-chambre' onclick='deleteRoom(" + i + ");'><span>(-)</span></div></div>" +
+                "</div>"));
 
         i++;
     });
 
-    $('.form-control').each(function() {
+    $('.form-control').each(function () {
         floatedLabel($(this));
     });
 
-    $('.form-control').on('input', function() {
+    $('.form-control').on('input', function () {
         floatedLabel($(this));
     });
 
@@ -115,7 +119,7 @@ jQuery(document).ready(function() {
         }
     }
 
-    $("#submit-book").click(function() {
+    $("#submit-book").click(function () {
         if (isStartGreatThanEnd == true) {
             $("#dateDepart").get(0).setCustomValidity("Departure date must be greater than arrival date!");
         } else {
@@ -124,9 +128,10 @@ jQuery(document).ready(function() {
             addValueInSessionStorage();
         }
     });
-    
-     $("[name='bookNow']").click(function() {
-           let establishmentName = document.getElementById("establishmentName").innerHTML;
-           localStorage.setItem("nameEstablishment", JSON.stringify(establishmentName));
-        });
+
+    $("[name='bookNow']").click(function () {
+        let establishmentName = document.getElementById("establishmentName").innerHTML;
+        localStorage.setItem("nameEstablishment", JSON.stringify(establishmentName));
+    });
+
 });

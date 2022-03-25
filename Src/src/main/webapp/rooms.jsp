@@ -16,8 +16,8 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-12 booking-cta">
-                                    <h2> ${room.typeChambre} Room </h2>
-                                    <p>${room.typeChambre} Rooms are designed in open-concept living area and have many facilities.</p>
+                                    <h2> ${room.typeChambre} <fmt:message key="BOOKING.ROOMS.TITLE"/> </h2>
+                                    <p>${room.typeChambre} <fmt:message key="BOOKING.ROOMS.DESIGNED"/>.</p>
                                 </div>
                             </div>
                             <br/>
@@ -33,7 +33,7 @@
                                         <div class="col-md-6 col-xs-6">
                                             <div class="row">
                                                 <div class="col-md-5">
-                                                    <i class="fa fa-male"></i><b>GUESTS :</b>
+                                                    <i class="fa fa-male"></i><b><fmt:message key="BOOKING.GUESTS.TITLE"/> :</b>
                                                 </div>
                                                 <div class="col-md-5">
                                                   <span id="nbPax_${myIndex.index}">${room.persMax}</span>
@@ -41,7 +41,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-5">
-                                                    <i class="fa fa-bookmark">  </i><b>TYPE :</b>
+                                                    <i class="fa fa-bookmark">  </i><b><fmt:message key="BOOKING.TYPE"/> :</b>
                                                 </div>
                                                 <div class="col-md-5">
                                                      <span id="roomType_${myIndex.index}">${room.typeChambre}</span>
@@ -54,25 +54,25 @@
                                     <p>${room.typeTarifLibelle}</p>
                                     <p>
                                         <span style="font-size:30px; font-weight:bolder"> <label id="rate_${myIndex.index}">${room.amount}</label>&euro;</span>
-                                        <span style="font-size:15px;">/per night</span>
+                                        <span style="font-size:15px;">/<fmt:message key="BOOKING.PER.NIGHT"/></span>
                                     </p>	
                                     <form class="form-input">
                                         <p>                                    
                                             <input type="number" class="form-control" value = "1" id="qty_${myIndex.index}" min="1" max="${room.qteDispo}">
                                         </p>
 
-                                        <p>of ${room.qteDispo} accommodations available.</p>
+                                        <p>of ${room.qteDispo} <fmt:message key="BOOKING.ACCOMMODATIONS.AVAILABLE"/>.</p>
                                         <input type="hidden" class="form-control" value = "${room.qteDispo}" id="disponible_${myIndex.index}">
                                         <input type="hidden" class="form-control" value = "${room.nbChild}" id="nbChild_${myIndex.index}">
                                     </form>
                                     <div class="form-btn">
-                                        <button id="valid-btn" name="bookRoom" class="submit-btn"  data-value='${myIndex.index}'>Book now</button>
+                                        <button id="valid-btn" name="bookRoom" class="submit-btn"  data-value='${myIndex.index}'><fmt:message key="BOOKING.BOOK.NOW.TITLE"/></button>
                                     </div>
 
                                     <br/>
                                     <div class="form-btn">
                                         <button id="proceder" class="submit-btn">
-                                            <a href="recap-resa" id="proceder_paiement">Proceder au paiement</a>
+                                            <a href="recap-resa" id="proceder_paiement"><fmt:message key="BOOKING.PROCEES.PAYMENT"/></a>
                                         </button>
                                     </div>
                                     <div id="pmsTarifGrilleDetailId_${myIndex.index}" style = "display:none;">${room.pmsTarifGrilleDetailId}</div>
