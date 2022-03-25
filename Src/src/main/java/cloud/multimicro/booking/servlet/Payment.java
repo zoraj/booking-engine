@@ -109,8 +109,8 @@ public class Payment extends HttpServlet {
         String cartePaiementExpiration = request.getParameter("carte-paiement-expiration");
         String cartePaiementTitulaire = request.getParameter("carte-paiement-titulaire");
         String cartePaiementCVV = request.getParameter("carte-paiement-cvv");
-        String ventillation = request.getParameter("ventillation");
-        JsonObject ventillationObject = Payment.stringToJsonObject(ventillation);
+        String ventilation = request.getParameter("ventilation");
+        JsonObject ventilationObject = Payment.stringToJsonObject(ventilation);
         String informationRate = request.getParameter("informationRate");
         JsonObject informationRateObject = Payment.stringToJsonObject(informationRate);
         String observation = request.getParameter("observation");
@@ -124,7 +124,7 @@ public class Payment extends HttpServlet {
                 .add("cbType", cartePaiementType).add("cbNumero", cartePaiementNumero)
                 .add("cbTitulaire", cartePaiementTitulaire).add("cbExp", cartePaiementExpiration)
                 .add("cbCvv", cartePaiementCVV).add("observation", observation)
-                .add("ventillation", ventillationObject.getJsonArray("ventillation"))
+                .add("ventilation", ventilationObject.getJsonArray("ventilation"))
                 .add("reservationTarif", informationRateObject.getJsonArray("reservationTarif")).build();
         Payment.reservationCreation(payload);
         List<String> dataMailList = new ArrayList<String>();
