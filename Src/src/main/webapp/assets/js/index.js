@@ -18,7 +18,7 @@ function addValueInSessionStorage() {
     sessionStorage.setItem("erreur", document.getElementById('erreur').innerHTML);
     sessionStorage.setItem("erreurTarif", document.getElementById('erreurTarif').innerHTML);
     sessionStorage.setItem("mainPage", document.getElementById('mainPage').innerHTML);
-    sessionStorage.setItem("mainPage", document.getElementById('lang').innerHTML);
+    sessionStorage.setItem("lang", document.getElementById('lang').innerHTML);
     var roomAvailable = {
         "dateArrivee": $("#dateArrivee").val(),
         "dateDepart": $("#dateDepart").val(),
