@@ -12,18 +12,18 @@
             }
         %>-->
         <span><h3 style = 'text-align: center;' id="erreurInfo"></h3></span>
-        <p style = "text-align: center"> <a onclick="redirection();" id="mainPage"></a></p>
+        <p style = "text-align: center"> <a onclick="redirection();" id="mainPageErreur"></a></p>
     </div>
 
     <script>
         var mainPage = sessionStorage.getItem('mainPage');
         var erreur = sessionStorage.getItem('erreur');
-        var mainPageInfo = document.getElementById('mainPage');
+        let mainPageInfo = document.getElementById('mainPageErreur');
         mainPageInfo.innerHTML += mainPage;
-        var erreurInfo = document.getElementById('erreurInfo');
+        let erreurInfo = document.getElementById('erreurInfo');
         erreurInfo.innerHTML += erreur;
 
-        let nameEstablishment = JSON.parse(localStorage.getItem("nameEstablishment"));
+        var nameEstablishment = JSON.parse(localStorage.getItem("nameEstablishment"));
         function redirection() {
 
             let url = "/booking" + nameEstablishment;

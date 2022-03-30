@@ -1,11 +1,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
-<fmt:setLocale value="${language}" />
-<fmt:setBundle basename="mat" var="lang"/>
+<c:set var="lang" value="${not empty param.lang ? param.lang : not empty lang ? lang : pageContext.request.locale}" scope="session" />
+<fmt:setLocale value="${lang}" />
+<fmt:setBundle basename="mat" var="language"/>
 <!DOCTYPE html>
-<html lang="${language}" >
+<html language="${lang}" >
     <!-- BEGIN HEAD -->
     <head>
         <meta charset="utf-8">
@@ -24,7 +24,7 @@
         <script src="./assets/js/jquery.min.js"></script>
     </head>
     <!-- END HEAD -->
-    <span id="lang" style="display:none;">${language}</span>
+    <span id="lang" style="display:none;">${lang}</span>
     <span id="erreur" style="display:none;"><fmt:message key="BOOKING.ROOMS.ERROR"/></span>
     <span id="erreurTarif" style="display:none;"><fmt:message key="BOOKING.RATE.ERROR"/></span>
     <span id="mainPage" style="display:none;"><fmt:message key="BOOKING.RETURN.MAIN.PAGE"/></span>
