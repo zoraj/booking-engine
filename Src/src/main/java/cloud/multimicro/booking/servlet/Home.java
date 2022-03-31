@@ -35,7 +35,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author zo
  */
-@WebServlet(name = "Home", urlPatterns = { "/" })
+@WebServlet(name = "Home", urlPatterns = {"/"})
 public class Home extends HttpServlet {
 
     private static String apiKey;
@@ -47,10 +47,10 @@ public class Home extends HttpServlet {
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -63,22 +63,21 @@ public class Home extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(true);
-        String establishmentName = request.getServletPath();  
+        String establishmentName = request.getServletPath();
         //session.setAttribute("establishmentName", establishmentName);
         if (establishmentName != null) {
             request.setAttribute("establishmentName", establishmentName);
         }
 
-        
         apiKey = getApiKeyBySiteName(establishmentName);
         JsonObject apikeyObject = stringToJsonObject(apiKey);
         apiKey = apikeyObject.getString("apiKey");
@@ -91,20 +90,20 @@ public class Home extends HttpServlet {
         processRequest(request, response);
 
     }
-    
+
     private static String getApiKeyBySiteName(String establishmentName) {
-        System.out.println("Jwt.generateToken()"+Jwt.generateToken());
+        System.out.println("Jwt.generateToken()" + Jwt.generateToken());
         ResteasyClient client = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = client.target(Util.getContextVar("e-api-url").concat(Constant.WS_GET_NAME_SITE + establishmentName));
-        System.out.println("target_target"+target);
+        System.out.println("target_target" + target);
         //System.out.println("Jwt.generateToken()"+Jwt.generateToken());
         String bearerToken = Jwt.generateToken();
-        
+
         Home.setToken(bearerToken);
         Response response = target.request().header("Authorization", "Bearer " + bearerToken).get();
         // Read output in string format
         String value = response.readEntity(String.class);
-		System.out.println("value : " + value);
+        System.out.println("value : " + value);
         response.close();
         return value;
     }
@@ -126,10 +125,10 @@ public class Home extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -186,16 +185,16 @@ public class Home extends HttpServlet {
                 request.setAttribute("listRooms", rooms);
                 getServletConfig().getServletContext().getRequestDispatcher("/rooms").forward(request, response);
             } else {
-                String message = "<span><h3 style = 'text-align: center;'>Désolé. Les tarif ne sont pas encore prêt pour ces dates.</h3></span>";
-                request.setAttribute("message", message);
+                /*String message = "<span><h3 style = 'text-align: center;'>Désolé. Les tarif ne sont pas encore prêt pour ces dates.</h3></span>";
+                request.setAttribute("message", message);*/
                 request.setAttribute("backgroundImage", Home.getBackgroundimage());
-                getServletConfig().getServletContext().getRequestDispatcher("/info.jsp").forward(request, response);
+                getServletConfig().getServletContext().getRequestDispatcher("/erreur_info.jsp").forward(request, response);
             }
         } else {
-            String message = "<span><h3 style = 'text-align: center;'>Désolé. Aucune chambre disponible correspond à vos critères.</h3></span>";
-            request.setAttribute("message", message);
+            /*String message = "<span><h3 style = 'text-align: center;'>Désolé. Aucune chambre disponible correspond à vos critères.</h3></span>";
+            request.setAttribute("message", message);*/
             request.setAttribute("backgroundImage", Home.getBackgroundimage());
-            getServletConfig().getServletContext().getRequestDispatcher("/info.jsp").forward(request, response);
+            getServletConfig().getServletContext().getRequestDispatcher("/erreur_tarif_info.jsp").forward(request, response);
 
         }
     }
