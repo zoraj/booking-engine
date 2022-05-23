@@ -1,10 +1,20 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@page import="java.util.List"%>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<style>
+    .carousel-inner > .item > img,
+    .carousel-inner > .item > a > img {
+      width: 70%;
+      margin: auto;
+    }
+</style>
 <link type="text/css" rel="stylesheet" href="./assets/css/liste_type_chambre.css" />
  <% 
     String backgroundImage = (String) request.getAttribute("backgroundImage");
  %>
-<body style = "background-image: url('../room-type-image/<%out.print(backgroundImage);%>');">
+<body style = "background-image: url('assets/img/background.jpg');">
 <div id="booking">
     <div class="container">
         <div class="row">
@@ -24,8 +34,24 @@
                             <div class="row">
                                 <div class="col-md-6 col-xs-12">
                                     <div class="row">
-                                        <div class="col-md-12 col-xs-12">	
-                                            <img src="./assets/img/post-7.jpg" alt="" class="image-liste">
+                                        <div class="col-md-12 col-xs-12">
+                                            <div class="carousel slide myCarousel">
+                                                <!-- Wrapper for slides -->
+                                                <div class="carousel-inner" role="listbox">
+                                                    <c:forEach var="image" items="${listePhotoByRoomType}" varStatus="loop">
+                                                        ${image.listePhotoByRoomType}
+                                                    </c:forEach>
+                                                </div>
+                                                <!-- Left and right controls -->
+                                                <a class="left carousel-control" href="#" role="button">
+                                                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                                    <span class="sr-only">Previous</span>
+                                                </a>
+                                                <a class="right carousel-control" href="#" role="button">
+                                                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                                    <span class="sr-only">Next</span>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                     <br/>
@@ -113,6 +139,16 @@
     }
 
     $(document).ready(function() {
+        // Activate Carousel
+        $(".myCarousel").carousel();
+        // Enable Carousel Controls
+        $(".left").click(function(){
+          $(".myCarousel").carousel("prev");
+        });
+        $(".right").click(function(){
+          $(".myCarousel").carousel("next");
+        });
+        
         $("[name='bookRoom']").click(function() {
             let currentIndex = $(this).data("value");
             var saisie = document.getElementById("qty_" + currentIndex).value;
