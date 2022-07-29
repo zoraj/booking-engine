@@ -86,8 +86,8 @@
                         "reservationTarif": []
                     };
 
-    var ventillation = {
-        "ventillation": []
+    var ventilation = {
+        "ventilation": []
     };
 
 
@@ -107,17 +107,17 @@
                  "nbAdult":room.nbPax,
                  "nbEnf":room.nbChild
             });
-            if(ventillation.ventillation.length>0){
-                for (var i = 0; i < ventillation.ventillation.length; i++) {
-                    if(ventillation.ventillation[i].pmsTypeChambreId == room.roomTypeId){
-                       ventillation.ventillation[i].qteChb = ventillation.ventillation[i].qteChb + room.qty;
+            if(ventilation.ventilation.length>0){
+                for (var i = 0; i < ventilation.ventilation.length; i++) {
+                    if(ventilation.ventilation[i].pmsTypeChambreId == room.roomTypeId){
+                       ventilation.ventilation[i].qteChb = ventilation.ventilation[i].qteChb + room.qty;
                        isExist = true;
                        break;
                     } 
                 }
             }
             if(isExist == false){
-                  ventillation.ventillation.push({
+                  ventilation.ventilation.push({
                       "qteChb": room.qty,
                       "pmsTypeChambreId": room.roomTypeId
                   });
@@ -129,8 +129,8 @@
             recapitulationChambre = recapitulationChambre + "<div class='col-md-8'>" + room.qty + " x " + room.roomType + "</div>" + "<div class='col-md-4'><span>" + room.rate + "&euro;</span></div>";
         });
 
-        var ventillation_json = JSON.stringify(ventillation);
-        sessionStorage.setItem("ventillation_json", ventillation_json);
+        var ventilation_json = JSON.stringify(ventilation);
+        sessionStorage.setItem("ventilation_json", ventilation_json);
 
         var reservationTarif_json = JSON.stringify(reservationTarif);
         sessionStorage.setItem("reservationTarif_json", reservationTarif_json);

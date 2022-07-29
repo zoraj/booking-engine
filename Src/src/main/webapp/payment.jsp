@@ -512,7 +512,7 @@
                                             <input type="hidden" id="adults" name="adults">
                                             <input type="hidden" id="dateArrivee" name="dateArrivee">
                                             <input type="hidden" id="dateDepart" name="dateDepart">
-                                            <input type="hidden" id="ventillation" name="ventillation">
+                                            <input type="hidden" id="ventillation" name="ventilation">
                                             <input type="hidden" id="informationRate" name="informationRate">
                                             <input type="hidden" id="recapitulationChambre" name="recapitulationChambre">
 
@@ -543,7 +543,7 @@
 
                                                 var informationNoteVentilation = sessionStorage.getItem("informationNoteVentilation_json");
                                                 var informationNoteVentilationObject = JSON.parse(informationNoteVentilation);
-                                                var informationVentilation = sessionStorage.getItem("ventillation_json");
+                                                var informationVentilation = sessionStorage.getItem("ventilation_json");
                                                 var informationRate = sessionStorage.getItem("reservationTarif_json");
                                                 var listRoomObject = JSON.parse(listRoom);
                                                 var recapJson = sessionStorage.getItem("informationTypeRooms_json");
