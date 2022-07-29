@@ -124,7 +124,7 @@ public class Payment extends HttpServlet {
                 .add("cbType", cartePaiementType).add("cbNumero", cartePaiementNumero)
                 .add("cbTitulaire", cartePaiementTitulaire).add("cbExp", cartePaiementExpiration)
                 .add("cbCvv", cartePaiementCVV).add("observation", observation)
-                .add("ventilation", ventilationObject.getJsonArray("ventilation"))
+                //.add("ventilation", ventilationObject.getJsonArray("ventilation"))
                 .add("reservationTarif", informationRateObject.getJsonArray("reservationTarif")).build();
         Payment.reservationCreation(payload);
         List<String> dataMailList = new ArrayList<String>();
@@ -144,6 +144,7 @@ public class Payment extends HttpServlet {
                 request.setAttribute("message", message);*/
                 request.setAttribute("backgroundImage", Home.getBackgroundimage());
                 this.getServletContext().getRequestDispatcher("/info.jsp").forward(request, response);
+                Payment.resaVentilationCreation(ventilationObject);
             }
 
         } catch (AddressException e) {
@@ -180,6 +181,22 @@ public class Payment extends HttpServlet {
                 .header("Authorization", "Bearer " + token).post(Entity.json(resaJSONObject));
         // Read output in string format
         String value = response.readEntity(String.class);
+        System.out.println("reservationCreation : " + value);
+        response.close();
+    }
+    
+    private static void resaVentilationCreation(JsonObject resaJSONObject) {
+        final String urlVentilation = Util.getContextVar("api-url").concat(Constant.WS_CREATE_BOOKING_VENTILATION);
+        String apiKey = Home.getApiKey();
+        String token = Home.getToken();
+        System.out.println("resaVentilationCreation apiKey** : " + apiKey);
+        ResteasyClient reservation = new ResteasyClientBuilder().build();
+        ResteasyWebTarget targetResa = reservation.target(urlVentilation);
+        Response response = targetResa.request().header("Content-Type", "application/json").header("x-api-key", apiKey)
+                .header("Authorization", "Bearer " + token).post(Entity.json(resaJSONObject));
+        // Read output in string format
+        String value = response.readEntity(String.class);
+        System.out.println("resaVentilationCreation : " + value);
         response.close();
     }
 
