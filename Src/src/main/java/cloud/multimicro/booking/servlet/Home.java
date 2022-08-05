@@ -158,7 +158,7 @@ public class Home extends HttpServlet {
             JsonArray jsonArray = jsonObj.getJsonArray("Availability");
 
             List<DataBooking> rooms = new ArrayList<DataBooking>();
-            List<RoomsPhotoData> photoData = new ArrayList<RoomsPhotoData>();
+            //List<RoomsPhotoData> photoData = new ArrayList<RoomsPhotoData>();
             for (int i = 0; i < jsonArray.size(); i++) {
                 DataBooking dataBooking = new DataBooking();
 
@@ -170,6 +170,23 @@ public class Home extends HttpServlet {
                 dataBooking.setNbChild(jsonLigne.getInt("nbChild"));
                 dataBooking.setQteTotal(jsonLigne.getInt("qteTotal"));
                 dataBooking.setQteDispo(jsonLigne.getInt("qteDispo"));
+                
+                JsonArray jsonPhotoArray = jsonLigne.getJsonArray("roomPhoto");  
+                List<String> listPhoto = new ArrayList<String>();              
+                for (int k = 0; k < jsonPhotoArray.size(); k++) {                
+                    JsonObject jsonPhoto = jsonPhotoArray.getJsonObject(k);                    
+                   
+                    String photo = "";
+                    String dataSrc = jsonPhoto.getString("data");
+                    if (k == 0){
+                        photo = "<div class='item active'><img src='"+dataSrc+"' height = '400' width = '400'></div>";
+                    }else {
+                        photo = "<div class='item'><img src='"+dataSrc+"' height = '400' width = '400'></div>";
+                    }  
+                    
+                    listPhoto.add(photo);
+                }
+                dataBooking.setListePhotoByRoomType(listPhoto); 
                 JsonArray jsonTarifArray = jsonLigne.getJsonArray("tarif");
                 for (int j = 0; j < jsonTarifArray.size(); j++) {
                     DataBooking data = new DataBooking(dataBooking);
@@ -180,25 +197,11 @@ public class Home extends HttpServlet {
                     data.setPmsTarifGrilleDetailId(jsonTarif.getInt("pmsTarifGrilleDetailId"));
                     rooms.add(data);
                 }
-                JsonArray jsonPhotoArray = jsonLigne.getJsonArray("roomPhoto");
-                for (int k = 0; k < jsonPhotoArray.size(); k++) {
-                    String listPhoto = "";                    
-                    JsonObject jsonPhoto = jsonPhotoArray.getJsonObject(k);
-                    String dataSrc = jsonPhoto.getString("data");
-                    if (k == 0){
-                        listPhoto += "<div class='item active'><img src='"+dataSrc+"' height = '400' width = '400'></div>";
-                    }else {
-                        listPhoto += "<div class='item'><img src='"+dataSrc+"' height = '400' width = '400'></div>";
-                    }
-                    RoomsPhotoData img = new RoomsPhotoData();
-                    img.setListePhotoByRoomType(listPhoto);
-                    photoData.add(img);
-                }
             }
 
             if (rooms.size() > 0) {
                 request.setAttribute("listRooms", rooms);
-                request.setAttribute("listePhotoByRoomType", photoData);
+                //request.setAttribute("listePhotoByRoomType", photoData);
                 getServletConfig().getServletContext().getRequestDispatcher("/rooms").forward(request, response);
             } else {
                 /*String message = "<span><h3 style = 'text-align: center;'>Désolé. Les tarif ne sont pas encore prêt pour ces dates.</h3></span>";
