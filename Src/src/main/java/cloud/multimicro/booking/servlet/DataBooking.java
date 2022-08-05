@@ -24,6 +24,7 @@ public class DataBooking {
     private String typeTarifLibelle;
     private Double amount;
     private Integer pmsTarifGrilleDetailId;
+    private List<String> listePhotoByRoomType;
 
     public DataBooking() {
         
@@ -37,6 +38,7 @@ public class DataBooking {
         this.nbChild = data.getNbChild();
         this.persMin = data.getPersMin();
         this.persMax = data.getPersMax();
+        this.listePhotoByRoomType = data.getListePhotoByRoomType();
     }
     
     public Integer getPmsTypeChambreId() {
@@ -128,4 +130,12 @@ public class DataBooking {
         this.pmsTarifGrilleDetailId = pmsTarifGrilleDetailId;
     }
 
+    public List<String> getListePhotoByRoomType() {
+        return listePhotoByRoomType;
+    }
+
+    public void setListePhotoByRoomType(List<String> listePhotoByRoomType) {
+        this.listePhotoByRoomType = listePhotoByRoomType;
+    }
+    
 }

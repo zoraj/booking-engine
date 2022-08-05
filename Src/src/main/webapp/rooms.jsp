@@ -38,8 +38,8 @@
                                             <div class="carousel slide myCarousel">
                                                 <!-- Wrapper for slides -->
                                                 <div class="carousel-inner" role="listbox">
-                                                    <c:forEach var="image" items="${listePhotoByRoomType}" varStatus="loop">
-                                                        ${image.listePhotoByRoomType}
+                                                    <c:forEach var="image" items="${room.listePhotoByRoomType}" varStatus="loop">
+                                                       ${image}
                                                     </c:forEach>
                                                 </div>
                                                 <!-- Left and right controls -->
