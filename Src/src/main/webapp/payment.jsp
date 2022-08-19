@@ -345,184 +345,37 @@
                                                     <span class="form-label"><fmt:message key="BOOKING.OBSERVATION"/></span>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                <input type="hidden" id="reservation" name="reservation">
+                                                <input type="hidden" id="room-list" name="room-list">
+                                                <input type="hidden" id="carte-paiement-expiration" name="carte-paiement-expiration">
+                                                <input type="hidden" id="carte-paiement-type" name="carte-paiement-type">
+                                                <input type="hidden" id="montant" name="montant">
+                                                <input type="hidden" id="adults" name="adults">
+                                                <input type="hidden" id="dateArrivee" name="dateArrivee">
+                                                <input type="hidden" id="dateDepart" name="dateDepart">
+                                                <input type="hidden" id="ventillation" name="ventilation">
+                                                <input type="hidden" id="informationRate" name="informationRate">
+                                                <input type="hidden" id="recapitulationChambre" name="recapitulationChambre">
+                                            </div>
                                         </div><br>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-btn">
+                                                    <button class="submit-btn" id="validateId"><fmt:message key="BOOKING.PROCEES.PAYMENT"/></button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>							
                                     <div class="col-md-4">
                                         <div class="row">
                                             <div class="col-md-offset-3 col-md-9">
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row paiement-securise">
-                            <br>
-                            <div class="col-md-12">
-                                <h5 style="font-weight:bolder; font-size: 18px; color: #06a8c4;"><fmt:message key="BOOKING.SECURE.PAYEMENT"/></h5><hr style="border-top: 1px dashed rgba(0, 0, 0, 0.2);">
-                            </div>
-                            <div class="col-md-5">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <strong><fmt:message key="BOOKING.BANK.DETAILS"/></strong>
-                                    </div>
-                                </div></br>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <span class="other_label"><fmt:message key="BOOKING.CARD.TYPE"/><i class="obligatoir">*</i></span>
-                                    </div>
-                                </div><br>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-1">
-                                                <input class="form-check-input" type="radio" id="masterCardId">
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label class="form-check-label" for="">
-                                                    <img src="./assets/img/masterCard.jpg" alt="" class="image-liste">
-                                                </label>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <input class="form-check-input" type="radio" id="visaId">
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label class="form-check-label" for="">
-                                                    <img src="./assets/img/visa.jpg" alt="" class="image-liste">
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div></br>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <input class="form-control" id="carte-paiement-numero" pattern="[0-9]+" maxlength="15" name="carte-paiement-numero" type="text" required autocomplete="off">
-                                            <span class="form-label"><fmt:message key="BOOKING.CARD.NUMBER"/><i class="obligatoir">*</i></span>
-                                        </div>
-                                    </div>
-                                </div></br>
-                                <div class="row">									
-                                    <div class="col-md-6">
-                                        <span class="other_label"><fmt:message key="BOOKING.EXPIRATION.DATE"/><i class="obligatoir">*</i></span>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <!--span class="form-label"></span-->
-                                            <select id="mounthId" class="form-control" onchange="window.open('payment.jsp?mois=' + document.forms[0].mois.selectedValue, '_self');">
-                                                <option value="01"><fmt:message key="BOOKING.JANUARY"/></option>
-                                                <option value="02"><fmt:message key="BOOKING.FEBRUARY"/></option>
-                                                <option value="03"><fmt:message key="BOOKING.MARCH"/></option>
-                                                <option value="04"><fmt:message key="BOOKING.APRIL"/></option>
-                                                <option value="05"><fmt:message key="BOOKING.MAY"/></option>
-                                                <option value="06"><fmt:message key="BOOKING.JUNE"/></option>
-                                                <option value="07"><fmt:message key="BOOKING.JULY"/></option>
-                                                <option value="08"><fmt:message key="BOOKING.AUGUST"/></option>
-                                                <option value="09"><fmt:message key="BOOKING.SEPTEMBER"/></option>
-                                                <option value="10"><fmt:message key="BOOKING.OCTOBER"/></option>
-                                                <option value="11"><fmt:message key="BOOKING.NOVEMBER"/></option>
-                                                <option value="12"><fmt:message key="BOOKING.DECEMBER"/></option>
-                                            </select>
-                                            <span class="select-arrow"></span>
-                                            <!--input class="form-control" type="month">
-                                            <span class="form-label">Date d'expiration<i class="obligatoir">*</i></span-->
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <!--span class="form-label"></span-->
-                                            <select id="yearId" class="form-control">
-                                                <!--<option value="2020">2020</option>
-                                                <option value="2021">2021</option>
-                                                <option value="2022">2022</option>
-                                                <option value="2023">2023</option>
-                                                <option value="2024">2024</option>
-                                                <option value="2025">2025</option>-->
-                                            </select>
-                                            <span class="select-arrow"></span>
-                                        </div>
-                                    </div>
-                                </div></br>
-                                <div class="row">
-                                    <div class="col-md-7">
-                                        <div class="form-group">
-                                            <input class="form-control" maxlength="99" id="carte-paiement-titulaire" name="carte-paiement-titulaire" type="text" required autocomplete="off">
-                                            <span class="form-label"><fmt:message key="BOOKING.CARDHOLDER.NAME"/><i class="obligatoir">*</i></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <div class="form-group">
-                                            <input class="form-control" id="carte-paiement-cvv" name="carte-paiement-cvv" type="text" maxlength="3" pattern="[0-9]{3}" required autocomplete="off">
-                                            <span class="form-label"><fmt:message key="BOOKING.CRYPTOGRAM"/><i class="obligatoir">*</i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-7">
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        <strong><fmt:message key="BOOKING.AMOUNT.DEPOSIT"/></strong>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <strong id="amountId"></strong>
-                                    </div>
-                                </div><hr>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <p><fmt:message key="BOOKING.DEPOSIT.APPLIES"/>
-                                        </p>
-                                    </div>
-                                </div></br></br></br></br>
-                                <div class="row">
-                                    <div class="col-md-offset-4 col-md-8">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="row">
-                                                    <div class="col-md-1">
-                                                        <input type="checkbox" class="form-check-input">
-                                                    </div>
-                                                    <div class="col-md-11">
-                                                        <label class="form-check-label"><fmt:message key="BOOKING.CHECKING.BOX"/> 
-                                                            <a href="#"><fmt:message key="BOOKING.TERMS.OF.SALES"/></a> <fmt:message key="BOOKING.ACCEPT"/>.</label>
-                                                    </div>
-                                                </div>																								
-                                            </div>
-                                        </div></br>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="row">
-                                                    <div class="col-md-1">
-                                                        <input type="checkbox" class="form-check-input">
-                                                    </div>
-                                                    <div class="col-md-11">
-                                                        <label class="form-check-label"><fmt:message key="BOOKING.INFORM.EMAIL"/></label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div></br></br>
-                                        <div class="row">
-                                            <input type="hidden" id="reservation" name="reservation">
-                                            <input type="hidden" id="room-list" name="room-list">
-                                            <input type="hidden" id="carte-paiement-expiration" name="carte-paiement-expiration">
-                                            <input type="hidden" id="carte-paiement-type" name="carte-paiement-type">
-                                            <input type="hidden" id="montant" name="montant">
-                                            <input type="hidden" id="adults" name="adults">
-                                            <input type="hidden" id="dateArrivee" name="dateArrivee">
-                                            <input type="hidden" id="dateDepart" name="dateDepart">
-                                            <input type="hidden" id="ventillation" name="ventilation">
-                                            <input type="hidden" id="informationRate" name="informationRate">
-                                            <input type="hidden" id="recapitulationChambre" name="recapitulationChambre">
-
-
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-offset-4 col-md-8">
-                                                <div class="form-btn">
-                                                    <button class="submit-btn" id="validateId"><fmt:message key="BOOKING.VALIDATE"/></button>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -635,36 +488,29 @@
                                                     });
                                                     // Validation de paiment
                                                     $('#validateId').click(function () {
-                                                        var dateExpiration = new Date($("#yearId").val(), parseInt($("#mounthId").val()) - 1, 1);
+                                                        //$("#mounthId").get(0).setCustomValidity("");
+                                                        $("#reservation").val(JSON.stringify(reservationJson));
+                                                        $("#adults").val(nbPax);
+                                                        $("#montant").val(montantTTC);
+                                                        $("#carte-paiement-type").val(cartePaymentType);
+                                                        $("#dateArrivee").val(changeFormat(dateArrivee));
+                                                        $("#dateDepart").val(changeFormat(dateDepart));
+                                                        $("#ventillation").val(informationVentilation);
+                                                        $("#informationRate").val(informationRate);
+                                                        $("#recapitulationChambre").val(recapitulationChambre);
 
-                                                        if ((dateExpiration <= new Date())) {
-                                                            $("#mounthId").get(0).setCustomValidity("Date anterieure à la date du jour");
-                                                        } else {
-                                                            $("#mounthId").get(0).setCustomValidity("");
-                                                            $("#reservation").val(JSON.stringify(reservationJson));
-                                                            $("#carte-paiement-expiration").val($("#yearId").val() + "-" + $("#mounthId").val() + "-" + "01");
-                                                            $("#adults").val(nbPax);
-                                                            $("#montant").val(montantTTC);
-                                                            $("#carte-paiement-type").val(cartePaymentType);
-                                                            $("#dateArrivee").val(changeFormat(dateArrivee));
-                                                            $("#dateDepart").val(changeFormat(dateDepart));
-                                                            $("#ventillation").val(informationVentilation);
-                                                            $("#informationRate").val(informationRate);
-                                                            $("#recapitulationChambre").val(recapitulationChambre);
-
-                                                            function changeFormat(date) {
-                                                                options = {
-                                                                    weekday: "short", year: 'numeric', month: 'long', day: 'numeric'
-                                                                };
-                                                                return date.toLocaleString('fr-FR', options);
-                                                            }
+                                                        function changeFormat(date) {
+                                                            options = {
+                                                                weekday: "short", year: 'numeric', month: 'long', day: 'numeric'
+                                                            };
+                                                            return date.toLocaleString('fr-FR', options);
                                                         }
                                                     });
 
                                                 });
 
-                                                var t = new Date();
-                                                document.getElementById("mounthId").selectedIndex = t.getMonth();
+                                                //var t = new Date();
+                                                //document.getElementById("mounthId").selectedIndex = t.getMonth();
                                                 sessionStorage.setItem("mainPage", document.getElementById('mainPage').innerHTML);
                                                 sessionStorage.setItem("reservTaken", document.getElementById('reservTaken').innerHTML);
                                                 sessionStorage.setItem("summaryEmail", document.getElementById('summaryEmail').innerHTML);

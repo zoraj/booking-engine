@@ -58,7 +58,7 @@
                                     <div class="row">
                                         <div class="col-md-6 col-xs-6">
                                             <div class="row">
-                                                <div class="col-md-5">
+                                                <div class="col-md-6">
                                                     <i class="fa fa-male"></i><b><fmt:message key="BOOKING.GUESTS.TITLE"/> :</b>
                                                 </div>
                                                 <div class="col-md-5">
@@ -66,7 +66,7 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-5">
+                                                <div class="col-md-6">
                                                     <i class="fa fa-bookmark">  </i><b><fmt:message key="BOOKING.TYPE"/> :</b>
                                                 </div>
                                                 <div class="col-md-5">
@@ -80,14 +80,14 @@
                                     <p>${room.typeTarifLibelle}</p>
                                     <p>
                                         <span style="font-size:30px; font-weight:bolder"> <label id="rate_${myIndex.index}">${room.amount}</label>&euro;</span>
-                                        <span style="font-size:15px;">/<fmt:message key="BOOKING.PER.NIGHT"/></span>
+                                        <span style="font-size:15px;"> <fmt:message key="BOOKING.PER.NIGHT"/></span>
                                     </p>	
                                     <form class="form-input">
                                         <p>                                    
                                             <input type="number" class="form-control" value = "1" id="qty_${myIndex.index}" min="1" max="${room.qteDispo}">
                                         </p>
 
-                                        <p>of ${room.qteDispo} <fmt:message key="BOOKING.ACCOMMODATIONS.AVAILABLE"/>.</p>
+                                        <p><fmt:message key="BOOKING.OF.AVAILABLE"/> ${room.qteDispo} <fmt:message key="BOOKING.ACCOMMODATIONS.AVAILABLE"/>.</p>
                                         <input type="hidden" class="form-control" value = "${room.qteDispo}" id="disponible_${myIndex.index}">
                                         <input type="hidden" class="form-control" value = "${room.nbChild}" id="nbChild_${myIndex.index}">
                                     </form>

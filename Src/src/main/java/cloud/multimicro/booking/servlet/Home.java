@@ -172,18 +172,20 @@ public class Home extends HttpServlet {
                 dataBooking.setQteDispo(jsonLigne.getInt("qteDispo"));
                 
                 JsonArray jsonPhotoArray = jsonLigne.getJsonArray("roomPhoto");  
-                List<String> listPhoto = new ArrayList<String>();              
+                List<String> listPhoto = new ArrayList<String>(); 
+                String photo = "";
                 for (int k = 0; k < jsonPhotoArray.size(); k++) {                
-                    JsonObject jsonPhoto = jsonPhotoArray.getJsonObject(k);                    
-                   
-                    String photo = "";
+                    JsonObject jsonPhoto = jsonPhotoArray.getJsonObject(k);
                     String dataSrc = jsonPhoto.getString("data");
                     if (k == 0){
                         photo = "<div class='item active'><img src='"+dataSrc+"' height = '400' width = '400'></div>";
                     }else {
                         photo = "<div class='item'><img src='"+dataSrc+"' height = '400' width = '400'></div>";
-                    }  
-                    
+                    }                     
+                    listPhoto.add(photo);
+                }
+                if(jsonPhotoArray.isEmpty()){
+                    photo = "<div class='item active'><img src='assets/img/photo-non-dispo.png' height = '400' width = '400'></div>";
                     listPhoto.add(photo);
                 }
                 dataBooking.setListePhotoByRoomType(listPhoto); 
