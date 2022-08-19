@@ -43,10 +43,10 @@
                                                                     <div class="col-md-8"><span id="date-arrived-id"></span></div>
                                                                     <div class="col-md-4"><span id="amount-id">$0</span></div>
                                                                 </div><hr>-->
-                                <div class="row">
+                                <div class="row" style="display:none">
                                     <div class="col-md-8 font-title"><span><fmt:message key="BOOKING.TOTAL.TVA"/></span></div>
                                     <div class="col-md-4 font-title"><span id="tva-id"></span></div>
-                                </div><hr>
+                                </div><!--hr-->
                                 <div class="row">
                                     <div class="col-md-8 font-title"><span><fmt:message key="BOOKING.PRICE.TTC"/></span></div>
                                     <div class="col-md-4 font-title"><span id="total-id">$135</span></div>

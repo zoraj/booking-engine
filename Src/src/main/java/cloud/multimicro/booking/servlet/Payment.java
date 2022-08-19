@@ -23,6 +23,7 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import org.jboss.logging.Logger;
 import javax.annotation.Resource;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -34,8 +35,6 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 /**
@@ -44,6 +43,7 @@ import javax.naming.NamingException;
  */
 @WebServlet(name = "Payment", urlPatterns = {"/payment"})
 public class Payment extends HttpServlet {
+    private static final Logger LOGGER = Logger.getLogger(Payment.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -58,6 +58,16 @@ public class Payment extends HttpServlet {
             throws ServletException, IOException {
 
         getServletConfig().getServletContext().getRequestDispatcher("/payment.jsp").forward(request, response);
+    }
+    
+    private static String montantTTC;
+    
+    public static String getMontantTTC() {
+        return montantTTC;
+    }
+
+    public static void setMontantTTC(String value) {
+        montantTTC = value;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
@@ -121,15 +131,17 @@ public class Payment extends HttpServlet {
                 .add("nationalite", pays).add("nom", nom).add("prenom", prenom).add("adresse1", adresse1)
                 .add("adresse2", adresse2).add("tel", telMobile).add("email", email).add("cp", codePostal)
                 .add("ville", ville).add("pays", pays).add("origine", "BOOKING").add("posteUuid", "_BOOKING_")
-                .add("cbType", cartePaiementType).add("cbNumero", cartePaiementNumero)
-                .add("cbTitulaire", cartePaiementTitulaire).add("cbExp", cartePaiementExpiration)
-                .add("cbCvv", cartePaiementCVV).add("observation", observation)
+                //.add("cbType", cartePaiementType).add("cbNumero", cartePaiementNumero)
+                //.add("cbTitulaire", cartePaiementTitulaire).add("cbExp", cartePaiementExpiration)
+                //.add("cbCvv", cartePaiementCVV)
+                .add("observation", observation)
                 //.add("ventilation", ventilationObject.getJsonArray("ventilation"))
                 .add("reservationTarif", informationRateObject.getJsonArray("reservationTarif")).build();
         Payment.reservationCreation(payload);
         List<String> dataMailList = new ArrayList<String>();
         String amount = request.getParameter("montant");
         String recap = request.getParameter("recapitulationChambre");
+        Payment.setMontantTTC(amount);
         dataMailList.add(email);
         dataMailList.add(nom);
         dataMailList.add(nbPax);
@@ -142,8 +154,9 @@ public class Payment extends HttpServlet {
             if (sended == true) {
                 /*String message = "<span><h2 style = 'text-align: center;'><b>Votre réservation a été pris en compte.</b></h2></span><span><h3 style = 'text-align: center;'><b>Un email de récapitulation vous sera envoyé.</b></h3></span>"; //
                 request.setAttribute("message", message);*/
-                request.setAttribute("backgroundImage", Home.getBackgroundimage());
-                this.getServletContext().getRequestDispatcher("/info.jsp").forward(request, response);
+                
+                /*request.setAttribute("backgroundImage", Home.getBackgroundimage());
+                this.getServletContext().getRequestDispatcher("/info.jsp").forward(request, response);*/
                 Payment.resaVentilationCreation(ventilationObject);
             }
 
@@ -157,7 +170,10 @@ public class Payment extends HttpServlet {
             e.printStackTrace();
         }
 
-        response.setContentType("text/html;charset=UTF-8");
+        //response.setContentType("text/html;charset=UTF-8");
+        // INtegration Stripe
+        //this.getServletContext().getRequestDispatcher("/checkout.jsp").forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/checkout.jsp");
 
     }
 
