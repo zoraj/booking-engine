@@ -97,6 +97,7 @@
         var childs = 0;
         var montantTTC = 0;
         var recapitulationChambre = "";
+        var night = dateDiff(dateArrivee,dateDepart);
         recapObject.bookRoom.forEach(function (room) {
             var isExist = false;
             var qty = 0;
@@ -141,11 +142,11 @@
         $("#adults-id").html(nbPax);
         $("#children-id").html(childs);
         
-         var night = dateDiff(dateArrivee,dateDepart);   
+        var montantTotal = parseFloat(montantTTC) * parseFloat(night);
         $("#night-id").html(night);
         $("#amount-id").html(0);
         $("#tva-id").html(100);
-        $("#total-id").html(montantTTC + "&euro;");
+        $("#total-id").html(montantTotal + "&euro;");
         $("#recapitulation-chambre-id").html("<div class = 'row'>" + recapitulationChambre + "</div>");
 
         function changeFormat(date) {           

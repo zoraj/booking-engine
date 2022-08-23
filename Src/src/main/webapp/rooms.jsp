@@ -92,15 +92,10 @@
                                         <input type="hidden" class="form-control" value = "${room.nbChild}" id="nbChild_${myIndex.index}">
                                     </form>
                                     <div class="form-btn">
-                                        <button id="valid-btn" name="bookRoom" class="submit-btn"  data-value='${myIndex.index}'><fmt:message key="BOOKING.BOOK.NOW.TITLE"/></button>
+                                        <button id="valid-btn" name="bookRoom" class="submit-btn"  data-value='${myIndex.index}'><fmt:message key="BOOKING.BOOK.ROOMS"/></button>
                                     </div>
 
                                     <br/>
-                                    <div class="form-btn">
-                                        <button id="proceder" class="submit-btn">
-                                            <a href="recap-resa" id="proceder_paiement"><fmt:message key="BOOKING.PROCEES.PAYMENT"/></a>
-                                        </button>
-                                    </div>
                                     <div id="pmsTarifGrilleDetailId_${myIndex.index}" style = "display:none;">${room.pmsTarifGrilleDetailId}</div>
                                 </div>
                             </div>
@@ -108,7 +103,15 @@
                     </div>
                     <!-- Fin Premier liste type chambre --> 
                 </c:forEach>
-
+                <div class="row" style="margin-bottom: 15px;">
+                    <div class="col-md-4 col-md-offset-4">
+                        <div class="form-btn">
+                            <button id="proceder" class="submit-btn">
+                                <a href="recap-resa" id="proceder_paiement"><fmt:message key="BOOKING.VALIDATE"/></a>
+                            </button>
+                        </div>
+                    </div>
+                </div>                
             </div>
         </div>
     </div>
