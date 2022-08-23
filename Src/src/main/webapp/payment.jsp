@@ -444,6 +444,7 @@
                                                     var recapitulationChambre = "";
                                                     var nbEnfant = 0;
                                                     var qteChb = 0;
+                                                    var night = dateDiff(dateArrivee,dateDepart);
 
                                                     recapObject.bookRoom.forEach(function (room) {
                                                         nbPax = parseInt(nbPax) + (parseInt(room.nbPax) * parseInt(room.qty));
@@ -486,12 +487,14 @@
                                                             $("#carte-paiement-type").val(cartePaymentType);
                                                         }
                                                     });
+                                                    
+                                                    var montantTotal = parseFloat(montantTTC) * parseFloat(night);
                                                     // Validation de paiment
                                                     $('#validateId').click(function () {
                                                         //$("#mounthId").get(0).setCustomValidity("");
                                                         $("#reservation").val(JSON.stringify(reservationJson));
                                                         $("#adults").val(nbPax);
-                                                        $("#montant").val(montantTTC);
+                                                        $("#montant").val(montantTotal);
                                                         $("#carte-paiement-type").val(cartePaymentType);
                                                         $("#dateArrivee").val(changeFormat(dateArrivee));
                                                         $("#dateDepart").val(changeFormat(dateDepart));
@@ -506,6 +509,25 @@
                                                             return date.toLocaleString('fr-FR', options);
                                                         }
                                                     });
+                                                    
+                                                    function dateDiff(date1, date2) {
+                                                        var diff = {}                           // Initialisation du retour
+                                                        var tmp = date2 - date1;
+
+                                                        tmp = Math.floor(tmp / 1000);             // Nombre de secondes entre les 2 dates
+                                                        diff.sec = tmp % 60;                    // Extraction du nombre de secondes
+
+                                                        tmp = Math.floor((tmp - diff.sec) / 60);    // Nombre de minutes (partie enti�re)
+                                                        diff.min = tmp % 60;                    // Extraction du nombre de minutes
+
+                                                        tmp = Math.floor((tmp - diff.min) / 60);    // Nombre d'heures (enti�res)
+                                                        diff.hour = tmp % 24;                   // Extraction du nombre d'heures
+
+                                                        tmp = Math.floor((tmp - diff.hour) / 24);   // Nombre de jours restants
+                                                        diff.day = tmp;
+
+                                                        return tmp;
+                                                    }
 
                                                 });
 
