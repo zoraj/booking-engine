@@ -1,7 +1,8 @@
 // This is a public sample test API key.
 // Don’t submit any personally identifiable information in requests made with this key.
 // Sign in to see your own test API key embedded in code samples.
-const stripe = Stripe("pk_test_51Kxp7TCm1ZvhCV0ApiCU4HMr5YyGPqXvepEoXbF6E4G54W6PSY0OleBMDYVArei19VSBtVhIGesWXBBmHaGkOTWG00hHU7cL9J");
+let publicKey = sessionStorage.getItem("publicApiKeyStripe");
+const stripe = Stripe(publicKey);
 
 // The items the customer wants to buy
 const items = [{ id: "xl-tshirt" }];
