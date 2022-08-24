@@ -19,6 +19,8 @@ public class Constant {
     public static final String WS_GET_SETTINGS_BOOKING_HEADER = "/settings/BOOKING_MAIL_HEADER";
     public static final String WS_GET_SETTINGS_BOOKING_DETAIL = "/settings/BOOKING_MAIL_DETAIL";
     public static final String WS_GET_SETTINGS_BOOKING_FOOTER = "/settings/BOOKING_MAIL_FOOTER";
+    public static final String WS_GET_SETTINGS_STRIPE_PRIVATE_KEY = "/settings/STRIPE_PRIVATE_KEY";
+    public static final String WS_GET_SETTINGS_STRIPE_PUBLIC_KEY = "/settings/STRIPE_PUBLIC_KEY";
 
 
     public static final String MMC_JWT_ID = "cloud.multimicro";

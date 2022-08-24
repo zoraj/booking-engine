@@ -42,6 +42,7 @@ public class Home extends HttpServlet {
     private static String token;
     private static String backgroundimage;
     private String roomRequested;
+    private static String privateApiKeyStripe;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -82,7 +83,16 @@ public class Home extends HttpServlet {
         JsonObject apikeyObject = stringToJsonObject(apiKey);
         apiKey = apikeyObject.getString("apiKey");
         Home.setApiKey(apiKey);
-
+        
+        privateApiKeyStripe = getSettingsStripePrivateKey();
+        JsonObject privateApikeyObject = stringToJsonObject(privateApiKeyStripe);
+        privateApiKeyStripe = privateApikeyObject.getString("valeur");
+        Home.setPrivateApiKeyStripe(privateApiKeyStripe);
+        
+        String publicApiKeyStripe = getSettingsStripePublicKey();
+        JsonObject publicApikeyObject = stringToJsonObject(publicApiKeyStripe);
+        publicApiKeyStripe = publicApikeyObject.getString("valeur");
+        request.setAttribute("publicApiKeyStripe", publicApiKeyStripe);
         //String backgroundImage = getBackGroundImage();
         //JsonObject backgroundImageObject = stringToJsonObject(backgroundImage);
         //Home.setBackgroundimage(backgroundImageObject.getString("valeur"));
@@ -118,6 +128,30 @@ public class Home extends HttpServlet {
         // Read output in string format
         String value = response.readEntity(String.class);
         System.out.println("value Image retourné : " + value);
+        response.close();
+        return value;
+    }
+    
+    private String getSettingsStripePrivateKey() {
+        final String urlBooking = Util.getContextVar("api-url").concat(Constant.WS_GET_SETTINGS_STRIPE_PRIVATE_KEY);
+        String bearerToken = Jwt.generateToken();
+        ResteasyClient cuisson = new ResteasyClientBuilder().build();
+        ResteasyWebTarget target = cuisson.target(urlBooking);
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer " + bearerToken).get();
+        // Read output in string format
+        String value = response.readEntity(String.class);
+        response.close();
+        return value;
+    }
+    
+    private String getSettingsStripePublicKey() {
+        final String urlBooking = Util.getContextVar("api-url").concat(Constant.WS_GET_SETTINGS_STRIPE_PUBLIC_KEY);
+        String bearerToken = Jwt.generateToken();
+        ResteasyClient cuisson = new ResteasyClientBuilder().build();
+        ResteasyWebTarget target = cuisson.target(urlBooking);
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer " + bearerToken).get();
+        // Read output in string format
+        String value = response.readEntity(String.class);
         response.close();
         return value;
     }
@@ -267,6 +301,14 @@ public class Home extends HttpServlet {
         backgroundimage = value;
     }
 
+    public static String getPrivateApiKeyStripe() {
+        return privateApiKeyStripe;
+    }
+
+    public static void setPrivateApiKeyStripe(String value) {
+        privateApiKeyStripe = value;
+    }
+    
     /**
      * Returns a short description of the servlet.
      *

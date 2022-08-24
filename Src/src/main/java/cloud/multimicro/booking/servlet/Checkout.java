@@ -87,7 +87,8 @@ public class Checkout extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try { 
-            Stripe.apiKey = "sk_test_51Kxp7TCm1ZvhCV0Apzl31cqHgsg3DIF8p9TOYKSw2EyvEpFcuEZ6rUJB1ltY4wnPl2FFe5AaFJsVoIhy9weE3g9v00YXIeb4pl";
+            //Stripe.apiKey = "sk_test_51Kxp7TCm1ZvhCV0Apzl31cqHgsg3DIF8p9TOYKSw2EyvEpFcuEZ6rUJB1ltY4wnPl2FFe5AaFJsVoIhy9weE3g9v00YXIeb4pl";
+            Stripe.apiKey = Home.getPrivateApiKeyStripe();
             String montant = Payment.getMontantTTC();
             int amount = Integer.parseInt(montant);
             //CreatePayment postBody = gson.fromJson(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())), CreatePayment.class);
