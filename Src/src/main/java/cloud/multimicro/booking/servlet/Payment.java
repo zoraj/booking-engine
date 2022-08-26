@@ -256,9 +256,10 @@ public class Payment extends HttpServlet {
     }
 
     private static JsonObject stringToJsonObject(String jsonString) {
-        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
-        JsonObject object = jsonReader.readObject();
-        jsonReader.close();
+        JsonObject object;
+        try (JsonReader jsonReader = Json.createReader(new StringReader(jsonString))) {
+            object = jsonReader.readObject();
+        }
         return object;
 
     }

@@ -261,6 +261,7 @@ public class Home extends HttpServlet {
         ResteasyWebTarget target = client.target(urlAvailability);
         System.out.println(Entity.json(availableObject));
         String bearerToken = Jwt.generateToken();
+        String apiKey = Home.getApiKey();
         Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey)
                 .header("Authorization", "Bearer " + bearerToken).post(Entity.json(availableObject));
         // Read output in string format
