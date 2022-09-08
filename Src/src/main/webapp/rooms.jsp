@@ -97,6 +97,8 @@
 
                                     <br/>
                                     <div id="pmsTarifGrilleDetailId_${myIndex.index}" style = "display:none;">${room.pmsTarifGrilleDetailId}</div>
+                                    <div id="pmsModelTarifId_${myIndex.index}" style = "display:none;">${room.typeTarifId}</div>
+                                    <div id="base_${myIndex.index}" style = "display:none;">${room.base}</div>
                                 </div>
                             </div>
                         </div>
@@ -178,7 +180,9 @@
                                 "rate": parseFloat(room.rate),
                                 "nbChild": parseInt(room.nbChild),
                                 "qty": parseInt(room.qty),
-                                "pmsTarifGrilleDetailId": parseInt(room.pmsTarifGrilleDetailId)
+                                "pmsTarifGrilleDetailId": parseInt(room.pmsTarifGrilleDetailId),
+                                "pmsModelTarifId": parseInt(room.pmsModelTarifId),
+                                "base": parseInt(room.base)
                             });
                         }
                     });
@@ -209,6 +213,8 @@
                             "nbChild": parseInt($("#nbChild_" + currentIndex).val()),
                             "qty": parseInt($("#qty_" + currentIndex).val()),
                             "pmsTarifGrilleDetailId": parseInt($("#pmsTarifGrilleDetailId_" + currentIndex).html()),
+                            "pmsModelTarifId": parseInt($("#pmsModelTarifId_" + currentIndex).html()),
+                            "base": parseInt($("#base_" + currentIndex).html())
                         });
                     }
                 }

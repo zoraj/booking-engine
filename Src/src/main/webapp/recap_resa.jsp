@@ -102,11 +102,15 @@
             var isExist = false;
             var qty = 0;
             reservationTarif.reservationTarif.push({
-                 "qteChb": room.qty,
+                 //"qteChb": room.qty,
                  "pmsTypeChambreId": room.roomTypeId,
-                 "pmsTarifGrilleDetailId": room.pmsTarifGrilleDetailId,
+                 //"pmsTarifGrilleDetailId": room.pmsTarifGrilleDetailId,
                  "nbAdult":room.nbPax,
-                 "nbEnf":room.nbChild
+                 "nbEnf":room.nbChild,
+                 "dateDebut":listRoomObject.dateArrivee,
+                 "dateFin":listRoomObject.dateDepart,
+                 "pmsModelTarifId":room.pmsModelTarifId,
+                 "base":room.base
             });
             if(ventilation.ventilation.length>0){
                 for (var i = 0; i < ventilation.ventilation.length; i++) {

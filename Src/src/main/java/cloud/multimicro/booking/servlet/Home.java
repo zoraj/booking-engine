@@ -231,6 +231,7 @@ public class Home extends HttpServlet {
                     data.setAmount(Double.parseDouble(jsonTarif.get("amount").toString()));
                     data.setTypeTarifLibelle(jsonTarif.getString("typeTarifLibelle"));
                     data.setPmsTarifGrilleDetailId(jsonTarif.getInt("pmsTarifGrilleDetailId"));
+                    data.setBase(jsonTarif.getInt("base"));
                     rooms.add(data);
                 }
             }

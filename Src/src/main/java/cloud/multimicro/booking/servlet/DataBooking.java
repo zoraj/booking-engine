@@ -25,6 +25,7 @@ public class DataBooking {
     private Double amount;
     private Integer pmsTarifGrilleDetailId;
     private List<String> listePhotoByRoomType;
+    private Integer base;
 
     public DataBooking() {
         
@@ -136,6 +137,14 @@ public class DataBooking {
 
     public void setListePhotoByRoomType(List<String> listePhotoByRoomType) {
         this.listePhotoByRoomType = listePhotoByRoomType;
+    }
+
+    public Integer getBase() {
+        return base;
+    }
+
+    public void setBase(Integer base) {
+        this.base = base;
     }
     
 }
