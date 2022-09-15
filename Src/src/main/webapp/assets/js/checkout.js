@@ -42,7 +42,7 @@ async function handleSubmit(e) {
     elements,
     confirmParams: {
       // Make sure to change this to your payment completion page
-      return_url: window.location.origin +"/booking/info.jsp",
+      return_url: window.location.origin +"/booking/info",
     },
   });
 

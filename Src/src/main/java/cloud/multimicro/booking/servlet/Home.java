@@ -28,6 +28,8 @@ import javax.json.JsonArray;
 import javax.json.JsonNumber;
 import java.util.*;
 import java.math.BigDecimal;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.json.stream.JsonParsingException;
 import javax.servlet.http.HttpSession;
 
@@ -79,11 +81,15 @@ public class Home extends HttpServlet {
             request.setAttribute("establishmentName", establishmentName);
         }
 
-        apiKey = getApiKeyBySiteName(establishmentName);
-        JsonObject apikeyObject = stringToJsonObject(apiKey);
-        apiKey = apikeyObject.getString("apiKey");
-        Home.setApiKey(apiKey);
-        
+        try {        
+            apiKey = getApiKeyBySiteName(establishmentName);
+            JsonObject apikeyObject = stringToJsonObject(apiKey);
+            apiKey = apikeyObject.getString("apiKey");
+            Home.setApiKey(apiKey);
+        } catch (Exception ex) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
+ 
         privateApiKeyStripe = getSettingsStripePrivateKey();
         JsonObject privateApikeyObject = stringToJsonObject(privateApiKeyStripe);
         privateApiKeyStripe = privateApikeyObject.getString("valeur");
@@ -101,7 +107,7 @@ public class Home extends HttpServlet {
 
     }
 
-    private static String getApiKeyBySiteName(String establishmentName) {
+    private static String getApiKeyBySiteName(String establishmentName) throws Exception {
         System.out.println("Jwt.generateToken()" + Jwt.generateToken());
         ResteasyClient client = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = client.target(Util.getContextVar("e-api-url").concat(Constant.WS_GET_NAME_SITE + establishmentName));
@@ -112,6 +118,9 @@ public class Home extends HttpServlet {
         Home.setToken(bearerToken);
         Response response = target.request().header("Authorization", "Bearer " + bearerToken).get();
         // Read output in string format
+        if(response.getStatus()!= Response.Status.OK.getStatusCode()){
+            throw new Exception("Establishment Not Found.");
+        }
         String value = response.readEntity(String.class);
         System.out.println("value : " + value);
         response.close();
@@ -204,6 +213,8 @@ public class Home extends HttpServlet {
                 dataBooking.setNbChild(jsonLigne.getInt("nbChild"));
                 dataBooking.setQteTotal(jsonLigne.getInt("qteTotal"));
                 dataBooking.setQteDispo(jsonLigne.getInt("qteDispo"));
+                dataBooking.setMmcModeEncaissementId(jsonLigne.getInt("mmcModeEncaissementId"));
+                dataBooking.setMmcClientId(jsonLigne.getInt("mmcClientId"));
                 
                 JsonArray jsonPhotoArray = jsonLigne.getJsonArray("roomPhoto");  
                 List<String> listPhoto = new ArrayList<String>(); 

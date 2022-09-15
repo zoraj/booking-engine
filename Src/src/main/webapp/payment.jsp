@@ -357,6 +357,7 @@
                                                 <input type="hidden" id="ventillation" name="ventilation">
                                                 <input type="hidden" id="informationRate" name="informationRate">
                                                 <input type="hidden" id="recapitulationChambre" name="recapitulationChambre">
+                                                <input type="hidden" id="deposit" name="deposit">
                                             </div>
                                         </div><br>
                                         <div class="row">
@@ -403,6 +404,7 @@
                                                 var recapObject = JSON.parse(recapJson);
                                                 var informationPersonJson = sessionStorage.getItem("informationPerson_json");
                                                 var informationPersonObject = JSON.parse(informationPersonJson);
+                                                var depositObject = sessionStorage.getItem("informationArrhes_json");
                                                 var dateArrivee = new Date(listRoomObject.dateArrivee);
                                                 var dateDepart = new Date(listRoomObject.dateDepart);
                                                 $('.form-control').each(function () {
@@ -501,7 +503,7 @@
                                                         $("#ventillation").val(informationVentilation);
                                                         $("#informationRate").val(informationRate);
                                                         $("#recapitulationChambre").val(recapitulationChambre);
-
+                                                        $("#deposit").val(depositObject);
                                                         function changeFormat(date) {
                                                             options = {
                                                                 weekday: "short", year: 'numeric', month: 'long', day: 'numeric'
