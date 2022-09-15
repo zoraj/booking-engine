@@ -14,6 +14,7 @@ public class Constant {
     public static final String WS_CREATE_BOOKING = "/reservation/";
     public static final String WS_CREATE_BOOKING_VENTILATION = "/reservation/ventilation";
     public static final String WS_CREATE_BOOKING_RATE = "/reservation/rate";
+    public static final String WS_CREATE_BOOKING_DEPOSIT = "/deposit/booking";
     public static final String WS_SEARCH_AVAILABILITY = "/booking/room-available-by-type";
     public static final String WS_GET_NAME_SITE = "/sites/";
     public static final String WS_GET_BACKGROUND_IMAGE = "/settings/NAME_BACKGROUND_IMAGE";

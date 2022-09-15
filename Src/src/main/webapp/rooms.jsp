@@ -23,6 +23,8 @@
                     <!-- Debut Premier liste type chambre -->
                     <div class="row" id="list-room">	
                         <input type="hidden" id="room_type_id_${myIndex.index}" class="form-control" value = "${room.pmsTypeChambreId}">
+                        <input type="hidden" class="form-control" value = "${room.mmcModeEncaissementId}" id="mmcModeEncaissementId_${myIndex.index}">
+                        <input type="hidden" class="form-control" value = "${room.mmcClientId}" id="mmcClientId_${myIndex.index}">
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-12 booking-cta">
@@ -182,7 +184,9 @@
                                 "qty": parseInt(room.qty),
                                 "pmsTarifGrilleDetailId": parseInt(room.pmsTarifGrilleDetailId),
                                 "pmsModelTarifId": parseInt(room.pmsModelTarifId),
-                                "base": parseInt(room.base)
+                                "base": parseInt(room.base),
+                                "mmcModeEncaissementId": parseInt(room.mmcModeEncaissementId),
+                                "mmcClientId": parseInt(room.mmcClientId)
                             });
                         }
                     });
@@ -214,7 +218,9 @@
                             "qty": parseInt($("#qty_" + currentIndex).val()),
                             "pmsTarifGrilleDetailId": parseInt($("#pmsTarifGrilleDetailId_" + currentIndex).html()),
                             "pmsModelTarifId": parseInt($("#pmsModelTarifId_" + currentIndex).html()),
-                            "base": parseInt($("#base_" + currentIndex).html())
+                            "base": parseInt($("#base_" + currentIndex).html()),
+                            "mmcModeEncaissementId": parseInt($("#mmcModeEncaissementId_" + currentIndex).val()),
+                            "mmcClientId": parseInt($("#mmcClientId_" + currentIndex).val())
                         });
                     }
                 }

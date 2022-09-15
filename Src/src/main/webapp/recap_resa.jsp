@@ -82,6 +82,10 @@
 
     var dateArrivee = new Date(listRoomObject.dateArrivee);
     var dateDepart = new Date(listRoomObject.dateDepart);
+    var today = new Date();
+    var month = today.getMonth() + 1;
+    var day = today.getDate();
+    var dateReglement = today.getFullYear()+ '-' +(month.toString().length > 1 ? month : "0" + month) + '-' +(day.toString().length > 1 ? day : "0" + day);
     var reservationTarif = {
                         "reservationTarif": []
                     };
@@ -90,7 +94,7 @@
         "ventilation": []
     };
 
-
+    var arrhesJson;
    
     jQuery(document).ready(function () {
         var nbPax = 0;
@@ -123,7 +127,7 @@
             }
             if(isExist == false){
                   ventilation.ventilation.push({
-                      "qteChb": room.qty,
+                      //"qteChb": room.qty,
                       "pmsTypeChambreId": room.roomTypeId
                   });
             }
@@ -132,6 +136,12 @@
             nbPax = nbPax + (parseInt(room.nbPax)*parseInt(room.qty));
             montantTTC = parseFloat(montantTTC)  + parseFloat(room.qty) * parseFloat(room.rate);
             recapitulationChambre = recapitulationChambre + "<div class='col-md-8'>" + room.qty + " x " + room.roomType + "</div>" + "<div class='col-md-4'><span>" + room.rate + "&euro;</span></div>";
+            arrhesJson = {
+                "mmcModeEncaissementId": room.mmcModeEncaissementId,
+                "mmcClientId": room.mmcClientId,
+                "dateReglement": dateReglement,
+                "montant": parseFloat(montantTTC) * parseFloat(night)
+            };
         });
 
         var ventilation_json = JSON.stringify(ventilation);
@@ -139,6 +149,9 @@
 
         var reservationTarif_json = JSON.stringify(reservationTarif);
         sessionStorage.setItem("reservationTarif_json", reservationTarif_json);
+        
+        var informationArrhes_json = JSON.stringify(arrhesJson);
+        sessionStorage.setItem("informationArrhes_json", informationArrhes_json);
 
         $("#name-user").html("#" + informationPersonObject.name);
         $("#date-id").html("du " + changeFormat(dateArrivee) + " au " + changeFormat(dateDepart));

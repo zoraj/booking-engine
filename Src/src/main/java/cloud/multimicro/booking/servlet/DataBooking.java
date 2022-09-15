@@ -26,6 +26,8 @@ public class DataBooking {
     private Integer pmsTarifGrilleDetailId;
     private List<String> listePhotoByRoomType;
     private Integer base;
+    private Integer mmcModeEncaissementId;
+    private Integer mmcClientId;
 
     public DataBooking() {
         
@@ -40,6 +42,8 @@ public class DataBooking {
         this.persMin = data.getPersMin();
         this.persMax = data.getPersMax();
         this.listePhotoByRoomType = data.getListePhotoByRoomType();
+        this.mmcModeEncaissementId = data.getMmcModeEncaissementId();
+        this.mmcClientId = data.getMmcClientId();
     }
     
     public Integer getPmsTypeChambreId() {
@@ -145,6 +149,22 @@ public class DataBooking {
 
     public void setBase(Integer base) {
         this.base = base;
+    }
+
+    public Integer getMmcModeEncaissementId() {
+        return mmcModeEncaissementId;
+    }
+
+    public void setMmcModeEncaissementId(Integer mmcModeEncaissementId) {
+        this.mmcModeEncaissementId = mmcModeEncaissementId;
+    }
+
+    public Integer getMmcClientId() {
+        return mmcClientId;
+    }
+
+    public void setMmcClientId(Integer mmcClientId) {
+        this.mmcClientId = mmcClientId;
     }
     
 }
