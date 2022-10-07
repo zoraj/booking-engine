@@ -9,7 +9,7 @@
         <%String attribut = (String) request.getAttribute("establishmentName");
             out.println(attribut);%> </label>
     <label id="publicApiKeyStripe"    name="publicApiKeyStripe" hidden> 
-        <%String publicKey = (String) request.getAttribute("publicApiKeyStripe");
+        <%String publicKey = (String) session.getAttribute("publicApiKeyStripe");
             out.println(publicKey);%> </label>
     <div id="booking" class="section">
         <div class="container">

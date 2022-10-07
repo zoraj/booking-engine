@@ -25,11 +25,7 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonArray;
-import javax.json.JsonNumber;
 import java.util.*;
-import java.math.BigDecimal;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.json.stream.JsonParsingException;
 import javax.servlet.http.HttpSession;
 
@@ -40,11 +36,7 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "Home", urlPatterns = {"/"})
 public class Home extends HttpServlet {
 
-    private static String apiKey;
-    private static String token;
-    private static String backgroundimage;
-    private String roomRequested;
-    private static String privateApiKeyStripe;
+    private String apiKey = null;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -83,26 +75,18 @@ public class Home extends HttpServlet {
 
         try {        
             apiKey = getApiKeyBySiteName(establishmentName);
-            JsonObject apikeyObject = stringToJsonObject(apiKey);
+            JsonObject apikeyObject = Util.stringToJsonObject(apiKey);
             apiKey = apikeyObject.getString("apiKey");
-            Home.setApiKey(apiKey);
+            session.setAttribute("api-key", apiKey);
         } catch (Exception ex) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
- 
-        privateApiKeyStripe = getSettingsStripePrivateKey();
-        JsonObject privateApikeyObject = stringToJsonObject(privateApiKeyStripe);
-        privateApiKeyStripe = privateApikeyObject.getString("valeur");
-        Home.setPrivateApiKeyStripe(privateApiKeyStripe);
         
         String publicApiKeyStripe = getSettingsStripePublicKey();
-        JsonObject publicApikeyObject = stringToJsonObject(publicApiKeyStripe);
+        JsonObject publicApikeyObject = Util.stringToJsonObject(publicApiKeyStripe);
         publicApiKeyStripe = publicApikeyObject.getString("valeur");
-        request.setAttribute("publicApiKeyStripe", publicApiKeyStripe);
-        //String backgroundImage = getBackGroundImage();
-        //JsonObject backgroundImageObject = stringToJsonObject(backgroundImage);
-        //Home.setBackgroundimage(backgroundImageObject.getString("valeur"));
-        //request.setAttribute("backgroundImage", backgroundImageObject.getString("valeur"));
+        session.setAttribute("publicApiKeyStripe", publicApiKeyStripe);
+
         processRequest(request, response);
 
     }
@@ -112,10 +96,7 @@ public class Home extends HttpServlet {
         ResteasyClient client = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = client.target(Util.getContextVar("e-api-url").concat(Constant.WS_GET_NAME_SITE + establishmentName));
         System.out.println("target_target" + target);
-        //System.out.println("Jwt.generateToken()"+Jwt.generateToken());
         String bearerToken = Jwt.generateToken();
-
-        Home.setToken(bearerToken);
         Response response = target.request().header("Authorization", "Bearer " + bearerToken).get();
         // Read output in string format
         if(response.getStatus()!= Response.Status.OK.getStatusCode()){
@@ -123,32 +104,6 @@ public class Home extends HttpServlet {
         }
         String value = response.readEntity(String.class);
         System.out.println("value : " + value);
-        response.close();
-        return value;
-    }
-
-    private static String getBackGroundImage() {
-        final String urlgetbackgroundimage = Util.getContextVar("api-url").concat(Constant.WS_GET_BACKGROUND_IMAGE);
-        ResteasyClient client = new ResteasyClientBuilder().build();
-        ResteasyWebTarget target = client.target(urlgetbackgroundimage);
-        String bearerToken = Jwt.generateToken();
-        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey)
-                .header("Authorization", "Bearer " + bearerToken).get();
-        // Read output in string format
-        String value = response.readEntity(String.class);
-        System.out.println("value Image retourné : " + value);
-        response.close();
-        return value;
-    }
-    
-    private String getSettingsStripePrivateKey() {
-        final String urlBooking = Util.getContextVar("api-url").concat(Constant.WS_GET_SETTINGS_STRIPE_PRIVATE_KEY);
-        String bearerToken = Jwt.generateToken();
-        ResteasyClient cuisson = new ResteasyClientBuilder().build();
-        ResteasyWebTarget target = cuisson.target(urlBooking);
-        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer " + bearerToken).get();
-        // Read output in string format
-        String value = response.readEntity(String.class);
         response.close();
         return value;
     }
@@ -215,6 +170,7 @@ public class Home extends HttpServlet {
                 dataBooking.setQteDispo(jsonLigne.getInt("qteDispo"));
                 dataBooking.setMmcModeEncaissementId(jsonLigne.getInt("mmcModeEncaissementId"));
                 dataBooking.setMmcClientId(jsonLigne.getInt("mmcClientId"));
+                dataBooking.setPmsTarifGrilleId(jsonLigne.getInt("pmsTarifGrilleId"));
                 
                 JsonArray jsonPhotoArray = jsonLigne.getJsonArray("roomPhoto");  
                 List<String> listPhoto = new ArrayList<String>(); 
@@ -254,13 +210,13 @@ public class Home extends HttpServlet {
             } else {
                 /*String message = "<span><h3 style = 'text-align: center;'>Désolé. Les tarif ne sont pas encore prêt pour ces dates.</h3></span>";
                 request.setAttribute("message", message);*/
-                request.setAttribute("backgroundImage", Home.getBackgroundimage());
+                //request.setAttribute("backgroundImage", Home.getBackgroundimage());
                 getServletConfig().getServletContext().getRequestDispatcher("/erreur_info.jsp").forward(request, response);
             }
         } else {
             /*String message = "<span><h3 style = 'text-align: center;'>Désolé. Aucune chambre disponible correspond à vos critères.</h3></span>";
             request.setAttribute("message", message);*/
-            request.setAttribute("backgroundImage", Home.getBackgroundimage());
+            //request.setAttribute("backgroundImage", Home.getBackgroundimage());
             getServletConfig().getServletContext().getRequestDispatcher("/erreur_tarif_info.jsp").forward(request, response);
 
         }
@@ -268,58 +224,17 @@ public class Home extends HttpServlet {
 
     private String postRoomAvailability(String availableString) {
         final String urlAvailability = Util.getContextVar("api-url").concat(Constant.WS_SEARCH_AVAILABILITY);
-        JsonObject availableObject = stringToJsonObject(availableString);
+        JsonObject availableObject = Util.stringToJsonObject(availableString);
         ResteasyClient client = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = client.target(urlAvailability);
         System.out.println(Entity.json(availableObject));
         String bearerToken = Jwt.generateToken();
-        String apiKey = Home.getApiKey();
         Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey)
                 .header("Authorization", "Bearer " + bearerToken).post(Entity.json(availableObject));
         // Read output in string format
         String value = response.readEntity(String.class);
-        System.out.println("value disponibilite  retourné : " + value);
         response.close();
         return value;
-    }
-
-    private static JsonObject stringToJsonObject(String jsonString) {
-        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
-        JsonObject object = jsonReader.readObject();
-        jsonReader.close();
-        return object;
-    }
-
-    public static String getApiKey() {
-        return apiKey;
-    }
-
-    public static void setApiKey(String value) {
-        apiKey = value;
-    }
-
-    public static String getToken() {
-        return token;
-    }
-
-    public static void setToken(String value) {
-        token = value;
-    }
-
-    public static String getBackgroundimage() {
-        return backgroundimage;
-    }
-
-    public static void setBackgroundimage(String value) {
-        backgroundimage = value;
-    }
-
-    public static String getPrivateApiKeyStripe() {
-        return privateApiKeyStripe;
-    }
-
-    public static void setPrivateApiKeyStripe(String value) {
-        privateApiKeyStripe = value;
     }
     
     /**

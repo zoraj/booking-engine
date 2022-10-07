@@ -5,6 +5,9 @@
  */
 package cloud.multimicro.booking.servlet;
 
+import cloud.multimicro.booking.util.Constant;
+import cloud.multimicro.booking.util.Jwt;
+import cloud.multimicro.booking.util.Util;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.stripe.Stripe;
@@ -15,12 +18,18 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+import javax.json.JsonObject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.ws.rs.core.Response;
 import org.jboss.logging.Logger;
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
+import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
 /**
  *
@@ -29,6 +38,7 @@ import org.jboss.logging.Logger;
 @WebServlet(name = "Checkout", urlPatterns = {"/create-payment-intent"})
 public class Checkout extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(Checkout.class);
+    private String apiKey = null;
     
     private static Gson gson = new Gson();
 
@@ -86,10 +96,15 @@ public class Checkout extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        apiKey = (String) session.getAttribute("api-key");
+        String montant = (String) session.getAttribute("montant");
+        String privateApiKeyStripe = getSettingsStripePrivateKey();
+        JsonObject privateApikeyObject = Util.stringToJsonObject(privateApiKeyStripe);
+        privateApiKeyStripe = privateApikeyObject.getString("valeur");
         try { 
             //Stripe.apiKey = "sk_test_51Kxp7TCm1ZvhCV0Apzl31cqHgsg3DIF8p9TOYKSw2EyvEpFcuEZ6rUJB1ltY4wnPl2FFe5AaFJsVoIhy9weE3g9v00YXIeb4pl";
-            Stripe.apiKey = Home.getPrivateApiKeyStripe();
-            String montant = Payment.getMontantTTC();
+            Stripe.apiKey = privateApiKeyStripe;
             int amount = Integer.parseInt(montant);
             //CreatePayment postBody = gson.fromJson(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())), CreatePayment.class);
             CreatePayment postBody = gson.fromJson("{\"items\":[{\"id\":\"xl-tshirt\"}]}", CreatePayment.class);
@@ -116,6 +131,18 @@ public class Checkout extends HttpServlet {
         } catch (StripeException ex) {
             LOGGER.info(ex);
         }
+    }
+    
+    private String getSettingsStripePrivateKey() {
+        final String urlBooking = Util.getContextVar("api-url").concat(Constant.WS_GET_SETTINGS_STRIPE_PRIVATE_KEY);
+        String bearerToken = Jwt.generateToken();
+        ResteasyClient cuisson = new ResteasyClientBuilder().build();
+        ResteasyWebTarget target = cuisson.target(urlBooking);
+        Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer " + bearerToken).get();
+        // Read output in string format
+        String value = response.readEntity(String.class);
+        response.close();
+        return value;
     }
 
     /**

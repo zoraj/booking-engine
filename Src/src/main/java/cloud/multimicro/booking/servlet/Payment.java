@@ -36,6 +36,7 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.naming.NamingException;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -59,61 +60,6 @@ public class Payment extends HttpServlet {
 
         getServletConfig().getServletContext().getRequestDispatcher("/payment.jsp").forward(request, response);
     }
-    
-    private static String montantTTC;
-    private static String recap;
-    private static JsonObject payloadReservation;
-    private static JsonObject payloadVentilation;
-    private static JsonObject payloadReservationTarif;
-    private static JsonObject depositJson;
-    
-    public static String getMontantTTC() {
-        return montantTTC;
-    }
-
-    public static void setMontantTTC(String value) {
-        montantTTC = value;
-    }
-
-    public static String getRecap() {
-        return recap;
-    }
-
-    public static void setRecap(String value) {
-        recap = value;
-    }
-    
-    public static JsonObject getDepositJson() {
-        return depositJson;
-    }
-
-    public static void setDepositJson(JsonObject value) {
-        depositJson = value;
-    }
-
-    public static JsonObject getPayloadReservation() {
-        return payloadReservation;
-    }
-
-    public static void setPayloadReservation(JsonObject value) {
-        payloadReservation = value;
-    }
-
-    public static JsonObject getPayloadVentilation() {
-        return payloadVentilation;
-    }
-
-    public static void setPayloadVentilation(JsonObject value) {
-        payloadVentilation = value;
-    }
-
-    public static JsonObject getPayloadReservationTarif() {
-        return payloadReservationTarif;
-    }
-
-    public static void setPayloadReservationTarif(JsonObject value) {
-        payloadReservationTarif = value;
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
     // + sign on the left to edit the code.">
@@ -128,7 +74,7 @@ public class Payment extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("backgroundImage", Home.getBackgroundimage());
+        //request.setAttribute("backgroundImage", Home.getBackgroundimage());
         processRequest(request, response);
     }
 
@@ -143,8 +89,9 @@ public class Payment extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
         String reservation = request.getParameter("reservation");
-        JsonObject reservationObject = Payment.stringToJsonObject(reservation);
+        JsonObject reservationObject = Util.stringToJsonObject(reservation);
         String nbChambre = reservationObject.get("nbChambre").toString();
         String nbPax = reservationObject.get("nbPax").toString();
         String nbEnfant = reservationObject.get("nbEnfant").toString();
@@ -165,28 +112,26 @@ public class Payment extends HttpServlet {
         String cartePaiementTitulaire = request.getParameter("carte-paiement-titulaire");
         String cartePaiementCVV = request.getParameter("carte-paiement-cvv");
         String ventilation = request.getParameter("ventilation");
-        JsonObject ventilationObject = Payment.stringToJsonObject(ventilation);
-        Payment.setPayloadVentilation(ventilationObject);
+        session.setAttribute("ventilation", ventilation);
         String informationRate = request.getParameter("informationRate");
-        JsonObject informationRateObject = Payment.stringToJsonObject(informationRate);
-        Payment.setPayloadReservationTarif(informationRateObject);
+        session.setAttribute("informationRate", informationRate);
         String observation = request.getParameter("observation");
+        String tarifGrille = request.getParameter("pmsTarifGrilleId");
         JsonObject payload = Json.createObjectBuilder().add("dateArrivee", reservationObject.getString("dateArrivee"))
                 .add("dateDepart", reservationObject.getString("dateDepart")).add("nomReservation", nomReservation)
                 .add("nbChambre", nbChambre).add("nbPax", nbPax).add("nbEnfant", nbEnfant)
-                .add("reservationType", "INDIV").add("pmsTarifGrilleId", 1).add("cardex", "").add("civilite", civilite)
+                .add("reservationType", "INDIV").add("pmsTarifGrilleId", tarifGrille).add("cardex", "").add("civilite", civilite)
                 .add("nationalite", pays).add("nom", nom).add("prenom", prenom).add("adresse1", adresse1)
                 .add("adresse2", adresse2).add("tel", telMobile).add("email", email).add("cp", codePostal)
                 .add("ville", ville).add("pays", pays).add("origine", "BOOKING").add("posteUuid", "_BOOKING_")
                 .add("observation", observation).build();
-        Payment.setPayloadReservation(payload);
+        session.setAttribute("reservation", payload);
         String amount = request.getParameter("montant");
-        Payment.setMontantTTC(amount);
+        session.setAttribute("montant", amount);
         String recap = request.getParameter("recapitulationChambre");
-        Payment.setRecap(recap);
+        session.setAttribute("recapitulationChambre", recap);
         String deposit = request.getParameter("deposit");
-        JsonObject depositObject = Payment.stringToJsonObject(deposit);
-        Payment.setDepositJson(depositObject);
+        session.setAttribute("deposit", deposit);
         
         response.sendRedirect(request.getContextPath() + "/checkout.jsp");
 
@@ -201,14 +146,5 @@ public class Payment extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    private static JsonObject stringToJsonObject(String jsonString) {
-        JsonObject object;
-        try (JsonReader jsonReader = Json.createReader(new StringReader(jsonString))) {
-            object = jsonReader.readObject();
-        }
-        return object;
-
-    }
 
 }

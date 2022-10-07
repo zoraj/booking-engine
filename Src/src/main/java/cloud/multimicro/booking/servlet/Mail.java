@@ -34,7 +34,7 @@ public class Mail extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String message = "<span><h2>thank you for your visit,</h2></span><span><h3>a summary email has been sent to you.</h3></span>";
         request.setAttribute("message", message);
-        request.setAttribute("backgroundImage", Home.getBackgroundimage());
+        //request.setAttribute("backgroundImage", Home.getBackgroundimage());
         getServletConfig().getServletContext().getRequestDispatcher("/info.jsp").forward(request, response);
     }
 
