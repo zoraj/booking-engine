@@ -7,6 +7,7 @@ package cloud.multimicro.booking.servlet;
 
 import cloud.multimicro.booking.util.Constant;
 import cloud.multimicro.booking.util.ContentMail;
+import cloud.multimicro.booking.util.Jwt;
 import cloud.multimicro.booking.util.Util;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -36,6 +37,7 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.naming.NamingException;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -44,6 +46,7 @@ import javax.naming.NamingException;
 @WebServlet(name = "Info", urlPatterns = {"/info"})
 public class Info extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(Info.class);
+    private String apiKey = null;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -70,31 +73,40 @@ public class Info extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        JsonObject payloadResa = Payment.getPayloadReservation();
-        Info.reservationCreation(payloadResa);
+        HttpSession session = request.getSession(false);
+        apiKey = (String) session.getAttribute("api-key");
+        String recap = (String) session.getAttribute("recapitulationChambre");
+        String montant = (String) session.getAttribute("montant");
+        JsonObject reservation = (JsonObject) session.getAttribute("reservation");
+        String deposit = (String) session.getAttribute("deposit");
+        String ventilation = (String) session.getAttribute("ventilation");
+        String informationRate = (String) session.getAttribute("informationRate");
+        
+        //GET RESERVATION
+        reservationCreation(reservation);
         //GET VENTILATION
-        JsonObject payloadVentilation = Payment.getPayloadVentilation();
+        JsonObject payloadVentilation = Util.stringToJsonObject(ventilation);
         //GET RESERVATION TARIF
-        JsonObject payloadReservationTarif = Payment.getPayloadReservationTarif();
+        JsonObject payloadReservationTarif = Util.stringToJsonObject(informationRate);
         //GET ARRHES
-        JsonObject depositObject = Payment.getDepositJson();
+        JsonObject depositObject = Util.stringToJsonObject(deposit);
         
         List<String> dataMailList = new ArrayList<String>();
-        dataMailList.add(payloadResa.getString("email"));
-        dataMailList.add(payloadResa.getString("nom"));
-        dataMailList.add(payloadResa.getString("nbPax"));
-        dataMailList.add(payloadResa.getString("dateArrivee"));
-        dataMailList.add(payloadResa.getString("dateDepart"));
-        dataMailList.add(Payment.getMontantTTC());
-        dataMailList.add(Payment.getRecap());
+        dataMailList.add(reservation.getString("email"));
+        dataMailList.add(reservation.getString("nom"));
+        dataMailList.add(reservation.getString("nbPax"));
+        dataMailList.add(reservation.getString("dateArrivee"));
+        dataMailList.add(reservation.getString("dateDepart"));
+        dataMailList.add(montant);
+        dataMailList.add(recap);
         try {
             boolean sended = this.sendMail(dataMailList);
             if (sended == true) {
                 /*String message = "<span><h2 style = 'text-align: center;'><b>Votre réservation a été pris en compte.</b></h2></span><span><h3 style = 'text-align: center;'><b>Un email de récapitulation vous sera envoyé.</b></h3></span>"; //
                 request.setAttribute("message", message);*/
-                Info.resaVentilationCreation(payloadVentilation);
-                Info.reservationTarifCreation(payloadReservationTarif);
-                Info.depositCreation(depositObject);
+                resaVentilationCreation(payloadVentilation);
+                reservationTarifCreation(payloadReservationTarif);
+                depositCreation(depositObject);
             }
 
         } catch (AddressException e) {
@@ -128,10 +140,9 @@ public class Info extends HttpServlet {
         processRequest(request, response);
     }
     
-    private static void reservationCreation(JsonObject resaJSONObject) {
+    private void reservationCreation(JsonObject resaJSONObject) {
         final String urlBooking = Util.getContextVar("api-url").concat(Constant.WS_CREATE_BOOKING);
-        String apiKey = Home.getApiKey();
-        String token = Home.getToken();
+        String token = Jwt.generateToken();
         ResteasyClient reservation = new ResteasyClientBuilder().build();
         ResteasyWebTarget targetResa = reservation.target(urlBooking);
         Response response = targetResa.request().header("Content-Type", "application/json").header("x-api-key", apiKey)
@@ -142,11 +153,9 @@ public class Info extends HttpServlet {
         response.close();
     }
     
-    private static void resaVentilationCreation(JsonObject resaJSONObject) {
+    private void resaVentilationCreation(JsonObject resaJSONObject) {
         final String urlVentilation = Util.getContextVar("api-url").concat(Constant.WS_CREATE_BOOKING_VENTILATION);
-        String apiKey = Home.getApiKey();
-        String token = Home.getToken();
-        System.out.println("resaVentilationCreation apiKey** : " + apiKey);
+        String token = Jwt.generateToken();
         ResteasyClient reservation = new ResteasyClientBuilder().build();
         ResteasyWebTarget targetResa = reservation.target(urlVentilation);
         Response response = targetResa.request().header("Content-Type", "application/json").header("x-api-key", apiKey)
@@ -157,10 +166,9 @@ public class Info extends HttpServlet {
         response.close();
     }
     
-    private static void reservationTarifCreation(JsonObject resaJSONObject) {
+    private void reservationTarifCreation(JsonObject resaJSONObject) {
         final String urlVentilation = Util.getContextVar("api-url").concat(Constant.WS_CREATE_BOOKING_RATE);
-        String apiKey = Home.getApiKey();
-        String token = Home.getToken();
+        String token = Jwt.generateToken();
         ResteasyClient reservation = new ResteasyClientBuilder().build();
         ResteasyWebTarget targetResa = reservation.target(urlVentilation);
         Response response = targetResa.request().header("Content-Type", "application/json").header("x-api-key", apiKey)
@@ -171,10 +179,9 @@ public class Info extends HttpServlet {
         response.close();
     }
     
-    private static void depositCreation(JsonObject resaJSONObject) {
+    private void depositCreation(JsonObject resaJSONObject) {
         final String urlDeposit = Util.getContextVar("api-url").concat(Constant.WS_CREATE_BOOKING_DEPOSIT);
-        String apiKey = Home.getApiKey();
-        String token = Home.getToken();
+        String token = Jwt.generateToken();
         ResteasyClient reservation = new ResteasyClientBuilder().build();
         ResteasyWebTarget targetResa = reservation.target(urlDeposit);
         Response response = targetResa.request().header("Content-Type", "application/json").header("x-api-key", apiKey)
@@ -187,8 +194,7 @@ public class Info extends HttpServlet {
     
     private String getSettingsByBookingHeader() {
         final String urlBooking = Util.getContextVar("api-url").concat(Constant.WS_GET_SETTINGS_BOOKING_HEADER);
-        String apiKey = Home.getApiKey();
-        String token = Home.getToken();
+        String token = Jwt.generateToken();
         ResteasyClient cuisson = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = cuisson.target(urlBooking);
         Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer " + token).get();
@@ -200,8 +206,7 @@ public class Info extends HttpServlet {
 
     private String getSettingsByBookingDetail() {
         final String urlBooking = Util.getContextVar("api-url").concat(Constant.WS_GET_SETTINGS_BOOKING_DETAIL);
-        String apiKey = Home.getApiKey();
-        String token = Home.getToken();
+        String token = Jwt.generateToken();
         ResteasyClient cuisson = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = cuisson.target(urlBooking);
         Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer " + token).get();
@@ -213,8 +218,7 @@ public class Info extends HttpServlet {
 
     private String getSettingsByBookingFooter() {
         final String urlBooking = Util.getContextVar("api-url").concat(Constant.WS_GET_SETTINGS_BOOKING_FOOTER);
-        String apiKey = Home.getApiKey();
-        String token = Home.getToken();
+        String token = Jwt.generateToken();
         ResteasyClient cuisson = new ResteasyClientBuilder().build();
         ResteasyWebTarget target = cuisson.target(urlBooking);
         Response response = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer " + token).get();
@@ -241,15 +245,15 @@ public class Info extends HttpServlet {
         String mailContent = ContentMail.MMC_MAIL_DETAIL;
 
         String bookingHeader = getSettingsByBookingHeader();
-        JsonObject getSettingsByBookingHeaderObject = stringToJsonObject(bookingHeader);
+        JsonObject getSettingsByBookingHeaderObject = Util.stringToJsonObject(bookingHeader);
         bookingHeader = getSettingsByBookingHeaderObject.getString("valeur");
 
         String bookingDetail = getSettingsByBookingDetail();
-        JsonObject getSettingsByBookingDetailObject = stringToJsonObject(bookingDetail);
+        JsonObject getSettingsByBookingDetailObject = Util.stringToJsonObject(bookingDetail);
         bookingDetail = getSettingsByBookingDetailObject.getString("valeur");
 
         String bookingFooter = getSettingsByBookingFooter();
-        JsonObject getSettingsByBookingFooterObject = stringToJsonObject(bookingFooter);
+        JsonObject getSettingsByBookingFooterObject = Util.stringToJsonObject(bookingFooter);
         bookingFooter = getSettingsByBookingFooterObject.getString("valeur");
 
         mailContent = mailContent.replace("{booking-url}", bookingUrl);
@@ -267,15 +271,6 @@ public class Info extends HttpServlet {
         mimeMessage.setContent(mailContent, "text/html; charset=UTF-8");
         Transport.send(mimeMessage);
         return true;
-    }
-    
-    private static JsonObject stringToJsonObject(String jsonString) {
-        JsonObject object;
-        try (JsonReader jsonReader = Json.createReader(new StringReader(jsonString))) {
-            object = jsonReader.readObject();
-        }
-        return object;
-
     }
 
     /**

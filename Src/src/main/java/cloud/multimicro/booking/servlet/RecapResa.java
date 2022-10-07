@@ -30,7 +30,7 @@ public class RecapResa extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setAttribute("backgroundImage", Home.getBackgroundimage());
+        //request.setAttribute("backgroundImage", Home.getBackgroundimage());
         getServletConfig().getServletContext().getRequestDispatcher("/recap_resa.jsp").forward(request, response);
     }
 

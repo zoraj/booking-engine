@@ -6,6 +6,10 @@
 
 package cloud.multimicro.booking.util;
 
+import java.io.StringReader;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -41,7 +45,14 @@ public class Util {
             //todo: handle exception
         }
         return result;
-   }
+    }
+    
+    public static JsonObject stringToJsonObject(String jsonString) {
+        JsonReader jsonReader = Json.createReader(new StringReader(jsonString));
+        JsonObject object = jsonReader.readObject();
+        jsonReader.close();
+        return object;
+    }    
 }
 
 

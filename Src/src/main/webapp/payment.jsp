@@ -358,6 +358,7 @@
                                                 <input type="hidden" id="informationRate" name="informationRate">
                                                 <input type="hidden" id="recapitulationChambre" name="recapitulationChambre">
                                                 <input type="hidden" id="deposit" name="deposit">
+                                                <input type="hidden" id="pmsTarifGrilleId" name="pmsTarifGrilleId">
                                             </div>
                                         </div><br>
                                         <div class="row">
@@ -447,6 +448,7 @@
                                                     var nbEnfant = 0;
                                                     var qteChb = 0;
                                                     var night = dateDiff(dateArrivee,dateDepart);
+                                                    var tarifGrille = 0;
 
                                                     recapObject.bookRoom.forEach(function (room) {
                                                         nbPax = parseInt(nbPax) + (parseInt(room.nbPax) * parseInt(room.qty));
@@ -454,6 +456,7 @@
                                                         recapitulationChambre = recapitulationChambre + room.qty + " x " + room.roomType + ";";
                                                         qteChb = parseInt(qteChb) + parseInt(room.qty);
                                                         nbEnfant = parseInt(nbEnfant) + (parseInt(room.nbChild) * parseInt(room.qty));
+                                                        tarifGrille = parseInt(room.pmsTarifGrilleId);
                                                     });
 
                                                     // création de json reservation
@@ -504,6 +507,7 @@
                                                         $("#informationRate").val(informationRate);
                                                         $("#recapitulationChambre").val(recapitulationChambre);
                                                         $("#deposit").val(depositObject);
+                                                        $("#pmsTarifGrilleId").val(tarifGrille);
                                                         function changeFormat(date) {
                                                             options = {
                                                                 weekday: "short", year: 'numeric', month: 'long', day: 'numeric'

@@ -28,6 +28,7 @@ public class DataBooking {
     private Integer base;
     private Integer mmcModeEncaissementId;
     private Integer mmcClientId;
+    private Integer pmsTarifGrilleId;
 
     public DataBooking() {
         
@@ -44,6 +45,7 @@ public class DataBooking {
         this.listePhotoByRoomType = data.getListePhotoByRoomType();
         this.mmcModeEncaissementId = data.getMmcModeEncaissementId();
         this.mmcClientId = data.getMmcClientId();
+        this.pmsTarifGrilleId = data.getPmsTarifGrilleId();
     }
     
     public Integer getPmsTypeChambreId() {
@@ -165,6 +167,14 @@ public class DataBooking {
 
     public void setMmcClientId(Integer mmcClientId) {
         this.mmcClientId = mmcClientId;
+    }
+
+    public Integer getPmsTarifGrilleId() {
+        return pmsTarifGrilleId;
+    }
+
+    public void setPmsTarifGrilleId(Integer pmsTarifGrilleId) {
+        this.pmsTarifGrilleId = pmsTarifGrilleId;
     }
     
 }

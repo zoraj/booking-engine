@@ -25,6 +25,7 @@
                         <input type="hidden" id="room_type_id_${myIndex.index}" class="form-control" value = "${room.pmsTypeChambreId}">
                         <input type="hidden" class="form-control" value = "${room.mmcModeEncaissementId}" id="mmcModeEncaissementId_${myIndex.index}">
                         <input type="hidden" class="form-control" value = "${room.mmcClientId}" id="mmcClientId_${myIndex.index}">
+                        <input type="hidden" class="form-control" value = "${room.pmsTarifGrilleId}" id="pmsTarifGrilleId_${myIndex.index}">
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-12 booking-cta">
@@ -220,7 +221,8 @@
                             "pmsModelTarifId": parseInt($("#pmsModelTarifId_" + currentIndex).html()),
                             "base": parseInt($("#base_" + currentIndex).html()),
                             "mmcModeEncaissementId": parseInt($("#mmcModeEncaissementId_" + currentIndex).val()),
-                            "mmcClientId": parseInt($("#mmcClientId_" + currentIndex).val())
+                            "mmcClientId": parseInt($("#mmcClientId_" + currentIndex).val()),
+                            "pmsTarifGrilleId": parseInt($("#pmsTarifGrilleId_" + currentIndex).val())
                         });
                     }
                 }
