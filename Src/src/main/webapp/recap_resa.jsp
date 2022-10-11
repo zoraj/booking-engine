@@ -113,7 +113,7 @@
                  "nbEnf":room.nbChild,
                  "dateDebut":listRoomObject.dateArrivee,
                  "dateFin":listRoomObject.dateDepart,
-                 "pmsModelTarifId":room.pmsModelTarifId,
+                 "pmsTarifGrilleDetailId":room.pmsTarifGrilleDetailId,
                  "base":room.base
             });
             if(ventilation.ventilation.length>0){
