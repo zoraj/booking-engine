@@ -1,8 +1,8 @@
 target/**
-.project
-.settings/
-.classpath
-.factorypath
+Src/.project
+Src/.settings/
+Src/.classpath
+Src/.factorypath
 # Java class files
 *.class
 nb-configuration.xml
@@ -12,8 +12,5 @@ nb-configuration.xml
 /target/
 src/main/webapp/WEB-INF/web.develop.xml
 src/main/webapp/WEB-INF/web.pre.prod.xml
-src/main/webapp/WEB-INF/web.prod.a.template.xml
-src/main/webapp/WEB-INF/web.prod.a.node.a.xml
-src/main/webapp/WEB-INF/web.prod.a.node.b.xml
-src/main/webapp/WEB-INF/web.prod.b.node.a.xml
-src/main/webapp/WEB-INF/web.prod.b.node.b.xml
+src/main/webapp/WEB-INF/web.prod.a.xml
+src/main/webapp/WEB-INF/web.prod.b.xml

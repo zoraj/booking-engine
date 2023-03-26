@@ -1,5 +1,12 @@
 target/**
-
+.project
+.settings/
+.classpath
+.factorypath
+# Java class files
+*.class
+Src/.idea
+*.iml
 # Java class files
 *.class
 /target/
