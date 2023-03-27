@@ -1,5 +1,6 @@
-target/**
+Src/target/**
 Src/.project
+Src/.settings/**
 Src/.settings/
 Src/.classpath
 Src/.factorypath
@@ -10,7 +11,7 @@ nb-configuration.xml
 *.iml
 *.bak
 /target/
-src/main/webapp/WEB-INF/web.develop.xml
-src/main/webapp/WEB-INF/web.pre.prod.xml
-src/main/webapp/WEB-INF/web.prod.a.xml
-src/main/webapp/WEB-INF/web.prod.b.xml
+Src/src/main/webapp/WEB-INF/web.develop.xml
+Src/src/main/webapp/WEB-INF/web.pre.prod.xml
+Src/src/main/webapp/WEB-INF/web.prod.a.xml
+Src/src/main/webapp/WEB-INF/web.prod.b.xml
