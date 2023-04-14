@@ -105,13 +105,13 @@ public class Checkout extends HttpServlet {
         try { 
             //Stripe.apiKey = "sk_test_51Kxp7TCm1ZvhCV0Apzl31cqHgsg3DIF8p9TOYKSw2EyvEpFcuEZ6rUJB1ltY4wnPl2FFe5AaFJsVoIhy9weE3g9v00YXIeb4pl";
             Stripe.apiKey = privateApiKeyStripe;
-            int amount = Integer.parseInt(montant);
+            double amount = Double.parseDouble(montant);
             //CreatePayment postBody = gson.fromJson(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())), CreatePayment.class);
             CreatePayment postBody = gson.fromJson("{\"items\":[{\"id\":\"xl-tshirt\"}]}", CreatePayment.class);
-            int sumAmount = (amount * 100) + calculateOrderAmount(postBody.getItems());
+            double sumAmount = (amount * 100) + calculateOrderAmount(postBody.getItems());
             PaymentIntentCreateParams params =
                     PaymentIntentCreateParams.builder()
-                            .setAmount(new Long(sumAmount))
+                            .setAmount(Double.valueOf(sumAmount).longValue())
                             .setCurrency("usd")
                             .setAutomaticPaymentMethods(
                                     PaymentIntentCreateParams.AutomaticPaymentMethods

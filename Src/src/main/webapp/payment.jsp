@@ -364,7 +364,7 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <div class="form-group">
-                                                    
+                                                    <input type="hidden" id="codepromo" name="codepromo" />
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -391,155 +391,158 @@
     </div>
     <script src="./assets/js/jquery.min.js"></script>
     <script>
-                                                //lecture liste des chambre 
-                                                var cartePaymentType = "MASTERCARD";
+        //lecture liste des chambre 
+        var cartePaymentType = "MASTERCARD";
 
-                                                var listRoom = sessionStorage.getItem("roomList_json");
+        var listRoom = sessionStorage.getItem("roomList_json");
 
-                                                var informationNoteVentilation = sessionStorage.getItem("informationNoteVentilation_json");
-                                                var informationNoteVentilationObject = JSON.parse(informationNoteVentilation);
-                                                var informationVentilation = sessionStorage.getItem("ventilation_json");
-                                                var informationRate = sessionStorage.getItem("reservationTarif_json");
-                                                var listRoomObject = JSON.parse(listRoom);
-                                                var recapJson = sessionStorage.getItem("informationTypeRooms_json");
-                                                var recapObject = JSON.parse(recapJson);
-                                                var informationPersonJson = sessionStorage.getItem("informationPerson_json");
-                                                var informationPersonObject = JSON.parse(informationPersonJson);
-                                                var depositObject = sessionStorage.getItem("informationArrhes_json");
-                                                var dateArrivee = new Date(listRoomObject.dateArrivee);
-                                                var dateDepart = new Date(listRoomObject.dateDepart);
-                                                $('.form-control').each(function () {
-                                                    floatedLabel($(this));
-                                                });
-                                                $('.form-control').on('input', function () {
-                                                    floatedLabel($(this));
-                                                });
-                                                function floatedLabel(input) {
-                                                    var $field = input.closest('.form-group');
-                                                    if (input.val()) {
-                                                        $field.addClass('input-not-empty');
-                                                    } else {
-                                                        $field.removeClass('input-not-empty');
-                                                    }
-                                                }
-                                                function getYear(number) {
-                                                    let ladate = new Date();
-                                                    return ladate.getFullYear() + number;
+        var informationNoteVentilation = sessionStorage.getItem("informationNoteVentilation_json");
+        var informationNoteVentilationObject = JSON.parse(informationNoteVentilation);
+        var informationVentilation = sessionStorage.getItem("ventilation_json");
+        var informationRate = sessionStorage.getItem("reservationTarif_json");
+        var listRoomObject = JSON.parse(listRoom);
+        var recapJson = sessionStorage.getItem("informationTypeRooms_json");
+        var recapObject = JSON.parse(recapJson);
+        var informationPersonJson = sessionStorage.getItem("informationPerson_json");
+        var informationPersonObject = JSON.parse(informationPersonJson);
+        var depositObject = sessionStorage.getItem("informationArrhes_json");
+        var dateArrivee = new Date(listRoomObject.dateArrivee);
+        var dateDepart = new Date(listRoomObject.dateDepart);
+        $('.form-control').each(function () {
+            floatedLabel($(this));
+        });
+        $('.form-control').on('input', function () {
+            floatedLabel($(this));
+        });
+        function floatedLabel(input) {
+            var $field = input.closest('.form-group');
+            if (input.val()) {
+                $field.addClass('input-not-empty');
+            } else {
+                $field.removeClass('input-not-empty');
+            }
+        }
+        function getYear(number) {
+            let ladate = new Date();
+            return ladate.getFullYear() + number;
 
-                                                }
+        }
 
+        function afficherAnnee() {
+            $("#yearId").html(
+                    '<option value="' + getYear(0) + '">' + getYear(0) + '</option>' +
+                    '<option value="' + getYear(1) + '">' + getYear(1) + '</option>' +
+                    '<option value="' + getYear(2) + '">' + getYear(2) + '</option>' +
+                    '<option value="' + getYear(3) + '">' + getYear(3) + '</option>' +
+                    '<option value="' + getYear(4) + '">' + getYear(4) + '</option>' +
+                    '<option value="' + getYear(5) + '">' + getYear(5) + '</option>'
+                    );
+        }
+        
+        jQuery(document).ready(function () {
+            
+            $("#carte-paiement-type").val(cartePaymentType);
+            var nbPax = 0;
+            var montantTTC = 0;
+            var recapitulationChambre = "";
+            var nbEnfant = 0;
+            var qteChb = 0;
+            var night = dateDiff(dateArrivee,dateDepart);
+            var tarifGrille = 0;
 
+            recapObject.bookRoom.forEach(function (room) {
+                nbPax = parseInt(nbPax) + (parseInt(room.nbPax) * parseInt(room.qty));
+                montantTTC = parseFloat(montantTTC) + parseFloat(room.qty) * parseFloat(room.rate);
+                recapitulationChambre = recapitulationChambre + room.qty + " x " + room.roomType + ";";
+                qteChb = parseInt(qteChb) + parseInt(room.qty);
+                nbEnfant = parseInt(nbEnfant) + (parseInt(room.nbChild) * parseInt(room.qty));
+                tarifGrille = parseInt(room.pmsTarifGrilleId);
+            });
 
-                                                function afficherAnnee() {
-                                                    $("#yearId").html(
-                                                            '<option value="' + getYear(0) + '">' + getYear(0) + '</option>' +
-                                                            '<option value="' + getYear(1) + '">' + getYear(1) + '</option>' +
-                                                            '<option value="' + getYear(2) + '">' + getYear(2) + '</option>' +
-                                                            '<option value="' + getYear(3) + '">' + getYear(3) + '</option>' +
-                                                            '<option value="' + getYear(4) + '">' + getYear(4) + '</option>' +
-                                                            '<option value="' + getYear(5) + '">' + getYear(5) + '</option>'
-                                                            );
-                                                }
-                                                jQuery(document).ready(function () {
-                                                    $("#carte-paiement-type").val(cartePaymentType);
-                                                    var nbPax = 0;
-                                                    var montantTTC = 0;
-                                                    var recapitulationChambre = "";
-                                                    var nbEnfant = 0;
-                                                    var qteChb = 0;
-                                                    var night = dateDiff(dateArrivee,dateDepart);
-                                                    var tarifGrille = 0;
+            // création de json reservation
+            var reservationJson = {
+                "dateArrivee": listRoomObject.dateArrivee,
+                "dateDepart": listRoomObject.dateDepart,
+                "nbPax": nbPax,
+                "nbChambre": qteChb,
+                "nbEnfant": nbEnfant,
+                "reservationType": "INDIV",
+                "posteUuid": "1000",
+                "origine": "BOOKING"
+            };
 
-                                                    recapObject.bookRoom.forEach(function (room) {
-                                                        nbPax = parseInt(nbPax) + (parseInt(room.nbPax) * parseInt(room.qty));
-                                                        montantTTC = parseFloat(montantTTC) + parseFloat(room.qty) * parseFloat(room.rate);
-                                                        recapitulationChambre = recapitulationChambre + room.qty + " x " + room.roomType + ";";
-                                                        qteChb = parseInt(qteChb) + parseInt(room.qty);
-                                                        nbEnfant = parseInt(nbEnfant) + (parseInt(room.nbChild) * parseInt(room.qty));
-                                                        tarifGrille = parseInt(room.pmsTarifGrilleId);
-                                                    });
+            // Affichage de montant ttc
+            $("#amountId").html(montantTTC + " " + sessionStorage.getItem("devisePpalSymbole"));
+            //initialisation
+            $("#masterCardId").prop('checked', true);
+            $("#visaId").prop('checked', false);
+            //si on click sur masterCard
+            $('#masterCardId').click(function () {
+                if ($('#masterCardId').is(':checked') === true) {
+                    $("#visaId").prop('checked', false);
+                    cartePaymentType = "MASTERCARD";
+                    $("#carte-paiement-type").val(cartePaymentType);
+                }
+            });
+            //si on click sur VISA
+            $('#visaId').click(function () {
+                if ($('#visaId').is(':checked') === true) {
+                    $("#masterCardId").prop('checked', false);
+                    cartePaymentType = "VISA";
+                    $("#carte-paiement-type").val(cartePaymentType);
+                }
+            });
 
-                                                    // création de json reservation
-                                                    var reservationJson = {
-                                                        "dateArrivee": listRoomObject.dateArrivee,
-                                                        "dateDepart": listRoomObject.dateDepart,
-                                                        "nbPax": nbPax,
-                                                        "nbChambre": qteChb,
-                                                        "nbEnfant": nbEnfant,
-                                                        "reservationType": "INDIV",
-                                                        "posteUuid": "1000",
-                                                        "origine": "BOOKING"
-                                                    };
+            var montantTotal = parseFloat(montantTTC) * parseFloat(night);
+            // Validation de paiment
+            $('#validateId').click(function () {
+                //$("#mounthId").get(0).setCustomValidity("");
+                $("#reservation").val(JSON.stringify(reservationJson));
+                $("#adults").val(nbPax);
+                $("#montant").val(sessionStorage.getItem("montantTotalTtcAvecRemisePromo") == null ? montantTotal : sessionStorage.getItem("montantTotalTtcAvecRemisePromo"));
+                $("#carte-paiement-type").val(cartePaymentType);
+                $("#dateArrivee").val(changeFormat(dateArrivee));
+                $("#dateDepart").val(changeFormat(dateDepart));
+                $("#ventillation").val(informationVentilation);
+                $("#informationRate").val(informationRate);
+                $("#recapitulationChambre").val(recapitulationChambre);
+                $("#deposit").val(depositObject);
+                $("#pmsTarifGrilleId").val(tarifGrille);
+                let codePromoObj = JSON.parse(sessionStorage.getItem("codepromoObjStr"));
+                $("#codepromo").val(codePromoObj.code);
+                function changeFormat(date) {
+                    options = {
+                        weekday: "short", year: 'numeric', month: 'long', day: 'numeric'
+                    };
+                    return date.toLocaleString('fr-FR', options);
+                }
+            });
 
-                                                    // Affichage de montant ttc
-                                                    $("#amountId").html(montantTTC + " &euro;");
-                                                    //initialisation
-                                                    $("#masterCardId").prop('checked', true);
-                                                    $("#visaId").prop('checked', false);
-                                                    //si on click sur masterCard
-                                                    $('#masterCardId').click(function () {
-                                                        if ($('#masterCardId').is(':checked') === true) {
-                                                            $("#visaId").prop('checked', false);
-                                                            cartePaymentType = "MASTERCARD";
-                                                            $("#carte-paiement-type").val(cartePaymentType);
-                                                        }
-                                                    });
-                                                    //si on click sur VISA
-                                                    $('#visaId').click(function () {
-                                                        if ($('#visaId').is(':checked') === true) {
-                                                            $("#masterCardId").prop('checked', false);
-                                                            cartePaymentType = "VISA";
-                                                            $("#carte-paiement-type").val(cartePaymentType);
-                                                        }
-                                                    });
-                                                    
-                                                    var montantTotal = parseFloat(montantTTC) * parseFloat(night);
-                                                    // Validation de paiment
-                                                    $('#validateId').click(function () {
-                                                        //$("#mounthId").get(0).setCustomValidity("");
-                                                        $("#reservation").val(JSON.stringify(reservationJson));
-                                                        $("#adults").val(nbPax);
-                                                        $("#montant").val(montantTotal);
-                                                        $("#carte-paiement-type").val(cartePaymentType);
-                                                        $("#dateArrivee").val(changeFormat(dateArrivee));
-                                                        $("#dateDepart").val(changeFormat(dateDepart));
-                                                        $("#ventillation").val(informationVentilation);
-                                                        $("#informationRate").val(informationRate);
-                                                        $("#recapitulationChambre").val(recapitulationChambre);
-                                                        $("#deposit").val(depositObject);
-                                                        $("#pmsTarifGrilleId").val(tarifGrille);
-                                                        function changeFormat(date) {
-                                                            options = {
-                                                                weekday: "short", year: 'numeric', month: 'long', day: 'numeric'
-                                                            };
-                                                            return date.toLocaleString('fr-FR', options);
-                                                        }
-                                                    });
-                                                    
-                                                    function dateDiff(date1, date2) {
-                                                        var diff = {}                           // Initialisation du retour
-                                                        var tmp = date2 - date1;
+            function dateDiff(date1, date2) {
+                
+                var diff = {}                           // Initialisation du retour
+                var tmp = date2 - date1;
 
-                                                        tmp = Math.floor(tmp / 1000);             // Nombre de secondes entre les 2 dates
-                                                        diff.sec = tmp % 60;                    // Extraction du nombre de secondes
+                tmp = Math.floor(tmp / 1000);             // Nombre de secondes entre les 2 dates
+                diff.sec = tmp % 60;                    // Extraction du nombre de secondes
 
-                                                        tmp = Math.floor((tmp - diff.sec) / 60);    // Nombre de minutes (partie enti�re)
-                                                        diff.min = tmp % 60;                    // Extraction du nombre de minutes
+                tmp = Math.floor((tmp - diff.sec) / 60);    // Nombre de minutes (partie enti�re)
+                diff.min = tmp % 60;                    // Extraction du nombre de minutes
 
-                                                        tmp = Math.floor((tmp - diff.min) / 60);    // Nombre d'heures (enti�res)
-                                                        diff.hour = tmp % 24;                   // Extraction du nombre d'heures
+                tmp = Math.floor((tmp - diff.min) / 60);    // Nombre d'heures (enti�res)
+                diff.hour = tmp % 24;                   // Extraction du nombre d'heures
 
-                                                        tmp = Math.floor((tmp - diff.hour) / 24);   // Nombre de jours restants
-                                                        diff.day = tmp;
+                tmp = Math.floor((tmp - diff.hour) / 24);   // Nombre de jours restants
+                diff.day = tmp;
 
-                                                        return tmp;
-                                                    }
+                return tmp;
+            }
 
-                                                });
+        });
 
-                                                //var t = new Date();
-                                                //document.getElementById("mounthId").selectedIndex = t.getMonth();
-                                                sessionStorage.setItem("mainPage", document.getElementById('mainPage').innerHTML);
-                                                sessionStorage.setItem("reservTaken", document.getElementById('reservTaken').innerHTML);
-                                                sessionStorage.setItem("summaryEmail", document.getElementById('summaryEmail').innerHTML);
+        //var t = new Date();
+        //document.getElementById("mounthId").selectedIndex = t.getMonth();
+        sessionStorage.setItem("mainPage", document.getElementById('mainPage').innerHTML);
+        sessionStorage.setItem("reservTaken", document.getElementById('reservTaken').innerHTML);
+        sessionStorage.setItem("summaryEmail", document.getElementById('summaryEmail').innerHTML);
     </script>

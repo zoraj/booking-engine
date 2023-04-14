@@ -17,6 +17,15 @@
 <body style = "background-image: url('assets/img/background.jpg');">
 <div id="booking">
     <div class="container">
+        <c:if test="${empty codepromoObjStr}">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12 booking-cta">
+                        <span style="color:red;font-style: italic;font-size: 19px;"><fmt:message key="COMMON.BOOKING.PROMOCODE.CODEPROMO.MSG.INVALID"/></span>
+                    </div>
+                </div>
+            </div>
+        </c:if>
         <div class="row">
             <div class="col-md-12 col-xs-12">
                 <c:forEach var="room" items="${listRooms}" varStatus="myIndex">
@@ -82,7 +91,7 @@
                                 <div class="col-md-4 col-xs-12">
                                     <p>${room.typeTarifLibelle}</p>
                                     <p>
-                                        <span style="font-size:30px; font-weight:bolder"> <label id="rate_${myIndex.index}">${room.amount}</label>&euro;</span>
+                                        <span style="font-size:30px; font-weight:bolder"> <label id="rate_${myIndex.index}">${room.amount}</label><label class="lib_devise"></label></span>
                                         <span style="font-size:15px;"> <fmt:message key="BOOKING.PER.NIGHT"/></span>
                                     </p>	
                                     <form class="form-input">
@@ -147,6 +156,15 @@
     }
 
     $(document).ready(function() {
+        
+        sessionStorage.setItem("devisePpalSymbole", "${devisePpalSymbole}");
+        $(".lib_devise").html(sessionStorage.getItem("devisePpalSymbole"));
+        
+        let codepromoObjStr = '${codepromoObjStr}';
+        if (codepromoObjStr != "") {
+            sessionStorage.setItem("codepromoObjStr", codepromoObjStr);
+        }
+        
         // Activate Carousel
         $(".myCarousel").carousel();
         // Enable Carousel Controls
