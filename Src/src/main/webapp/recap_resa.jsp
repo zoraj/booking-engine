@@ -47,10 +47,18 @@
                                     <div class="col-md-8 font-title"><span><fmt:message key="BOOKING.TOTAL.TVA"/></span></div>
                                     <div class="col-md-4 font-title"><span id="tva-id"></span></div>
                                 </div><!--hr-->
+                                
+                                <div id="block_remise" class="row" style="display: none;">
+                                    <div class="col-md-8 font-title"><span><fmt:message key="COMMON.BOOKING.PROMOCODE.REMISE.PROMO"/></span></div>
+                                    <div class="col-md-4 font-title"><span id="valeur_remise"></span></div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-8 font-title"><span><fmt:message key="BOOKING.PRICE.TTC"/></span></div>
-                                    <div class="col-md-4 font-title"><span id="total-id">$135</span></div>
+                                    <div class="col-md-4 font-title"><span id="total-id"></span></div>
                                 </div><hr>
+                                <div id="code_promo_invalide_msg" class="row" style="display: none;">
+                                    <div class="col-md-12"><span style="color:red;font-style: italic;font-size: 17px;"><fmt:message key="COMMON.BOOKING.PROMOCODE.CODEPROMO.MSG.INVALID"/></span></div>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -95,8 +103,24 @@
     };
 
     var arrhesJson;
+    
+    function calculerEtAfficherRemisePromotionnel(montantTotal, codePromoObj) {
+        let typeRemise = codePromoObj.typeRemise;
+        let montant = 0;
+        if (typeRemise == "POURCENTAGE") {
+            $("#valeur_remise").html(codePromoObj.valeur.toString().concat("&percnt;"));
+            montant = montantTotal - ( montantTotal * ( codePromoObj.valeur / 100 ) );
+        }
+        else if (typeRemise == "FIXE") {
+            $("#valeur_remise").html(codePromoObj.valeur.toString().concat(sessionStorage.getItem("devisePpalSymbole")));
+            montant = montantTotal - codePromoObj.valeur;
+        }
+        $("#total-id").html(montant.toString().concat(sessionStorage.getItem("devisePpalSymbole")));
+        sessionStorage.setItem("montantTotalTtcAvecRemisePromo", montant.toString());
+    }
    
     jQuery(document).ready(function () {
+        
         var nbPax = 0;
         var childs = 0;
         var montantTTC = 0;
@@ -135,7 +159,7 @@
             childs = childs + (parseInt(room.nbChild)*parseInt(room.qty));
             nbPax = nbPax + (parseInt(room.nbPax)*parseInt(room.qty));
             montantTTC = parseFloat(montantTTC)  + parseFloat(room.qty) * parseFloat(room.rate);
-            recapitulationChambre = recapitulationChambre + "<div class='col-md-8'>" + room.qty + " x " + room.roomType + "</div>" + "<div class='col-md-4'><span>" + room.rate + "&euro;</span></div>";
+            recapitulationChambre = recapitulationChambre + "<div class='col-md-8'>" + room.qty + " x " + room.roomType + "</div>" + "<div class='col-md-4'><span>" + (room.rate).toString().concat(sessionStorage.getItem("devisePpalSymbole")) + "</span></div>";
             arrhesJson = {
                 "mmcModeEncaissementId": room.mmcModeEncaissementId,
                 "mmcClientId": room.mmcClientId,
@@ -163,18 +187,36 @@
         $("#night-id").html(night);
         $("#amount-id").html(0);
         $("#tva-id").html(100);
-        $("#total-id").html(montantTotal + "&euro;");
+        
+        // vérification validité code promo
+        if (sessionStorage.getItem("codepromoObjStr") != null) {
+            let codePromoObj = JSON.parse(sessionStorage.getItem("codepromoObjStr"));
+            let min_applicable = codePromoObj.minApplicable;
+            let max_applicable = codePromoObj.maxApplicable;
+            if (montantTotal < min_applicable || montantTotal > max_applicable) {
+                $("#code_promo_invalide_msg").show();
+                $("#block_remise").hide();
+                $("#total-id").html(montantTotal.toString().concat(sessionStorage.getItem("devisePpalSymbole")));
+            } else {
+                $("#code_promo_invalide_msg").hide();
+                $("#block_remise").show();
+                calculerEtAfficherRemisePromotionnel(montantTotal, codePromoObj);
+            }
+        } else {
+            $("#total-id").html(montantTotal.toString().concat(sessionStorage.getItem("devisePpalSymbole")));
+        }
+        
         $("#recapitulation-chambre-id").html("<div class = 'row'>" + recapitulationChambre + "</div>");
 
-        function changeFormat(date) {           
-            var lang= document.getElementById('lang').innerHTML;
+        function changeFormat(date) {
+            var lang = sessionStorage.getItem("lang");
             options = {
                 weekday: "short", year: 'numeric', month: 'long', day: 'numeric'
             };      
             return date.toLocaleString(lang, options);
         }
         
-         function dateDiff(date1, date2) {
+        function dateDiff(date1, date2) {
             var diff = {}                           // Initialisation du retour
             var tmp = date2 - date1;
 

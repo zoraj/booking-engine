@@ -117,7 +117,7 @@
             $("#night-id").html(night);
             $("#date-arrivee").html(listRoomObject.dateArrivee);
             $("#date-depart").html(listRoomObject.dateDepart);
-            $("#total-id").html(montantTotal + "&euro;");
+            $("#total-id").html(sessionStorage.getItem("montantTotalTtcAvecRemisePromo") == null ? montantTotal.toString().concat(sessionStorage.getItem("devisePpalSymbole")) : sessionStorage.getItem("montantTotalTtcAvecRemisePromo").concat(sessionStorage.getItem("devisePpalSymbole")));
             $("#recapitulation-chambre-id").html("<div class = 'row'>" + recapitulationChambre + "</div>");
 
              function dateDiff(date1, date2) {

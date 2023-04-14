@@ -117,17 +117,35 @@ public class Payment extends HttpServlet {
         session.setAttribute("informationRate", informationRate);
         String observation = request.getParameter("observation");
         String tarifGrille = request.getParameter("pmsTarifGrilleId");
-        JsonObject payload = Json.createObjectBuilder().add("dateArrivee", reservationObject.getString("dateArrivee"))
-                .add("dateDepart", reservationObject.getString("dateDepart")).add("nomReservation", nomReservation)
-                .add("nbChambre", nbChambre).add("nbPax", nbPax).add("nbEnfant", nbEnfant)
-                .add("reservationType", "INDIV").add("pmsTarifGrilleId", tarifGrille).add("cardex", "").add("civilite", civilite)
-                .add("nationalite", pays).add("nom", nom).add("prenom", prenom).add("adresse1", adresse1)
-                .add("adresse2", adresse2).add("tel", telMobile).add("email", email).add("cp", codePostal)
-                .add("ville", ville).add("pays", pays).add("origine", "BOOKING").add("posteUuid", "_BOOKING_")
+        JsonObject payload = Json.createObjectBuilder()
+                .add("dateArrivee", reservationObject.getString("dateArrivee"))
+                .add("dateDepart", reservationObject.getString("dateDepart"))
+                .add("nomReservation", nomReservation)
+                .add("nbChambre", nbChambre)
+                .add("nbPax", nbPax)
+                .add("nbEnfant", nbEnfant)
+                .add("reservationType", "INDIV")
+                .add("pmsTarifGrilleId", tarifGrille)
+                .add("cardex", "")
+                .add("civilite", civilite)
+                .add("nationalite", pays)
+                .add("nom", nom)
+                .add("prenom", prenom)
+                .add("adresse1", adresse1)
+                .add("adresse2", adresse2)
+                .add("tel", telMobile)
+                .add("email", email)
+                .add("cp", codePostal)
+                .add("ville", ville)
+                .add("pays", pays)
+                .add("origine", "BOOKING")
+                .add("posteUuid", "_BOOKING_")
                 .add("observation", observation).build();
         session.setAttribute("reservation", payload);
         String amount = request.getParameter("montant");
         session.setAttribute("montant", amount);
+        String codepromo = request.getParameter("codepromo");
+        session.setAttribute("codepromo", codepromo);
         String recap = request.getParameter("recapitulationChambre");
         session.setAttribute("recapitulationChambre", recap);
         String deposit = request.getParameter("deposit");

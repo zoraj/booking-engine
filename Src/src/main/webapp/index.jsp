@@ -6,11 +6,11 @@
 <!--body style = "background-image: url('../room-type-image/<%out.print(backgroundImage);%>');"-->
 <body style = "background-image: url('assets/img/background.jpg');">
     <label id="establishmentName"    name="establishmentName" hidden> 
-        <%String attribut = (String) request.getAttribute("establishmentName");
-            out.println(attribut);%> </label>
+        <% String attribut = (String) request.getAttribute("establishmentName");
+            out.println(attribut); %> </label>
     <label id="publicApiKeyStripe"    name="publicApiKeyStripe" hidden> 
-        <%String publicKey = (String) session.getAttribute("publicApiKeyStripe");
-            out.println(publicKey);%> </label>
+        <% String publicKey = (String) session.getAttribute("publicApiKeyStripe");
+            out.println(publicKey); %> </label>
     <div id="booking" class="section">
         <div class="container">
             <div class="row">
@@ -58,6 +58,16 @@
                                         <span class="form-label"><fmt:message key="BOOKING.MAIL.TITLE"/></span>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="codepromo" maxlength="25" autocomplete="off">
+                                        <span class="form-label"><fmt:message key="COMMON.BOOKING.PROMOCODE.CODEPROMO"/></span>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="msg_codepromo_invalide" id="msg_codepromo_invalide">
+                                <ul style="display:none;"><li id="txt_codepromo_invalid"><fmt:message key="COMMON.BOOKING.PROMOCODE.CODEPROMO.MSG.INVALID"/></li></ul>
                             </div>
                             <div class="row">
                                 <div class="col-md-3 col-sm-3">
@@ -115,3 +125,8 @@
         </div>
     </div>
 </body>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#msg_codepromo_invalide").val($("#txt_codepromo_invalid").html().trim());
+    });
+</script>

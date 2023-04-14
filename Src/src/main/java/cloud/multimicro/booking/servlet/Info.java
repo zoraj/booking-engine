@@ -77,6 +77,7 @@ public class Info extends HttpServlet {
         apiKey = (String) session.getAttribute("api-key");
         String recap = (String) session.getAttribute("recapitulationChambre");
         String montant = (String) session.getAttribute("montant");
+        String codepromo = (String) session.getAttribute("codepromo");
         JsonObject reservation = (JsonObject) session.getAttribute("reservation");
         String deposit = (String) session.getAttribute("deposit");
         String ventilation = (String) session.getAttribute("ventilation");
@@ -121,8 +122,7 @@ public class Info extends HttpServlet {
             LOGGER.info("NamingException ");
             e.printStackTrace();
         }
-        
-        
+                
         processRequest(request, response);
     }
 

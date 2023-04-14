@@ -72,8 +72,7 @@ public class Home extends HttpServlet {
         if (establishmentName != null) {
             request.setAttribute("establishmentName", establishmentName);
         }
-
-        try {        
+        try {
             apiKey = getApiKeyBySiteName(establishmentName);
             JsonObject apikeyObject = Util.stringToJsonObject(apiKey);
             apiKey = apikeyObject.getString("apiKey");
@@ -131,16 +130,36 @@ public class Home extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        // verification validité code promo
+        String codepromo = request.getParameter("codepromo");
+        boolean isCodePromoValid = false;
+        if (codepromo != null && !codepromo.equals("")) {
+            final String urlVerifCodePromo = Util.getContextVar("api-url").concat(Constant.WS_GET_CODEPROMO_VALIDITY).concat("/").concat(codepromo);
+            String bearerToken = Jwt.generateToken();
+            ResteasyClient httpClient = new ResteasyClientBuilder().build();
+            ResteasyWebTarget target = httpClient.target(urlVerifCodePromo);
+            Response responseVerif = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer " + bearerToken).get();
+            isCodePromoValid = responseVerif.readEntity(Boolean.class);
+            responseVerif.close();
+            if (isCodePromoValid) {
+                final String urlGetCodePromoObj = Util.getContextVar("api-url").concat(Constant.WS_GET_CODEPROMO_BY_CODE).concat("/").concat(codepromo);
+                target = httpClient.target(urlGetCodePromoObj);
+                Response responseCodepromo = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer " + bearerToken).get();
+                codepromo = responseCodepromo.readEntity(String.class);
+            }
+        }
+        
         String roomRequested = request.getParameter("room-requested");
 
         if ("".equals(roomRequested)) {
             getServletConfig().getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
             return;
         }
-
+        
         String value = postRoomAvailability(roomRequested);
-
-        if (value != "") {
+        
+        if (!value.equals("")) {
             value = "{\"Availability\":" + value + "}";
 
             JsonObject jsonObj = null;
@@ -154,10 +173,11 @@ public class Home extends HttpServlet {
 
             // Transformer JSONObject en Array
             JsonArray jsonArray = jsonObj.getJsonArray("Availability");
-
+            System.out.println("value  jsonArray = "+jsonArray);
             List<DataBooking> rooms = new ArrayList<DataBooking>();
             //List<RoomsPhotoData> photoData = new ArrayList<RoomsPhotoData>();
             for (int i = 0; i < jsonArray.size(); i++) {
+                System.out.println("jsonArray.size = "+jsonArray.size());
                 DataBooking dataBooking = new DataBooking();
 
                 JsonObject jsonLigne = jsonArray.getJsonObject(i);
@@ -201,13 +221,28 @@ public class Home extends HttpServlet {
                     data.setBase(jsonTarif.getInt("base"));
                     rooms.add(data);
                 }
+                System.out.println("----------- value  rooms = "+rooms);
             }
 
-            if (rooms.size() > 0) {
+            if (!rooms.isEmpty()) {
+                System.out.println("rooms not empty------------------- ");
                 request.setAttribute("listRooms", rooms);
-                //request.setAttribute("listePhotoByRoomType", photoData);
+                // mise en session du symbole du devise principal
+                final String urlDevisePpal = Util.getContextVar("api-url").concat(Constant.WS_GET_SETTINGS_DEVISE_PPAL_SYMBOLE);
+                String bearerToken = Jwt.generateToken();
+                ResteasyClient httpClient = new ResteasyClientBuilder().build();
+                ResteasyWebTarget target = httpClient.target(urlDevisePpal);
+                Response responseDevisePpal = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer " + bearerToken).get();
+                String devisePpalSymbole = responseDevisePpal.readEntity(String.class);
+                request.setAttribute("devisePpalSymbole", devisePpalSymbole);
+                responseDevisePpal.close();
+                if (isCodePromoValid) {
+                    request.setAttribute("codepromoObjStr", codepromo);
+                }
+                //request.setAttribute("listePhotoByRoomType", photoData);                
                 getServletConfig().getServletContext().getRequestDispatcher("/rooms").forward(request, response);
             } else {
+                System.out.println("rooms empty------------------- ");
                 /*String message = "<span><h3 style = 'text-align: center;'>Désolé. Les tarif ne sont pas encore prêt pour ces dates.</h3></span>";
                 request.setAttribute("message", message);*/
                 //request.setAttribute("backgroundImage", Home.getBackgroundimage());
