@@ -38,6 +38,8 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 /**
  *
@@ -84,7 +86,7 @@ public class Info extends HttpServlet {
         String informationRate = (String) session.getAttribute("informationRate");
         
         //GET RESERVATION
-        reservationCreation(reservation);
+        String strResa = reservationCreation(reservation);
         //GET VENTILATION
         JsonObject payloadVentilation = Util.stringToJsonObject(ventilation);
         //GET RESERVATION TARIF
@@ -108,8 +110,8 @@ public class Info extends HttpServlet {
                 resaVentilationCreation(payloadVentilation);
                 reservationTarifCreation(payloadReservationTarif);
                 depositCreation(depositObject);
+                createNotifResa(strResa);
             }
-
         } catch (AddressException e) {
             // TODO Auto-generated catch block
             LOGGER.info("AddressException ");
@@ -121,9 +123,26 @@ public class Info extends HttpServlet {
         } catch (NamingException e) {
             LOGGER.info("NamingException ");
             e.printStackTrace();
+        } catch (JSONException e) {
+            LOGGER.info("JSONException ");
+            e.printStackTrace();
         }
-                
+        
         processRequest(request, response);
+    }
+    
+    private void createNotifResa(String resa) throws JSONException {
+        final String url = Util.getContextVar("api-url").concat(Constant.WS_CREATE_BOOKING_NOTIF);
+        String token = Jwt.generateToken();
+        ResteasyClient notif = new ResteasyClientBuilder().build();
+        ResteasyWebTarget targetResa = notif.target(url);
+        JsonReader jsonReader = Json.createReader(new StringReader(resa));
+        Response response = targetResa.request().header("Content-Type", "application/json").header("x-api-key", apiKey)
+                .header("Authorization", "Bearer " + token).post(Entity.json(jsonReader.readObject()));
+        // Read output in string format
+        String value = response.readEntity(String.class);
+        jsonReader.close();
+        response.close();
     }
 
     /**
@@ -140,7 +159,7 @@ public class Info extends HttpServlet {
         processRequest(request, response);
     }
     
-    private void reservationCreation(JsonObject resaJSONObject) {
+    private String reservationCreation(JsonObject resaJSONObject) {
         final String urlBooking = Util.getContextVar("api-url").concat(Constant.WS_CREATE_BOOKING);
         String token = Jwt.generateToken();
         ResteasyClient reservation = new ResteasyClientBuilder().build();
@@ -149,8 +168,9 @@ public class Info extends HttpServlet {
                 .header("Authorization", "Bearer " + token).post(Entity.json(resaJSONObject));
         // Read output in string format
         String value = response.readEntity(String.class);
-        System.out.println("reservationCreation : " + value);
+        System.out.println("=============== reservationCreation : " + value);
         response.close();
+        return value;
     }
     
     private void resaVentilationCreation(JsonObject resaJSONObject) {
