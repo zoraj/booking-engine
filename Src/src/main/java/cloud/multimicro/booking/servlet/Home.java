@@ -148,6 +148,8 @@ public class Home extends HttpServlet {
                 Response responseCodepromo = target.request().header("Content-Type", "application/json").header("x-api-key", apiKey).header("Authorization", "Bearer " + bearerToken).get();
                 codepromo = responseCodepromo.readEntity(String.class);
             }
+        } else {
+            request.setAttribute("codepromoObjStr", "NOT_SPECIFIED");
         }
         
         String roomRequested = request.getParameter("room-requested");
