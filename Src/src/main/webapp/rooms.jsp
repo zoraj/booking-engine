@@ -161,7 +161,7 @@
         $(".lib_devise").html(sessionStorage.getItem("devisePpalSymbole"));
         
         let codepromoObjStr = '${codepromoObjStr}';
-        if (codepromoObjStr != "") {
+        if (codepromoObjStr != "" && codepromoObjStr != "NOT_SPECIFIED") {
             sessionStorage.setItem("codepromoObjStr", codepromoObjStr);
         }
         

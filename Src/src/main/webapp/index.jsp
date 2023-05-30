@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <input class="form-control" type="date" id="dateDepart" required  onblur="verifyDateCheckOut()">
+                                        <input class="form-control" type="date" id="dateDepart" required >
                                         <span class="form-label"><fmt:message key="BOOKING.DEPARTURE.DATE.TITLE"/></span>
                                     </div>
                                 </div>
@@ -114,7 +114,7 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12">
                                     <div class="form-btn" id="submit-book">
-                                        <button name="bookNow" class="submit-btn" ><fmt:message key="BOOKING.BOOK.NOW.TITLE"/></button>
+                                        <button id="bookNow" name="bookNow" class="submit-btn" ><fmt:message key="BOOKING.BOOK.NOW.TITLE"/></button>
                                     </div>
                                 </div>
                             </div>
@@ -128,5 +128,16 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("#msg_codepromo_invalide").val($("#txt_codepromo_invalid").html().trim());
+        $("#dateArrivee").on("keypress", function(e) {
+            e.preventDefault();
+        });
+        $("#dateDepart").on("keypress", function(e) {
+            e.preventDefault();
+        });
+        $("#bookNow").on("click", function() {
+            if ($("#dateArrivee").val() != "" && $("#dateDepart").val() != "") {
+                verifyDateCheckOut();
+            }
+        });
     });
 </script>
