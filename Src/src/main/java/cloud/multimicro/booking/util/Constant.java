@@ -12,6 +12,7 @@ package cloud.multimicro.booking.util;
  */
 public class Constant {
     public static final String WS_CREATE_BOOKING = "/reservation/";
+    public static final String WS_CREATE_BOOKING_NOTIF = "/notification/";
     public static final String WS_CREATE_BOOKING_VENTILATION = "/reservation/ventilation";
     public static final String WS_CREATE_BOOKING_RATE = "/reservation/rate";
     public static final String WS_CREATE_BOOKING_DEPOSIT = "/deposit/booking";
