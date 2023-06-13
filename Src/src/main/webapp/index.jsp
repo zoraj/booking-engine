@@ -124,7 +124,7 @@
             </div>
         </div>
     </div>
-</body>
+<!--/body-->
 <script type="text/javascript">
     $(document).ready(function() {
         $("#msg_codepromo_invalide").val($("#txt_codepromo_invalid").html().trim());
@@ -141,3 +141,4 @@
         });
     });
 </script>
+<script src="./assets/js/index.js"></script>
