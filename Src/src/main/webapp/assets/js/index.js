@@ -68,9 +68,9 @@ function deleteRoom(i) {
 
 jQuery(document).ready(function () {
 
-
     document.getElementById('dateArrivee').min = new Date().toISOString().substr(0, 10);
     document.getElementById('dateDepart').min = new Date(new Date().getTime() + 24 * 60 * 60 * 1000 - new Date().getTimezoneOffset() * 60 * 1000).toISOString().substr(0, 10);
+    
     $("#dateDepart").change(function () {
         verifyDateCheckOut();
     });
@@ -82,6 +82,7 @@ jQuery(document).ready(function () {
     // $("body").css("background-image", "url('../../../../room-type-image/image1002.jpg')");
 
     sessionStorage.setItem("disponibilite_json", $('#disponibilite-id').html());
+    
     $("#add-chambre").click(function () {
         $('#other-room-add').append($("<div class='row' id='room" + i + "'>" +
                 "<div class='col-md-3'>" +
@@ -90,14 +91,14 @@ jQuery(document).ready(function () {
                 "<span class='select-arrow'></span></div></div>" +
                 "<div class='col-md-4'>" +
                 "<div class='form-group'><span class='form-label'></span>" +
-                "<select class='form-control' id='nbPax" + i + "'><option>1 People</option><option>2 People</option><option>3 People</option><option>4 People</option></select>" +
+                "<select class='form-control' id='nbPax" + i + "'><option>1 "+$("#personne_txt").html()+"</option><option>2 "+$("#personne_txt").html()+"</option><option>3 "+$("#personne_txt").html()+"</option><option>4 "+$("#personne_txt").html()+"</option></select>" +
                 "<span class='select-arrow'></span></div></div>" +
                 "<div class='col-md-3'>" +
                 "<div class='form-group'><span class='form-label'></span>" +
                 "<select class='form-control' id='nbEnfant" + i + "'><option>0</option><option>1</option><option>2</option><option>3</option></select>" +
                 "<span class='select-arrow'></span></div></div>" +
                 "<div class='col-md-2'>" +
-                "<div id='del-chambre' onclick='deleteRoom(" + i + ");'><span>(-)</span></div></div>" +
+                "<div id='del-chambre' onclick='deleteRoom(" + i + ");'><span style=\"cursor: default;\">(-)</span></div></div>" +
                 "</div>"));
 
         i++;

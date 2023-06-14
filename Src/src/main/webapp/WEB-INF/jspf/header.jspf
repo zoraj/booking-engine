@@ -30,5 +30,6 @@
     <span id="mainPage" style="display:none;"><fmt:message key="BOOKING.RETURN.MAIN.PAGE"/></span>
     <span id="reservTaken" style="display:none;"><fmt:message key="BOOKING.RESERVATION.TAKEN.INTO.ACCOUNT"/></span>
     <span id="summaryEmail" style="display:none;"><fmt:message key="BOOKING.SUMMARY.EMAIL"/></span>
+    <span id="personne_txt" style="display:none;"><fmt:message key="BOOKING.PEOPLE.TITLE"/></span>
 
 
