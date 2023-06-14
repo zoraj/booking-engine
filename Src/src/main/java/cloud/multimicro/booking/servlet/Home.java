@@ -175,7 +175,7 @@ public class Home extends HttpServlet {
 
             // Transformer JSONObject en Array
             JsonArray jsonArray = jsonObj.getJsonArray("Availability");
-            System.out.println("value  jsonArray = "+jsonArray);
+            System.out.println("============== value jsonArray = "+jsonArray);
             List<DataBooking> rooms = new ArrayList<DataBooking>();
             //List<RoomsPhotoData> photoData = new ArrayList<RoomsPhotoData>();
             for (int i = 0; i < jsonArray.size(); i++) {

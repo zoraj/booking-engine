@@ -1,8 +1,24 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@page import="java.util.List"%>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link href="https://cdn.mat.cloud/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.mat.cloud/assets/global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.mat.cloud/assets/global/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.mat.cloud/assets/global/css/components-rounded.min.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.mat.cloud/assets/global/css/plugins.min.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.mat.cloud/assets/layouts/layout2/css/themes/blue.min.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.mat.cloud/assets/layouts/layout2/css/custom.min.css" rel="stylesheet" type="text/css" />
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.mat.cloud/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="https://cdn.mat.cloud/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="https://cdn.mat.cloud/assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="https://cdn.mat.cloud/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<script src="https://cdn.mat.cloud/assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
+<script src="https://cdn.mat.cloud/assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
+<script src="https://cdn.mat.cloud/assets/pages/scripts/ui-extended-modals.min.js" type="text/javascript"></script>
+
 <style>
     .carousel-inner > .item > img,
     .carousel-inner > .item > a > img {
@@ -129,11 +145,27 @@
             </div>
         </div>
     </div>
+    <div class="portlet light">
+        <div class="portlet-body">
+            <a class="btn btn-outline dark" data-target="#alertBooking" data-toggle="modal" style="display: none;" id="lAlertBooking"></a>
+            <div id="alertBooking" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false" data-attention-animation="false">
+                <div class="modal-body">
+                    <p id="txtAlertBooking"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn green">OK</button>
+                </div>
+            </div>
+            <span id="msgAlertBookingChbrReserverSurplus" style="display: none;"><fmt:message key="BOOKING.CHBR.RESERVER.SURPLUS"/></span>
+            <span id="msgAlertBookingChbrReserverEnMoins" style="display: none;"><fmt:message key="BOOKING.CHBR.RESERVER.ENMOINS"/></span>
+        </div>
+    </div>
+    
 </div>
 
 
 <script>
-        var informationTypeRooms = {
+    var informationTypeRooms = {
         "bookRoom": []
     };
 
@@ -177,23 +209,26 @@
         
         $("[name='bookRoom']").click(function() {
             let currentIndex = $(this).data("value");
-            var saisie = document.getElementById("qty_" + currentIndex).value;
-            var maxValue = document.getElementById("disponible_" + currentIndex).value;
-            var available = checkQuantityAvailable(maxValue, saisie, $("#room_type_id_" + currentIndex).val());
+            let saisie = document.getElementById("qty_" + currentIndex).value;
+            let maxValue = document.getElementById("disponible_" + currentIndex).value;
+            let available = checkQuantityAvailable(maxValue, saisie, $("#room_type_id_" + currentIndex).val());
             if ((parseInt(saisie) > parseInt(maxValue))) {
                 $(this).css('background-color', '#06a8c4');
             } else {
-                if ($(this).css('background-color') == 'rgb(174, 176, 174)') {
+                if ($(this).css('background-color') == 'rgb(174, 176, 174)') { // grisé
                     $(this).css('background-color', 'rgb(6, 168, 196)');
-                    var typeRoomListJson = sessionStorage.getItem("informationTypeRooms_json");
-                    var typeRoomObject = JSON.parse(typeRoomListJson);
+                    $("#qty_" + currentIndex).removeAttr("readonly");
+                    let typeRoomListJson = sessionStorage.getItem("informationTypeRooms_json");
+                    let typeRoomObject = JSON.parse(typeRoomListJson);
                     sessionStorage.setItem("informationTypeRooms_json", null);
 
                     informationTypeRooms = {
                         "bookRoom": []
                     };
                     typeRoomObject.bookRoom.forEach(function(room) {
-                        if (parseInt(room.roomTypeId) != parseInt($("#room_type_id_" + currentIndex).val())) {
+                        if (parseInt(room.roomTypeId) != parseInt($("#room_type_id_" + currentIndex).val()) || 
+                                parseInt(room.pmsTarifGrilleDetailId) != parseInt($("#pmsTarifGrilleDetailId_" + currentIndex).html()) || 
+                                parseInt(room.pmsModelTarifId) != parseInt($("#pmsModelTarifId_" + currentIndex).html())) {
                             informationTypeRooms.bookRoom.push({
                                 "roomTypeId": parseInt(room.roomTypeId),
                                 "nbPax": parseInt(room.nbPax),
@@ -209,14 +244,17 @@
                             });
                         }
                     });
-
+                    
+                    let informationTypeRooms_json = JSON.stringify(informationTypeRooms);
+                    sessionStorage.setItem("informationTypeRooms_json", informationTypeRooms_json);
 
                 } else if(available == true){
-                    var typeRoomJson = sessionStorage.getItem("informationTypeRooms_json");
-                    var typeObject = JSON.parse(typeRoomJson);
+                    
+                    let typeRoomJson = sessionStorage.getItem("informationTypeRooms_json");
+                    let typeObject = JSON.parse(typeRoomJson);
 
-                    var ventillationJson = sessionStorage.getItem("informationNoteVentilation");
-                    var ventillationObject = JSON.parse(ventillationJson);
+                    let ventillationJson = sessionStorage.getItem("informationNoteVentilation");
+                    let ventillationObject = JSON.parse(ventillationJson);
 
                     if (typeObject != null) {
                         informationTypeRooms = typeObject;
@@ -227,6 +265,8 @@
                     }
 
                     $(this).css('background-color', '#aeb0ae');
+                    $("#qty_" + currentIndex).attr("readonly", "readonly");
+                    
                     if ($("#list-room").is(":hidden") == false) {
                         informationTypeRooms.bookRoom.push({
                             "roomTypeId": parseInt($("#room_type_id_" + currentIndex).val()),
@@ -243,10 +283,39 @@
                             "pmsTarifGrilleId": parseInt($("#pmsTarifGrilleId_" + currentIndex).val())
                         });
                     }
+                    let informationTypeRooms_json = JSON.stringify(informationTypeRooms);
+                    sessionStorage.setItem("informationTypeRooms_json", informationTypeRooms_json);
                 }
-                var informationTypeRooms_json = JSON.stringify(informationTypeRooms);
-                sessionStorage.setItem("informationTypeRooms_json", informationTypeRooms_json);
-
+            }
+        });
+        
+        $("#proceder").on("click", function(e){
+            // vérification nombre de chambre cohérent avec celui sélectionné dans le premier écran
+            let nbChambreReserver = 0;
+            $("[name='bookRoom']").each(function() {
+                let data_value = $(this).data("value");
+                let champNbChbr = $("#qty_" + data_value);
+                if ($(this).css('background-color') == 'rgb(174, 176, 174)') {
+                    nbChambreReserver += parseInt(champNbChbr.val());
+                }
+            });
+            let chambresprevus = sessionStorage.getItem("roomList_json");
+            chambresprevus = JSON.parse(chambresprevus);
+            let roomList = chambresprevus.roomList;
+            let nbChambrePrevus = 0;
+            for(let j=0; j < roomList.length; j++) {
+                let json = roomList[j];
+                nbChambrePrevus += json.qteChb;
+            }
+            if (nbChambreReserver < nbChambrePrevus) {
+                e.preventDefault();
+                $("#txtAlertBooking").html($("#msgAlertBookingChbrReserverEnMoins").html());
+                $("#lAlertBooking")[0].click();
+            }
+            if (nbChambreReserver > nbChambrePrevus) {
+                e.preventDefault();
+                $("#txtAlertBooking").html($("#msgAlertBookingChbrReserverSurplus").html());
+                $("#lAlertBooking")[0].click();
             }
         });
     });

@@ -106,7 +106,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-1">
-                                    <div id="add-chambre"><span>(+)</span></div>
+                                    <div id="add-chambre"><span style="cursor: default;">(+)</span></div>
                                 </div>									
                             </div>
                             <div id="other-room-add"></div>
