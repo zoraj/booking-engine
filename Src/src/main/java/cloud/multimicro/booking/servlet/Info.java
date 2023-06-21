@@ -111,6 +111,7 @@ public class Info extends HttpServlet {
                 reservationTarifCreation(payloadReservationTarif);
                 depositCreation(depositObject);
                 createNotifResa(strResa);
+                callWsNotif(strResa);
             }
         } catch (AddressException e) {
             // TODO Auto-generated catch block
@@ -141,6 +142,24 @@ public class Info extends HttpServlet {
                 .header("Authorization", "Bearer " + token).post(Entity.json(jsonReader.readObject()));
         // Read output in string format
         String value = response.readEntity(String.class);
+        jsonReader.close();
+        response.close();
+    }
+    
+    private void callWsNotif(String resa) throws JSONException {
+        final String url = Util.getContextVar("ws-notif-url");
+        ResteasyClient notif = new ResteasyClientBuilder().build();
+        ResteasyWebTarget targetResa = notif.target(url);
+        JsonReader jsonReader = Json.createReader(new StringReader(resa));
+        JsonObject jsonObj = jsonReader.readObject();
+        String data = "{\"notification\" : \"Une nouvelle réservation sous le numéro "+jsonObj.getString("numeroReservation")+" a été créée en ligne\", \"action\" : \"/reservation?id="+jsonObj.getInt("id")+"\"}";
+        JsonReader jsonReader2 = Json.createReader(new StringReader(data));
+        Response response = targetResa.request().header("Content-Type", "application/json")
+                                    .post(Entity.json(jsonReader2.readObject()));
+        // Read output in string format
+        String value = response.readEntity(String.class);
+        System.out.println("=============== retour appel WS notif : " + value);
+        jsonReader2.close();
         jsonReader.close();
         response.close();
     }
