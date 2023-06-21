@@ -12,8 +12,15 @@ import cloud.multimicro.booking.util.Util;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -148,20 +155,23 @@ public class Info extends HttpServlet {
     
     private void callWsNotif(String resa) throws JSONException {
         final String url = Util.getContextVar("ws-notif-url");
-        ResteasyClient notif = new ResteasyClientBuilder().build();
-        ResteasyWebTarget targetResa = notif.target(url);
         JsonReader jsonReader = Json.createReader(new StringReader(resa));
         JsonObject jsonObj = jsonReader.readObject();
         String data = "{\"notification\" : \"Une nouvelle réservation sous le numéro "+jsonObj.getString("numeroReservation")+" a été créée en ligne\", \"action\" : \"/reservation?id="+jsonObj.getInt("id")+"\"}";
-        JsonReader jsonReader2 = Json.createReader(new StringReader(data));
-        Response response = targetResa.request().header("Content-Type", "application/json")
-                                    .post(Entity.json(jsonReader2.readObject()));
-        // Read output in string format
-        String value = response.readEntity(String.class);
-        System.out.println("=============== retour appel WS notif : " + value);
-        jsonReader2.close();
         jsonReader.close();
-        response.close();
+        HttpRequest request = HttpRequest.newBuilder()
+                                .uri(URI.create(url))
+                                .header("Content-Type", "application/json")
+                                .POST(BodyPublishers.ofString(data))
+                                .build();
+        CompletableFuture<HttpResponse<String>> futureResponse = HttpClient.newHttpClient().sendAsync(request, BodyHandlers.ofString());
+        futureResponse.thenApply(HttpResponse::body).thenAccept(responseBody -> {
+                                                        System.out.println("=============== Response from WS notif : " + responseBody);
+                                                    })
+                    .exceptionally(ex -> { // Handle any exceptions that occurred during the request
+                        System.out.println("=============== erreur lors de l'appel WS notif : " + ex.toString());
+                        return null;
+                    });
     }
 
     /**
